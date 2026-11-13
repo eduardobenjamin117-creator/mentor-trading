@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Diario de Trading</title>
+<style>
+:root{--bg:#0b1020;--panel:#121a2d;--panel2:#18233a;--line:#26344f;--text:#edf2ff;--muted:#94a3bd;--green:#42d392;--red:#ff7185;--blue:#7aa7ff;--yellow:#f5c76b}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#0b1020,#111b30);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{padding:28px 20px 18px;max-width:1200px;margin:auto}h1{margin:0;font-size:clamp(25px,4vw,36px);letter-spacing:-.7px}header p{margin:5px 0 0;color:var(--muted)}
+main{max-width:1200px;margin:auto;padding:0 20px 40px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 20px}
+button,.tab{border:1px solid var(--line);background:var(--panel2);color:var(--text);padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:600}
+button.primary{background:var(--blue);border-color:var(--blue);color:#081326}button.danger{color:var(--red)}button:hover,.tab:hover{filter:brightness(1.12)}.tab.active{background:var(--blue);color:#081326;border-color:var(--blue)}
+.view{display:none}.view.active{display:block}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.card,.panel{background:rgba(18,26,45,.94);border:1px solid var(--line);border-radius:16px;padding:17px}
+.metric small{color:var(--muted);display:block}.metric strong{font-size:27px;display:block;margin-top:4px}.green{color:var(--green)}.red{color:var(--red)}.muted{color:var(--muted)}
+.panel{margin-top:15px}.panel h2{font-size:18px;margin:0 0 14px}.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}label{display:block;color:var(--muted);font-size:13px}input,select,textarea{width:100%;margin-top:5px;background:#0d1527;border:1px solid var(--line);color:var(--text);padding:11px;border-radius:9px;font:inherit}textarea{min-height:82px;resize:vertical}.wide{grid-column:1/-1}.checks{display:flex;gap:12px;flex-wrap:wrap}.checks label{display:flex;align-items:center;gap:6px}.checks input{width:auto;margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:700px}th,td{text-align:left;padding:11px 9px;border-bottom:1px solid var(--line);font-size:13px}th{color:var(--muted);font-weight:600}.empty{text-align:center;color:var(--muted);padding:28px}
+.trade-img{max-width:180px;max-height:110px;object-fit:cover;border-radius:8px;display:block;margin-top:5px}
+.note{font-size:13px;color:var(--muted);margin-top:9px}.pill{display:inline-block;border-radius:99px;padding:3px 8px;background:#202d47;font-size:12px}
+footer{max-width:1200px;margin:0 auto;padding:0 20px 30px;color:var(--muted);font-size:12px}
+@media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}}
+@media(max-width:520px){main{padding:0 12px 30px}header{padding:22px 12px 12px}.grid{gap:8px}.card{padding:13px}.metric strong{font-size:22px}form{grid-template-columns:1fr}.wide{grid-column:auto}}
+</style>
+</head>
+<body>
+<header>
+  <h1>📈 Mi diario de trading</h1>
+  <p>Registra tus operaciones. Mide tu disciplina, no solamente el dinero.</p>
+</header>
+<main>
+<nav class="tabs">
+ <button class="tab active" data-view="dashboard">Resumen</button>
+ <button class="tab" data-view="new">+ Registrar trade</button>
+ <button class="tab" data-view="history">Historial</button>
+ <button class="tab" data-view="review">Revisión semanal</button>
+</nav>
+
+<section id="dashboard" class="view active">
+ <div class="grid">
+  <div class="card metric"><small>Resultado acumulado</small><strong id="total">0%</strong></div>
+  <div class="card metric"><small>Operaciones</small><strong id="count">0</strong></div>
+  <div class="card metric"><small>Porcentaje ganador</small><strong id="winrate">0%</strong></div>
+  <div class="card metric"><small>Trades fuera de plan</small><strong id="violations">0</strong></div>
+ </div>
+ <div class="two">
+  <div class="panel"><h2>Disciplina</h2><div id="discipline" style="font-size:30px;font-weight:700">—</div><p class="note">Porcentaje de operaciones en las que respetaste todas tus reglas registradas.</p></div>
+  <div class="panel"><h2>Recordatorio</h2><p>Un trade ganador fuera de tu plan sigue siendo un error de ejecución. Una pérdida respetando tu plan puede ser una buena operación.</p></div>
+ </div>
+ <div class="panel"><h2>Últimas operaciones</h2><div id="recent"></div></div>
+</section>
+
+<section id="new" class="view">
+ <div class="panel">
+  <h2 id="formTitle">Registrar una operación</h2>
+  <form id="tradeForm">
+   <input type="hidden" id="editId">
+   <label>Fecha<input id="date" type="date" required></label>
+   <label>Instrumento / par<input id="symbol" placeholder="Ej. NASDAQ" value="NASDAQ"></label>
+   <label>Sesión<select id="session"><option>NY</option><option>Londres</option><option>Asia</option><option>Otra</option></select></label>
+   <label>Dirección<select id="direction"><option>Compra</option><option>Venta</option></select></label>
+   <label>Temporalidad de contexto<input id="contextTf" placeholder="Ej. H4 / H1"></label>
+   <label>Temporalidad de entrada<input id="entryTf" placeholder="Ej. M15"></label>
+   <label>Resultado<select id="result"><option value="win">TP / Ganadora</option><option value="loss">SL / Perdida</option><option value="be">Breakeven</option></select></label>
+   <label>Resultado en % (positivo o negativo)<input id="pnl" type="number" step="0.01" placeholder="Ej. -1 o 2.5" required></label>
+   <label>Riesgo usado (%)<input id="risk" type="number" step="0.01" min="0" placeholder="Ej. 0.5"></label>
+   <label>Zona / contexto<input id="zone" placeholder="Ej. FVG H1, DOL..."></label>
+   <label class="wide">Confirmación de entrada<textarea id="confirmation" placeholder="¿Hubo iFVG, estructura, desplazamiento...?"></textarea></label>
+   <label class="wide">¿Qué viste en el mercado?<textarea id="market" placeholder="Describe brevemente tu lectura."></textarea></label>
+   <div class="wide checks">
+    <label><input type="checkbox" id="onTime" checked> Dentro de mi horario</label>
+    <label><input type="checkbox" id="riskOk" checked> Respeté mi riesgo</label>
+    <label><input type="checkbox" id="confirmationOk" checked> Esperé confirmación</label>
+    <label><input type="checkbox" id="followed" checked> Seguí mi plan</label>
+   </div>
+   <label class="wide">Emociones antes/durante<textarea id="emotion" placeholder="Calma, ansiedad, euforia, frustración..."></textarea></label>
+   <label class="wide">¿Qué hice bien y qué debo corregir?<textarea id="lesson" placeholder="Sé honesto contigo."></textarea></label>
+   <label class="wide">Captura del gráfico (opcional)<input id="image" type="file" accept="image/*"><span class="note">La imagen se guarda en este navegador junto con el registro. Usa capturas comprimidas si son muy pesadas.</span><div id="imagePreview"></div></label>
+  </form>
+  <div class="actions"><button class="primary" type="submit" form="tradeForm">Guardar operación</button><button type="button" id="clearForm">Limpiar</button></div>
+  <p class="note">Los datos se guardan automáticamente en este navegador de tu dispositivo. No se suben a internet.</p>
+ </div>
+</section>
+
+<section id="history" class="view">
+ <div class="panel"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap"><h2>Historial de operaciones</h2><button id="export">Exportar respaldo JSON</button></div><div id="historyTable" class="table-wrap"></div><p class="note">Guarda un respaldo de vez en cuando. Si borras los datos del navegador o cambias de dispositivo, puedes perder el historial.</p><div class="actions"><label style="display:inline-block">Importar respaldo JSON<input id="importFile" type="file" accept=".json,application/json"></label><button class="danger" id="deleteAll">Borrar todos los registros</button></div></div>
+</section>
+
+<section id="review" class="view">
+ <div class="panel"><h2>Revisión semanal</h2>
+  <label>Semana que quieres revisar<input id="week" type="week"></label>
+  <div id="weeklyStats" style="margin-top:15px"></div>
+  <label style="margin-top:14px">¿Cuál fue mi principal error?<textarea id="weekError" placeholder="Ej. Forcé una entrada en FVG H1 sin confirmación..."></textarea></label>
+  <label style="margin-top:10px">¿Qué regla voy a cumplir la próxima semana?<textarea id="weekRule" placeholder="Ej. No operar después de las 10:30 y parar tras mi pérdida diaria."></textarea></label>
+  <div class="actions"><button class="primary" id="saveReview">Guardar revisión</button></div>
+ </div>
+</section>
+</main>
+<footer>Diario personal e independiente · Datos almacenados localmente en este navegador.</footer>
+<script>
+const $=id=>document.getElementById(id);
+const KEY='mi_diario_trading_v1';
+let trades=JSON.parse(localStorage.getItem(KEY)||'[]'), imageData='';
+let reviews=JSON.parse(localStorage.getItem(KEY+'_reviews')||'{}');
+const fields=['date','symbol','session','direction','contextTf','entryTf','result','pnl','risk','zone','confirmation','market','emotion','lesson'];
+function save(){localStorage.setItem(KEY,JSON.stringify(trades));render()}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function fmt(n){return (n>0?'+':'')+Number(n||0).toFixed(2)+'%'}
+function compliant(t){return t.onTime&&t.riskOk&&t.confirmationOk&&t.followed}
+function show(view){document.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.id===view));document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.view===view));if(view==='review')renderWeek();if(view==='history')renderHistory()}
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>show(b.dataset.view));
+$('date').value=new Date().toISOString().slice(0,10);
+$('tradeForm').onsubmit=e=>{e.preventDefault();let id=$('editId').value;let t={};fields.forEach(f=>t[f]=$(f).value);['pnl','risk'].forEach(f=>t[f]=Number(t[f]||0));['onTime','riskOk','confirmationOk','followed'].forEach(f=>t[f]=$(f).checked);t.image=imageData||(id?(trades.find(x=>x.id===id)?.image||''):'');t.id=id||String(Date.now());if(id)trades=trades.map(x=>x.id===id?t:x);else trades.unshift(t);save();resetForm();show('history')};
+$('image').onchange=()=>{let file=$('image').files[0];if(!file)return;if(file.size>2.5*1024*1024){alert('La imagen pesa más de 2.5 MB. Comprime la captura e inténtalo de nuevo.');$('image').value='';return}let r=new FileReader();r.onload=()=>{imageData=r.result;$('imagePreview').innerHTML='<img class="trade-img" src="'+imageData+'" alt="Vista previa">'};r.readAsDataURL(file)};
+function resetForm(){ $('tradeForm').reset();$('date').value=new Date().toISOString().slice(0,10);$('symbol').value='NASDAQ';$('onTime').checked=$('riskOk').checked=$('confirmationOk').checked=$('followed').checked=true;$('editId').value='';$('formTitle').textContent='Registrar una operación';imageData='';$('imagePreview').innerHTML=''}
+$('clearForm').onclick=resetForm;
+function edit(id){let t=trades.find(x=>x.id===id);if(!t)return;fields.forEach(f=>$(f).value=t[f]??'');['onTime','riskOk','confirmationOk','followed'].forEach(f=>$(f).checked=!!t[f]);$('editId').value=id;$('formTitle').textContent='Editar operación';imageData=t.image||'';$('imagePreview').innerHTML=imageData?'<img class="trade-img" src="'+imageData+'">':'';show('new')}
+function removeTrade(id){if(confirm('¿Eliminar esta operación?')){trades=trades.filter(t=>t.id!==id);save()}}
+function row(t){return `<tr><td>${esc(t.date)}</td><td>${esc(t.symbol)}</td><td>${esc(t.session)}</td><td class="${t.pnl>0?'green':t.pnl<0?'red':''}">${fmt(t.pnl)}</td><td>${t.risk}%</td><td>${compliant(t)?'<span class="green">En plan</span>':'<span class="red">Fuera de plan</span>'}</td><td><button onclick="edit('${t.id}')">Editar</button> <button class="danger" onclick="removeTrade('${t.id}')">✕</button></td></tr>`}
+function renderHistory(){$('historyTable').innerHTML=trades.length?'<table><thead><tr><th>Fecha</th><th>Par</th><th>Sesión</th><th>Resultado</th><th>Riesgo</th><th>Disciplina</th><th>Acciones</th></tr></thead><tbody>'+trades.map(row).join('')+'</tbody></table>':'<div class="empty">Todavía no tienes operaciones registradas.</div>'}
+function render(){let total=trades.reduce((s,t)=>s+t.pnl,0),wins=trades.filter(t=>t.result==='win').length,viol=trades.filter(t=>!compliant(t)).length,good=trades.filter(compliant).length; $('total').textContent=fmt(total);$('total').className=total>=0?'green':'red';$('count').textContent=trades.length;$('winrate').textContent=trades.length?Math.round(wins/trades.length*100)+'%':'0%';$('violations').textContent=viol;$('discipline').textContent=trades.length?Math.round(good/trades.length*100)+'%':'—';$('recent').innerHTML=trades.length?'<div class="table-wrap"><table><thead><tr><th>Fecha</th><th>Par</th><th>Resultado</th><th>Disciplina</th></tr></thead><tbody>'+trades.slice(0,5).map(t=>`<tr><td>${esc(t.date)}</td><td>${esc(t.symbol)}</td><td class="${t.pnl>=0?'green':'red'}">${fmt(t.pnl)}</td><td>${compliant(t)?'En plan':'Fuera de plan'}</td></tr>`).join('')+'</tbody></table></div>':'<div class="empty">Registra tu primer trade para ver tus estadísticas.</div>';renderHistory()}
+function weekDates(w){if(!w)return [];let [y,n]=w.split('-W').map(Number);let d=new Date(y,0,1+(n-1)*7);let day=d.getDay()||7;d.setDate(d.getDate()+1-day);let start=d.toISOString().slice(0,10);d.setDate(d.getDate()+6);return [start,d.toISOString().slice(0,10)]}
+function renderWeek(){let w=$('week').value;if(!w){$('weeklyStats').innerHTML='<p class="muted">Selecciona una semana para ver tu resumen.</p>';return}let [a,b]=weekDates(w),ts=trades.filter(t=>t.date>=a&&t.date<=b),sum=ts.reduce((s,t)=>s+t.pnl,0),viol=ts.filter(t=>!compliant(t)).length;$('weeklyStats').innerHTML=`<div class="grid"><div class="card metric"><small>Operaciones</small><strong>${ts.length}</strong></div><div class="card metric"><small>Resultado</small><strong class="${sum>=0?'green':'red'}">${fmt(sum)}</strong></div><div class="card metric"><small>Ganadoras</small><strong>${ts.filter(t=>t.result==='win').length}</strong></div><div class="card metric"><small>Fuera de plan</small><strong>${viol}</strong></div></div><p class="note">Periodo: ${a} al ${b}. ${ts.length?'Revisa especialmente las operaciones fuera de plan.':'No hay operaciones registradas en esta semana.'}</p>`;$('weekError').value=reviews[w]?.error||'';$('weekRule').value=reviews[w]?.rule||''}
+$('week').onchange=renderWeek;
+$('saveReview').onclick=()=>{let w=$('week').value;if(!w){alert('Selecciona una semana.');return}reviews[w]={error:$('weekError').value,rule:$('weekRule').value};localStorage.setItem(KEY+'_reviews',JSON.stringify(reviews));alert('Revisión semanal guardada.')};
+$('export').onclick=()=>{let blob=new Blob([JSON.stringify({trades,reviews},null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='respaldo-diario-trading.json';a.click();URL.revokeObjectURL(a.href)};
+$('importFile').onchange=async e=>{let f=e.target.files[0];if(!f)return;try{let d=JSON.parse(await f.text());if(!Array.isArray(d.trades))throw Error();if(confirm('¿Importar y reemplazar los registros actuales?')){trades=d.trades;reviews=d.reviews||{};localStorage.setItem(KEY+'_reviews',JSON.stringify(reviews));save();alert('Respaldo importado.')}}catch{alert('No se pudo leer el respaldo.')}e.target.value=''};
+$('deleteAll').onclick=()=>{if(confirm('¿Seguro que quieres borrar todos los trades? Esta acción no se puede deshacer.')){trades=[];save()}};
+render();
+</script>
+</body></html>
