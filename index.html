@@ -19,7 +19,23 @@ button.primary{background:var(--blue);border-color:var(--blue);color:#081326}but
 form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}label{display:block;color:var(--muted);font-size:13px}input,select,textarea{width:100%;margin-top:5px;background:#0d1527;border:1px solid var(--line);color:var(--text);padding:11px;border-radius:9px;font:inherit}textarea{min-height:82px;resize:vertical}.wide{grid-column:1/-1}.checks{display:flex;gap:12px;flex-wrap:wrap}.checks label{display:flex;align-items:center;gap:6px}.checks input{width:auto;margin:0}
 .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:700px}th,td{text-align:left;padding:11px 9px;border-bottom:1px solid var(--line);font-size:13px}th{color:var(--muted);font-weight:600}.empty{text-align:center;color:var(--muted);padding:28px}
 .note{font-size:13px;margin-top:9px}.pill{display:inline-block;border-radius:99px;padding:3px 8px;background:#202d47;font-size:12px}
-.authbox{max-width:650px;margin:18px auto}.authbox form{margin-bottom:10px}.hide{display:none!important}.trade{border-top:1px solid var(--line);padding:16px 0}.trade:first-child{border-top:0}.tradehead{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}.gallery{display:flex;align-items:center;gap:10px;margin:12px 0}.gallery-stage{flex:1;min-width:0;text-align:center}.gallery-stage img{max-width:100%;max-height:420px;object-fit:contain;border-radius:10px}.thumbs{display:flex;gap:7px;overflow:auto;margin-top:8px}.thumbs img{height:62px;width:90px;object-fit:cover;border-radius:7px;cursor:pointer;border:2px solid transparent}.thumbs img.active{border-color:var(--blue)}.image-preview{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.image-preview img{width:115px;height:80px;object-fit:cover;border-radius:8px}.status{padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#0d1527;margin:10px 0}.status.error{border-color:#8b4350;color:#ffb2bd}.status.ok{border-color:#28694f;color:#a9f1d0}
+.authbox{max-width:650px;margin:18px auto}.authbox form{margin-bottom:10px}.hide{display:none!important}.trade{border-top:1px solid var(--line);padding:16px 0}.trade:first-child{border-top:0}.tradehead{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}.gallery{display:flex;align-items:center;gap:10px;margin:12px 0}.gallery-stage{flex:1;min-width:0;text-align:center}.gallery-stage img{max-width:100%;max-height:420px;object-fit:contain;border-radius:10px}.thumbs{display:flex;gap:7px;overflow:auto;margin-top:8px}
+
+.image-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.image-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px;cursor:pointer}
+.image-card img{width:100%;height:130px;object-fit:cover;border-radius:8px}
+.image-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9999;align-items:center;justify-content:center;gap:15px;flex-wrap:wrap;padding:20px}
+.image-modal.open{display:flex}
+.image-modal img{max-width:75vw;max-height:75vh;object-fit:contain}
+.image-modal button{font-size:24px}
+#closeModal{position:absolute;top:15px;right:20px}
+#modalCaption{width:100%;text-align:center;color:white}
+
+.image-preview{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.image-preview img{width:115px;height:80px;object-fit:cover;border-radius:8px}
+.status{padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#0d1527;margin:10px 0}
+.status.error{border-color:#8b4350;color:#ffb2bd}
+.status.ok{border-color:#28694f;color:#a9f1d0}
 @media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}}
 @media(max-width:520px){main{padding:0 12px 30px}header{padding:22px 12px 12px}.grid{gap:8px}.card{padding:13px}.metric strong{font-size:22px}form{grid-template-columns:1fr}.wide{grid-column:auto}}
 </style>
@@ -46,6 +62,7 @@ form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}label{d
   <button class="tab active" data-view="dashboard">Resumen</button>
   <button class="tab" data-view="new">+ Registrar trade</button>
   <button class="tab" data-view="history">Historial</button>
+  <button class="tab" data-view="images">Imágenes</button>
   <button class="tab" data-view="review">Revisión semanal</button>
  </nav>
 
@@ -107,6 +124,13 @@ form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}label{d
    <p class="note">La importación agrega operaciones al historial actual; no reemplaza ni borra tus registros.</p>
   </div>
  </section>
+ <section id="images" class="view">
+  <div class="panel">
+    <h2>Galería de imágenes</h2>
+    <p class="note">Todas las capturas de tus operaciones.</p>
+    <div id="allImages"></div>
+  </div>
+</section>
 
  <section id="review" class="view">
   <div class="panel"><h2>Revisión semanal</h2>
@@ -136,7 +160,7 @@ function message(id,txt,kind=''){const el=$(id);el.textContent=txt;el.className=
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function fmt(n){return (Number(n)>0?'+':'')+Number(n||0).toFixed(2)+'%'}
 function compliant(t){return !!(t.on_time && t.risk_ok && t.confirmation_ok && t.followed)}
-function show(view){document.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.id===view));document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.view===view));if(view==='history')renderHistory();if(view==='review')renderWeek()}
+function show(view){document.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.id===view));document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.view===view));if(view==='history')renderHistory();if(view==='review')renderWeek();if(view==='images')renderAllImages()}
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>show(b.dataset.view));
 function localDate(){const d=new Date();return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10)}
 $('date').value=localDate();
@@ -165,7 +189,57 @@ function renderWeek(){const w=$('week').value;if(!w){$('weeklyStats').innerHTML=
 $('week').onchange=renderWeek;$('saveReview').onclick=()=>{const w=$('week').value;if(!w)return alert('Selecciona una semana.');reviews[w]={error:$('weekError').value,rule:$('weekRule').value};localStorage.setItem('mi_diario_reviews_v2',JSON.stringify(reviews));alert('Revisión semanal guardada en este navegador.')};
 async function signedUrl(path){const {data,error}=await sb.storage.from(BUCKET).createSignedUrl(path,3600);if(error)throw error;return data.signedUrl}
 async function renderGallery(container,paths){if(!paths?.length)return;const urls=[];for(const p of paths){try{urls.push({path:p,url:await signedUrl(p)})}catch(e){console.warn('No se pudo abrir imagen',e)}}if(!urls.length)return;let ix=0;const gal=document.createElement('div');gal.className='gallery';const prev=document.createElement('button');prev.textContent='‹';const stage=document.createElement('div');stage.className='gallery-stage';const img=document.createElement('img');img.alt='Captura del gráfico';const count=document.createElement('div');count.className='note';stage.append(img,count);const next=document.createElement('button');next.textContent='›';const thumbs=document.createElement('div');thumbs.className='thumbs';function paint(){img.src=urls[ix].url;count.textContent=`Imagen ${ix+1} de ${urls.length}`;[...thumbs.children].forEach((x,i)=>x.classList.toggle('active',i===ix))}urls.forEach((u,i)=>{const im=document.createElement('img');im.src=u.url;im.alt=`Miniatura ${i+1}`;im.onclick=()=>{ix=i;paint()};thumbs.append(im)});prev.onclick=()=>{ix=(ix-1+urls.length)%urls.length;paint()};next.onclick=()=>{ix=(ix+1)%urls.length;paint()};gal.append(prev,stage,next);container.append(gal,thumbs);paint()}
-async function renderHistory(){const host=$('historyTable');if(!trades.length){host.innerHTML='<div class="empty">Todavía no tienes operaciones registradas.</div>';return}host.innerHTML='';const wrap=document.createElement('div');wrap.className='table-wrap';const table=document.createElement('table');table.innerHTML='<thead><tr><th>Fecha</th><th>Activo</th><th>Sesión</th><th>Resultado</th><th>Riesgo</th><th>Disciplina</th><th>Acciones</th></tr></thead>';const body=document.createElement('tbody');for(const t of trades){const tr=document.createElement('tr');tr.innerHTML=`<td>${esc(t.date)}</td><td>${esc(t.symbol)}</td><td>${esc(t.session)}</td><td class="${t.pnl>0?'green':t.pnl<0?'red':''}">${fmt(t.pnl)}</td><td>${Number(t.risk||0)}%</td><td>${compliant(t)?'<span class="green">En plan</span>':'<span class="red">Fuera de plan</span>'}</td><td></td>`;const actions=tr.lastElementChild;const edit=document.createElement('button');edit.textContent='Editar';edit.onclick=()=>editTrade(t.id);const del=document.createElement('button');del.textContent='Eliminar';del.className='danger';del.onclick=()=>deleteTrade(t);actions.append(edit,document.createTextNode(' '),del);body.append(tr);const detail=document.createElement('tr');const cell=document.createElement('td');cell.colSpan=7;cell.innerHTML=`<div class="note"><b>Contexto:</b> ${esc(t.zone||'—')} · <b>Confirmación:</b> ${esc(t.confirmation||'—')}<br><b>Emociones:</b> ${esc(t.emotion||'—')}<br><b>Lección:</b> ${esc(t.lesson||'—')}</div>`;if(t.image_paths?.length){const galleryBox=document.createElement('div');cell.append(galleryBox);renderGallery(galleryBox,t.image_paths)}detail.append(cell);body.append(detail)}table.append(body);wrap.append(table);host.append(wrap)}
+async function renderHistory(){const host=$('historyTable');if(!trades.length){host.innerHTML='<div class="empty">Todavía no tienes operaciones registradas.</div>';return}host.innerHTML='';const wrap=document.createElement('div');wrap.className='table-wrap';const table=document.createElement('table');table.innerHTML='<thead><tr><th>Fecha</th><th>Activo</th><th>Sesión</th><th>Resultado</th><th>Riesgo</th><th>Disciplina</th><th>Acciones</th></tr></thead>';const body=document.createElement('tbody');for(const t of trades){const tr=document.createElement('tr');tr.innerHTML=`<td>${esc(t.date)}</td><td>${esc(t.symbol)}</td><td>${esc(t.session)}</td><td class="${t.pnl>0?'green':t.pnl<0?'red':''}">${fmt(t.pnl)}</td><td>${Number(t.risk||0)}%</td><td>${compliant(t)?'<span class="green">En plan</span>':'<span class="red">Fuera de plan</span>'}</td><td></td>`;const actions=tr.lastElementChild;const edit=document.createElement('button');edit.textContent='Editar';edit.onclick=()=>editTrade(t.id);const del=document.createElement('button');del.textContent='Eliminar';del.className='danger';del.onclick=()=>deleteTrade(t);actions.append(edit,document.createTextNode(' '),del);body.append(tr);const detail=document.createElement('tr');const cell=document.createElement('td');cell.colSpan=7;cell.innerHTML=`<div class="note"><b>Contexto:</b> ${esc(t.zone||'—')} · <b>Confirmación:</b> ${esc(t.confirmation||'—')}<br><b>Emociones:</b> ${esc(t.emotion||'—')}<br><b>Lección:</b> ${esc(t.lesson||'—')}</div>`;detail.append(cell);body.append(detail)}table.append(body);wrap.append(table);host.append(wrap)}
+
+ let allImages=[];
+let currentImage=0;
+
+async function renderAllImages(){
+ const host=$('allImages');
+ host.innerHTML='';
+ allImages=[];
+ for(const t of trades){
+  for(const path of (t.image_paths||[])){
+   try{
+    const url=await signedUrl(path);
+    allImages.push({url,date:t.date,symbol:t.symbol});
+   }catch(e){console.warn(e)}
+  }
+ }
+ if(!allImages.length){
+  host.innerHTML='<div class="empty">Todavía no tienes imágenes guardadas.</div>';
+  return;
+ }
+ host.className='image-grid';
+ allImages.forEach((item,i)=>{
+  const card=document.createElement('div');
+  card.className='image-card';
+  card.innerHTML=`<img src="${item.url}"><p>${esc(item.symbol)} · ${esc(item.date)}</p>`;
+  card.onclick=()=>openImage(i);
+  host.append(card);
+ });
+}function openImage(i){
+ currentImage=i;
+ let modal=$('imageModal');
+ if(!modal){
+  modal=document.createElement('div');
+  modal.id='imageModal';
+  modal.className='image-modal';
+  modal.innerHTML=`
+   <button id="closeModal">✕</button>
+   <button id="prevModal">‹</button>
+   <img id="modalImg">
+   <button id="nextModal">›</button>
+   <p id="modalCaption"></p>`;
+  document.body.append(modal);
+  $('closeModal').onclick=()=>modal.classList.remove('open');
+  $('prevModal').onclick=()=>openImage((currentImage-1+allImages.length)%allImages.length);
+  $('nextModal').onclick=()=>openImage((currentImage+1)%allImages.length);
+ }
+ $('modalImg').src=allImages[i].url;
+ $('modalCaption').textContent=allImages[i].symbol+' · '+allImages[i].date;
+ modal.classList.add('open');
+}
 function editTrade(id){const t=trades.find(x=>String(x.id)===String(id));if(!t)return;const vals={date:t.date,symbol:t.symbol,session:t.session,direction:t.direction,contextTf:t.contextTf,entryTf:t.entryTf,outcome:t.outcome,pnl:t.pnl,risk:t.risk,zone:t.zone,confirmation:t.confirmation,market:t.market,emotion:t.emotion,lesson:t.lesson};fields.forEach(f=>$(f).value=vals[f]??'');$('onTime').checked=t.on_time;$('riskOk').checked=t.risk_ok;$('confirmationOk').checked=t.confirmation_ok;$('followed').checked=t.followed;$('editId').value=t.id;$('formTitle').textContent='Editar operación';selectedFiles=[];$('imagePreview').innerHTML='';$('images').value='';show('new');if(t.image_paths?.length){message('saveMsg',`Esta operación ya tiene ${t.image_paths.length} imagen(es). Puedes añadir más; las anteriores se conservan.`)}}
 async function deleteTrade(t){if(!confirm('¿Eliminar esta operación y sus capturas?'))return;try{if(t.image_paths?.length){const {error:e}=await sb.storage.from(BUCKET).remove(t.image_paths);if(e)throw e}const {error}=await sb.from('trades').delete().eq('id',t.id);if(error)throw error;await loadTrades()}catch(e){alert('No se pudo eliminar: '+e.message)}}
 $('export').onclick=()=>{const blob=new Blob([JSON.stringify({trades:trades.map(t=>({...t})),reviews},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='respaldo-diario-trading.json';a.click();URL.revokeObjectURL(a.href)};
