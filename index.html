@@ -60,7 +60,7 @@ th{color:var(--muted);font-weight:600}
 .status.error{border-color:#8b4350;color:#ffb2bd}
 .status.ok{border-color:#28694f;color:#a9f1d0}
 
-/* Galería dentro de cada operación */
+/* Galería */
 .gallery-toggle{margin-top:10px}
 .trade-gallery{display:none;margin-top:12px;padding:12px;background:#0d1527;border:1px solid var(--line);border-radius:12px}
 .trade-gallery.open{display:block}
@@ -78,6 +78,11 @@ th{color:var(--muted);font-weight:600}
 .image-modal button{font-size:24px}
 #closeModal{position:absolute;top:15px;right:20px}
 #modalCaption{position:absolute;bottom:12px;width:100%;text-align:center;color:white}
+
+/* Mentor IA */
+.mentor-intro{border:1px solid #354d75;background:#111e35;padding:16px;border-radius:12px;margin-bottom:15px}
+.mentor-answer{white-space:pre-wrap;line-height:1.75;background:#0d1527;border:1px solid var(--line);padding:18px;border-radius:12px;margin-top:15px;overflow-wrap:anywhere}
+.mentor-question{min-height:100px}
 @media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}}
 @media(max-width:520px){main{padding:0 12px 30px}header{padding:22px 12px 12px}.grid{gap:8px}.card{padding:13px}.metric strong{font-size:22px}form{grid-template-columns:1fr}.wide{grid-column:auto}.image-modal img{max-width:85vw;max-height:70vh}}
 </style>
@@ -114,6 +119,7 @@ th{color:var(--muted);font-weight:600}
 <button class="tab" data-view="new">+ Registrar trade</button>
 <button class="tab" data-view="history">Historial</button>
 <button class="tab" data-view="review">Revisión semanal</button>
+<button class="tab" data-view="mentor">🧠 Mentor IA</button>
 </nav>
 
 <section id="dashboard" class="view active">
@@ -194,6 +200,29 @@ th{color:var(--muted);font-weight:600}
 <p class="note">Las notas de revisión semanal se guardan en este navegador.</p>
 </div>
 </section>
+
+<section id="mentor" class="view">
+<div class="panel">
+<h2>🧠 Tu Mentor de Trading</h2>
+<div class="mentor-intro">
+<strong>Un mentor que analiza tus decisiones, no solamente tus ganancias.</strong>
+<p class="note">Analizará tus operaciones registradas para detectar errores repetidos, problemas de disciplina, riesgo y fortalezas. Será directo y honesto contigo.</p>
+</div>
+
+<label>¿Qué quieres preguntarle?
+<textarea id="mentorQuestion" class="mentor-question" placeholder="Ej. ¿Por qué sigo sobreoperando después de una pérdida? ¿Qué debo corregir esta semana?"></textarea>
+</label>
+
+<div class="actions">
+<button class="primary" id="askMentor">Analizar mis operaciones</button>
+<button id="clearMentor">Limpiar respuesta</button>
+</div>
+
+<p id="mentorStatus" class="note" aria-live="polite"></p>
+<div id="mentorAnswer" class="mentor-answer hide"></div>
+<p class="note">El análisis utiliza los datos escritos de tus operaciones. En esta primera versión todavía no interpreta directamente las imágenes de tus gráficos.</p>
+</div>
+</section>
 </div>
 </main>
 
@@ -204,6 +233,8 @@ const SUPABASE_URL = 'https://sjznumwynuguxvlhbmwh.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_K5-lrmjbJOxls0yOwYX9aw_WmeQG0N4';
 const SITE_URL = 'https://eduardobenjamin117-creator.github.io/mentor-trading/';
 const BUCKET = 'trade-images';
+const MENTOR_FUNCTION = 'bright-function';
+
 const $ = id => document.getElementById(id);
 const supabaseReady = window.supabase && SUPABASE_PUBLISHABLE_KEY !== 'PEGA_AQUI_TU_CLAVE_PUBLICABLE';
 const sb = supabaseReady ? window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY) : null;
@@ -456,13 +487,94 @@ localStorage.setItem('mi_diario_reviews_v2',JSON.stringify(reviews));
 alert('Revisión semanal guardada en este navegador.');
 };
 
+/* CONEXIÓN CON EL MENTOR DE IA */
+$('askMentor').onclick=async()=>{
+const btn=$('askMentor');
+const answer=$('mentorAnswer');
+const question=$('mentorQuestion').value.trim();
+
+if(!sb||!user){
+message('mentorStatus','Primero inicia sesión en tu diario.','error');
+return;
+}
+if(!trades.length){
+message('mentorStatus','Todavía no tienes operaciones para analizar. Registra tus trades primero.','error');
+return;
+}
+
+btn.disabled=true;
+answer.classList.add('hide');
+answer.textContent='';
+message('mentorStatus','Tu mentor está analizando tus operaciones. Esto puede tardar unos segundos...');
+
+try{
+const mentorTrades=trades.map(t=>({
+fecha:t.date,
+activo:t.symbol,
+sesion:t.session,
+direccion:t.direction,
+temporalidad_contexto:t.contextTf,
+temporalidad_entrada:t.entryTf,
+resultado_porcentaje:t.pnl,
+tipo_resultado:t.outcome,
+riesgo_porcentaje:t.risk,
+zona_DOL_FVG:t.zone,
+confirmacion:t.confirmation,
+lectura_del_mercado:t.market,
+dentro_de_horario:t.on_time,
+respetó_riesgo:t.risk_ok,
+esperó_confirmacion:t.confirmation_ok,
+siguió_su_plan:t.followed,
+emociones:t.emotion,
+leccion:t.lesson
+}));
+
+const {data,error}=await sb.functions.invoke(MENTOR_FUNCTION,{
+body:{
+trades:mentorTrades,
+question:question||"Analiza mi rendimiento general. Detecta mis errores repetidos, mis fortalezas y dime qué debo corregir primero."
+}
+});
+
+if(error){
+let detail=error.message||'No se pudo conectar con el mentor.';
+if(error.context){
+try{
+const body=await error.context.json();
+if(body.error)detail=body.error;
+}catch{}
+}
+throw new Error(detail);
+}
+
+if(data?.error)throw new Error(data.error);
+if(!data?.answer)throw new Error('El mentor no devolvió una respuesta.');
+
+answer.textContent=data.answer;
+answer.classList.remove('hide');
+message('mentorStatus','Análisis completado. Revisa las observaciones y sé honesto contigo mismo.','ok');
+
+}catch(e){
+message('mentorStatus','No se pudo obtener el análisis: '+e.message,'error');
+}finally{
+btn.disabled=false;
+}
+};
+
+$('clearMentor').onclick=()=>{
+$('mentorQuestion').value='';
+$('mentorAnswer').textContent='';
+$('mentorAnswer').classList.add('hide');
+message('mentorStatus','');
+};
+
+/* Imágenes */
 async function signedUrl(path){
 const {data,error}=await sb.storage.from(BUCKET).createSignedUrl(path,3600);
 if(error)throw error;
 return data.signedUrl;
 }
 
-/* Visor de imágenes ampliadas */
 function ensureModal(){
 if($('imageModal'))return;
 const modal=document.createElement('div');
@@ -560,7 +672,6 @@ container.append(gal,thumbs);
 paint();
 }
 
-/* Historial con imágenes ocultas hasta pulsar el botón */
 async function renderHistory(){
 const host=$('historyTable');
 if(!trades.length){
