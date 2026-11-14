@@ -738,7 +738,7 @@ $('mentorQuestion').value='';
 
 /* Preparar las operaciones para el análisis */
 
-const mentorTrades=trades.slice(0,30).map(t=>({
+const mentorTrades=trades.map(t=>({
 id:t.id,
 fecha:t.date,
 activo:t.symbol,
@@ -759,7 +759,7 @@ siguio_su_plan:t.followed,
 emociones:t.emotion,
 leccion:t.lesson,
 // Solo se envían rutas privadas; bright-function decidirá cuáles necesita leer.
-image_paths:Array.isArray(t.image_paths)?t.image_paths.slice(0,4):[]
+image_paths:Array.isArray(t.image_paths)?t.image_paths:[]
 }));
 
 /* Enviar conversación y operaciones a bright-function */
@@ -792,7 +792,9 @@ if(!data?.answer)throw new Error('El mentor no devolvió una respuesta.');
 
 await saveMentorMessage('assistant',data.answer);
 
-message('mentorStatus','Respuesta guardada. Tu conversación permanece en Supabase.','ok');
+const loaded=Number(data.images_loaded||0);
+const failed=Number(data.images_failed||0);
+message('mentorStatus',`Respuesta guardada. Gemini recibió ${loaded} imágenes${failed?`. No se pudieron recuperar ${failed}`:''}.`,'ok');
 
 }catch(e){
 message('mentorStatus','No se pudo completar el mensaje: '+e.message,'error');
