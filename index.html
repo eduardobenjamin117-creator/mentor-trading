@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="es">
 <head>
@@ -7,143 +8,195 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{--bg:#0b1020;--panel:#121a2d;--panel2:#18233a;--line:#26344f;--text:#edf2ff;--muted:#94a3bd;--green:#42d392;--red:#ff7185;--blue:#7aa7ff;--yellow:#f5c76b}
-*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#0b1020,#111b30);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
-header{padding:26px 20px 14px;max-width:1200px;margin:auto}h1{margin:0;font-size:clamp(25px,4vw,36px);letter-spacing:-.7px}header p{margin:5px 0 0;color:var(--muted)}
-main{max-width:1200px;margin:auto;padding:0 20px 40px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 20px}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(135deg,#0b1020,#111b30);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{padding:26px 20px 14px;max-width:1200px;margin:auto}
+h1{margin:0;font-size:clamp(25px,4vw,36px);letter-spacing:-.7px}
+header p{margin:5px 0 0;color:var(--muted)}
+main{max-width:1200px;margin:auto;padding:0 20px 40px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 20px}
 button,.tab{border:1px solid var(--line);background:var(--panel2);color:var(--text);padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:600}
-button.primary{background:var(--blue);border-color:var(--blue);color:#081326}button.danger{color:var(--red)}button:disabled{opacity:.55;cursor:wait}.tab.active{background:var(--blue);color:#081326;border-color:var(--blue)}
-.view{display:none}.view.active{display:block}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+button.primary{background:var(--blue);border-color:var(--blue);color:#081326}
+button.danger{color:var(--red)}
+button:disabled{opacity:.55;cursor:wait}
+.tab.active{background:var(--blue);color:#081326;border-color:var(--blue)}
+.view{display:none}
+.view.active{display:block}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
 .card,.panel{background:rgba(18,26,45,.94);border:1px solid var(--line);border-radius:16px;padding:17px}
-.metric small{color:var(--muted);display:block}.metric strong{font-size:27px;display:block;margin-top:4px}.green{color:var(--green)}.red{color:var(--red)}.muted,.note{color:var(--muted)}
-.panel{margin-top:15px}.panel h2{font-size:18px;margin:0 0 14px}.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}label{display:block;color:var(--muted);font-size:13px}input,select,textarea{width:100%;margin-top:5px;background:#0d1527;border:1px solid var(--line);color:var(--text);padding:11px;border-radius:9px;font:inherit}textarea{min-height:82px;resize:vertical}.wide{grid-column:1/-1}.checks{display:flex;gap:12px;flex-wrap:wrap}.checks label{display:flex;align-items:center;gap:6px}.checks input{width:auto;margin:0}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:700px}th,td{text-align:left;padding:11px 9px;border-bottom:1px solid var(--line);font-size:13px}th{color:var(--muted);font-weight:600}.empty{text-align:center;color:var(--muted);padding:28px}
-.note{font-size:13px;margin-top:9px}.pill{display:inline-block;border-radius:99px;padding:3px 8px;background:#202d47;font-size:12px}
-.authbox{max-width:650px;margin:18px auto}.authbox form{margin-bottom:10px}.hide{display:none!important}.trade{border-top:1px solid var(--line);padding:16px 0}.trade:first-child{border-top:0}.tradehead{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}.gallery{display:flex;align-items:center;gap:10px;margin:12px 0}.gallery-stage{flex:1;min-width:0;text-align:center}.gallery-stage img{max-width:100%;max-height:420px;object-fit:contain;border-radius:10px}.thumbs{display:flex;gap:7px;overflow:auto;margin-top:8px}
-
-.image-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
-.image-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px;cursor:pointer}
-.image-card img{width:100%;height:130px;object-fit:cover;border-radius:8px}
-.image-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9999;align-items:center;justify-content:center;gap:15px;flex-wrap:wrap;padding:20px}
-.image-modal.open{display:flex}
-.image-modal img{max-width:75vw;max-height:75vh;object-fit:contain}
-.image-modal button{font-size:24px}
-#closeModal{position:absolute;top:15px;right:20px}
-#modalCaption{width:100%;text-align:center;color:white}
-
+.metric small{color:var(--muted);display:block}
+.metric strong{font-size:27px;display:block;margin-top:4px}
+.green{color:var(--green)}
+.red{color:var(--red)}
+.muted,.note{color:var(--muted)}
+.panel{margin-top:15px}
+.panel h2{font-size:18px;margin:0 0 14px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+label{display:block;color:var(--muted);font-size:13px}
+input,select,textarea{width:100%;margin-top:5px;background:#0d1527;border:1px solid var(--line);color:var(--text);padding:11px;border-radius:9px;font:inherit}
+textarea{min-height:82px;resize:vertical}
+.wide{grid-column:1/-1}
+.checks{display:flex;gap:12px;flex-wrap:wrap}
+.checks label{display:flex;align-items:center;gap:6px}
+.checks input{width:auto;margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.table-wrap{overflow:auto}
+table{width:100%;border-collapse:collapse;min-width:700px}
+th,td{text-align:left;padding:11px 9px;border-bottom:1px solid var(--line);font-size:13px}
+th{color:var(--muted);font-weight:600}
+.empty{text-align:center;color:var(--muted);padding:28px}
+.note{font-size:13px;margin-top:9px}
+.pill{display:inline-block;border-radius:99px;padding:3px 8px;background:#202d47;font-size:12px}
+.authbox{max-width:650px;margin:18px auto}
+.authbox form{margin-bottom:10px}
+.hide{display:none!important}
+.trade{border-top:1px solid var(--line);padding:16px 0}
+.trade:first-child{border-top:0}
+.tradehead{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .image-preview{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 .image-preview img{width:115px;height:80px;object-fit:cover;border-radius:8px}
 .status{padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#0d1527;margin:10px 0}
 .status.error{border-color:#8b4350;color:#ffb2bd}
 .status.ok{border-color:#28694f;color:#a9f1d0}
+
+/* Galería dentro de cada operación */
+.gallery-toggle{margin-top:10px}
+.trade-gallery{display:none;margin-top:12px;padding:12px;background:#0d1527;border:1px solid var(--line);border-radius:12px}
+.trade-gallery.open{display:block}
+.gallery{display:flex;align-items:center;gap:10px;margin:8px 0}
+.gallery-stage{flex:1;min-width:0;text-align:center}
+.gallery-stage img{max-width:100%;max-height:350px;object-fit:contain;border-radius:10px;cursor:zoom-in}
+.thumbs{display:flex;gap:8px;overflow-x:auto;margin-top:10px;padding-bottom:5px}
+.thumbs img{width:75px;height:60px;object-fit:cover;border-radius:7px;cursor:pointer;border:2px solid transparent}
+.thumbs img.active{border-color:var(--blue)}
+
+/* Visor ampliado */
+.image-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.94);z-index:9999;align-items:center;justify-content:center;gap:15px;padding:20px}
+.image-modal.open{display:flex}
+.image-modal img{max-width:75vw;max-height:78vh;object-fit:contain}
+.image-modal button{font-size:24px}
+#closeModal{position:absolute;top:15px;right:20px}
+#modalCaption{position:absolute;bottom:12px;width:100%;text-align:center;color:white}
 @media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}}
-@media(max-width:520px){main{padding:0 12px 30px}header{padding:22px 12px 12px}.grid{gap:8px}.card{padding:13px}.metric strong{font-size:22px}form{grid-template-columns:1fr}.wide{grid-column:auto}}
+@media(max-width:520px){main{padding:0 12px 30px}header{padding:22px 12px 12px}.grid{gap:8px}.card{padding:13px}.metric strong{font-size:22px}form{grid-template-columns:1fr}.wide{grid-column:auto}.image-modal img{max-width:85vw;max-height:70vh}}
 </style>
 </head>
 <body>
-<header><h1>📈 Mi diario de trading</h1><p>Registra tus operaciones. Mide tu disciplina, no solamente el dinero.</p></header>
+<header>
+<h1>📈 Mi diario de trading</h1>
+<p>Registra tus operaciones. Mide tu disciplina, no solamente el dinero.</p>
+</header>
+
 <main>
 <section id="auth" class="panel authbox">
- <h2>Entrar a tu diario</h2>
- <p class="note">Crea tu cuenta con tu correo y una contraseña. Tus operaciones e imágenes serán privadas.</p>
- <form id="authForm">
-  <label class="wide">Correo electrónico<input id="email" type="email" autocomplete="email" required></label>
-  <label class="wide">Contraseña<input id="password" type="password" minlength="8" autocomplete="current-password" required></label>
- </form>
- <div class="actions"><button class="primary" id="login">Iniciar sesión</button><button id="signup">Crear cuenta</button></div>
- <div id="authMsg" class="note" aria-live="polite"></div>
+<h2>Entrar a tu diario</h2>
+<p class="note">Crea tu cuenta con tu correo y una contraseña. Tus operaciones e imágenes serán privadas.</p>
+<form id="authForm">
+<label class="wide">Correo electrónico<input id="email" type="email" autocomplete="email" required></label>
+<label class="wide">Contraseña<input id="password" type="password" minlength="8" autocomplete="current-password" required></label>
+</form>
+<div class="actions">
+<button class="primary" id="login">Iniciar sesión</button>
+<button id="signup">Crear cuenta</button>
+</div>
+<div id="authMsg" class="note" aria-live="polite"></div>
 </section>
 
 <div id="app" class="hide">
- <div class="row" style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;margin:12px 0">
-  <span id="who" class="muted"></span><button id="logout">Cerrar sesión</button>
- </div>
- <nav class="tabs">
-  <button class="tab active" data-view="dashboard">Resumen</button>
-  <button class="tab" data-view="new">+ Registrar trade</button>
-  <button class="tab" data-view="history">Historial</button>
-  <button class="tab" data-view="images">Imágenes</button>
-  <button class="tab" data-view="review">Revisión semanal</button>
- </nav>
+<div class="row" style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;margin:12px 0">
+<span id="who" class="muted"></span>
+<button id="logout">Cerrar sesión</button>
+</div>
 
- <section id="dashboard" class="view active">
-  <div class="grid">
-   <div class="card metric"><small>Resultado acumulado</small><strong id="total">0%</strong></div>
-   <div class="card metric"><small>Operaciones</small><strong id="count">0</strong></div>
-   <div class="card metric"><small>Porcentaje ganador</small><strong id="winrate">0%</strong></div>
-   <div class="card metric"><small>Trades fuera de plan</small><strong id="violations">0</strong></div>
-  </div>
-  <div class="two">
-   <div class="panel"><h2>Disciplina</h2><div id="discipline" style="font-size:30px;font-weight:700">—</div><p class="note">Porcentaje de operaciones en las que respetaste tus reglas registradas.</p></div>
-   <div class="panel"><h2>Recordatorio</h2><p>Un trade ganador fuera de tu plan sigue siendo un error de ejecución. Una pérdida respetando tu plan puede ser una buena operación.</p></div>
-  </div>
-  <div class="panel"><h2>Últimas operaciones</h2><div id="recent"></div></div>
- </section>
+<nav class="tabs">
+<button class="tab active" data-view="dashboard">Resumen</button>
+<button class="tab" data-view="new">+ Registrar trade</button>
+<button class="tab" data-view="history">Historial</button>
+<button class="tab" data-view="review">Revisión semanal</button>
+</nav>
 
- <section id="new" class="view">
-  <div class="panel">
-   <h2 id="formTitle">Registrar una operación</h2>
-   <form id="tradeForm">
-    <input type="hidden" id="editId">
-    <label>Fecha<input id="date" type="date" required></label>
-    <label>Instrumento / par<input id="symbol" value="NASDAQ" placeholder="Ej. NASDAQ"></label>
-    <label>Sesión<select id="session"><option>NY</option><option>Londres</option><option>Asia</option><option>Otra</option></select></label>
-    <label>Dirección<select id="direction"><option>Compra</option><option>Venta</option></select></label>
-    <label>Temporalidad de contexto<input id="contextTf" placeholder="Ej. H4 / H1"></label>
-    <label>Temporalidad de entrada<input id="entryTf" placeholder="Ej. M15"></label>
-    <label>Resultado<select id="outcome"><option value="win">TP / Ganadora</option><option value="loss">SL / Perdida</option><option value="be">Breakeven</option></select></label>
-    <label>Resultado en % (positivo o negativo)<input id="pnl" type="number" step="0.01" placeholder="Ej. -1 o 2.5" required></label>
-    <label>Riesgo usado (%)<input id="risk" type="number" step="0.01" min="0" placeholder="Ej. 0.5"></label>
-    <label class="wide">Zona / contexto / DOL / FVG<textarea id="zone" placeholder="¿Qué zona estabas observando? ¿El DOL estaba claro?"></textarea></label>
-    <label class="wide">Confirmación de entrada<textarea id="confirmation" placeholder="¿Hubo iFVG, estructura, desplazamiento...?"></textarea></label>
-    <label class="wide">¿Qué viste en el mercado?<textarea id="market" placeholder="Describe tu lectura real. Si estaba nublado, escríbelo."></textarea></label>
-    <div class="wide checks">
-     <label><input type="checkbox" id="onTime" checked> Dentro de mi horario</label>
-     <label><input type="checkbox" id="riskOk" checked> Respeté mi riesgo</label>
-     <label><input type="checkbox" id="confirmationOk" checked> Esperé confirmación</label>
-     <label><input type="checkbox" id="followed" checked> Seguí mi plan</label>
-    </div>
-    <label class="wide">Emociones antes/durante<textarea id="emotion" placeholder="Calma, ansiedad, euforia, frustración, deseo de recuperar..."></textarea></label>
-    <label class="wide">¿Qué hice bien y qué debo corregir?<textarea id="lesson" placeholder="Sé honesto contigo."></textarea></label>
-    <label class="wide">Capturas del gráfico (puedes seleccionar varias)
-     <input id="images" type="file" accept="image/jpeg,image/png,image/webp" multiple>
-     <span class="note">Puedes añadir varias capturas por operación. Máximo 5 MB por imagen.</span>
-     <div id="imagePreview" class="image-preview"></div>
-    </label>
-   </form>
-   <div class="actions"><button class="primary" id="saveTrade" type="button">Guardar operación</button><button id="clearForm" type="button">Limpiar</button></div>
-   <p id="saveMsg" class="note" aria-live="polite"></p>
-  </div>
- </section>
-
- <section id="history" class="view">
-  <div class="panel">
-   <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap"><h2>Historial de operaciones</h2><button id="export">Exportar respaldo JSON</button></div>
-   <div id="historyTable" class="table-wrap"></div>
-   <div class="actions"><label style="display:inline-block">Importar respaldo JSON<input id="importFile" type="file" accept=".json,application/json"></label></div>
-   <p class="note">La importación agrega operaciones al historial actual; no reemplaza ni borra tus registros.</p>
-  </div>
- </section>
- <section id="images" class="view">
-  <div class="panel">
-    <h2>Galería de imágenes</h2>
-    <p class="note">Todas las capturas de tus operaciones.</p>
-    <div id="allImages"></div>
-  </div>
+<section id="dashboard" class="view active">
+<div class="grid">
+<div class="card metric"><small>Resultado acumulado</small><strong id="total">0%</strong></div>
+<div class="card metric"><small>Operaciones</small><strong id="count">0</strong></div>
+<div class="card metric"><small>Porcentaje ganador</small><strong id="winrate">0%</strong></div>
+<div class="card metric"><small>Trades fuera de plan</small><strong id="violations">0</strong></div>
+</div>
+<div class="two">
+<div class="panel"><h2>Disciplina</h2><div id="discipline" style="font-size:30px;font-weight:700">—</div><p class="note">Porcentaje de operaciones en las que respetaste tus reglas registradas.</p></div>
+<div class="panel"><h2>Recordatorio</h2><p>Un trade ganador fuera de tu plan sigue siendo un error de ejecución. Una pérdida respetando tu plan puede ser una buena operación.</p></div>
+</div>
+<div class="panel"><h2>Últimas operaciones</h2><div id="recent"></div></div>
 </section>
 
- <section id="review" class="view">
-  <div class="panel"><h2>Revisión semanal</h2>
-   <label>Semana que quieres revisar<input id="week" type="week"></label>
-   <div id="weeklyStats" style="margin-top:15px"></div>
-   <label style="margin-top:14px">¿Cuál fue mi principal error?<textarea id="weekError" placeholder="Ej. Forcé una entrada en FVG H1 sin confirmación..."></textarea></label>
-   <label style="margin-top:10px">¿Qué regla voy a cumplir la próxima semana?<textarea id="weekRule" placeholder="Ej. No operar después de las 10:30 y parar tras mi pérdida diaria."></textarea></label>
-   <div class="actions"><button class="primary" id="saveReview">Guardar revisión</button></div>
-   <p class="note">Las notas de revisión semanal se guardan en este navegador.</p>
-  </div>
- </section>
+<section id="new" class="view">
+<div class="panel">
+<h2 id="formTitle">Registrar una operación</h2>
+<form id="tradeForm">
+<input type="hidden" id="editId">
+<label>Fecha<input id="date" type="date" required></label>
+<label>Instrumento / par<input id="symbol" value="NASDAQ" placeholder="Ej. NASDAQ"></label>
+<label>Sesión<select id="session"><option>NY</option><option>Londres</option><option>Asia</option><option>Otra</option></select></label>
+<label>Dirección<select id="direction"><option>Compra</option><option>Venta</option></select></label>
+<label>Temporalidad de contexto<input id="contextTf" placeholder="Ej. H4 / H1"></label>
+<label>Temporalidad de entrada<input id="entryTf" placeholder="Ej. M15"></label>
+<label>Resultado<select id="outcome"><option value="win">TP / Ganadora</option><option value="loss">SL / Perdida</option><option value="be">Breakeven</option></select></label>
+<label>Resultado en % (positivo o negativo)<input id="pnl" type="number" step="0.01" placeholder="Ej. -1 o 2.5" required></label>
+<label>Riesgo usado (%)<input id="risk" type="number" step="0.01" min="0" placeholder="Ej. 0.5"></label>
+<label class="wide">Zona / contexto / DOL / FVG<textarea id="zone" placeholder="¿Qué zona estabas observando? ¿El DOL estaba claro?"></textarea></label>
+<label class="wide">Confirmación de entrada<textarea id="confirmation" placeholder="¿Hubo iFVG, estructura, desplazamiento...?"></textarea></label>
+<label class="wide">¿Qué viste en el mercado?<textarea id="market" placeholder="Describe tu lectura real. Si estaba nublado, escríbelo."></textarea></label>
+<div class="wide checks">
+<label><input type="checkbox" id="onTime" checked> Dentro de mi horario</label>
+<label><input type="checkbox" id="riskOk" checked> Respeté mi riesgo</label>
+<label><input type="checkbox" id="confirmationOk" checked> Esperé confirmación</label>
+<label><input type="checkbox" id="followed" checked> Seguí mi plan</label>
+</div>
+<label class="wide">Emociones antes/durante<textarea id="emotion" placeholder="Calma, ansiedad, euforia, frustración, deseo de recuperar..."></textarea></label>
+<label class="wide">¿Qué hice bien y qué debo corregir?<textarea id="lesson" placeholder="Sé honesto contigo."></textarea></label>
+<label class="wide">Capturas del gráfico (puedes seleccionar varias)
+<input id="images" type="file" accept="image/jpeg,image/png,image/webp" multiple>
+<span class="note">Puedes añadir varias capturas por operación. Máximo 5 MB por imagen.</span>
+<div id="imagePreview" class="image-preview"></div>
+</label>
+</form>
+<div class="actions">
+<button class="primary" id="saveTrade" type="button">Guardar operación</button>
+<button id="clearForm" type="button">Limpiar</button>
+</div>
+<p id="saveMsg" class="note" aria-live="polite"></p>
+</div>
+</section>
+
+<section id="history" class="view">
+<div class="panel">
+<div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap">
+<h2>Historial de operaciones</h2>
+<button id="export">Exportar respaldo JSON</button>
+</div>
+<div id="historyTable" class="table-wrap"></div>
+<div class="actions">
+<label style="display:inline-block">Importar respaldo JSON<input id="importFile" type="file" accept=".json,application/json"></label>
+</div>
+<p class="note">La importación agrega operaciones al historial actual; no reemplaza ni borra tus registros.</p>
+</div>
+</section>
+
+<section id="review" class="view">
+<div class="panel">
+<h2>Revisión semanal</h2>
+<label>Semana que quieres revisar<input id="week" type="week"></label>
+<div id="weeklyStats" style="margin-top:15px"></div>
+<label style="margin-top:14px">¿Cuál fue mi principal error?<textarea id="weekError" placeholder="Ej. Forcé una entrada en FVG H1 sin confirmación..."></textarea></label>
+<label style="margin-top:10px">¿Qué regla voy a cumplir la próxima semana?<textarea id="weekRule" placeholder="Ej. No operar después de las 10:30 y parar tras mi pérdida diaria."></textarea></label>
+<div class="actions"><button class="primary" id="saveReview">Guardar revisión</button></div>
+<p class="note">Las notas de revisión semanal se guardan en este navegador.</p>
+</div>
+</section>
 </div>
 </main>
+
 <footer style="max-width:1200px;margin:auto;padding:0 20px 30px;color:var(--muted);font-size:12px">Diario privado · Operaciones e imágenes sincronizadas con Supabase.</footer>
 
 <script>
@@ -154,97 +207,564 @@ const BUCKET = 'trade-images';
 const $ = id => document.getElementById(id);
 const supabaseReady = window.supabase && SUPABASE_PUBLISHABLE_KEY !== 'PEGA_AQUI_TU_CLAVE_PUBLICABLE';
 const sb = supabaseReady ? window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY) : null;
-let user = null, trades = [], selectedFiles = [], reviews = JSON.parse(localStorage.getItem('mi_diario_reviews_v2') || '{}');
+
+let user = null, trades = [], selectedFiles = [];
+let reviews = JSON.parse(localStorage.getItem('mi_diario_reviews_v2') || '{}');
+let modalImages = [], modalIndex = 0;
+
 const fields = ['date','symbol','session','direction','contextTf','entryTf','outcome','pnl','risk','zone','confirmation','market','emotion','lesson'];
-function message(id,txt,kind=''){const el=$(id);el.textContent=txt;el.className='note '+(kind==='error'?'red':kind==='ok'?'green':'')}
-function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+function message(id,txt,kind=''){
+const el=$(id);
+el.textContent=txt;
+el.className='note '+(kind==='error'?'red':kind==='ok'?'green':'');
+}
+function esc(s){
+return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
 function fmt(n){return (Number(n)>0?'+':'')+Number(n||0).toFixed(2)+'%'}
 function compliant(t){return !!(t.on_time && t.risk_ok && t.confirmation_ok && t.followed)}
-function show(view){document.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.id===view));document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.view===view));if(view==='history')renderHistory();if(view==='review')renderWeek();if(view==='images')renderAllImages()}
-document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>show(b.dataset.view));
-function localDate(){const d=new Date();return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10)}
-$('date').value=localDate();
-function mapRow(r){return {id:r.id,date:r.fecha,symbol:r.activo||'NASDAQ',session:r.session||'NY',direction:r.direccion||'Compra',contextTf:r.context_tf||'',entryTf:r.entry_tf||'',outcome:r.outcome|| (Number(r.resultado)>0?'win':Number(r.resultado)<0?'loss':'be'),pnl:Number(r.resultado||0),risk:Number(r.riesgo||0),zone:r.zone||r.contexto||'',confirmation:r.confirmacion||'',market:r.market_view||'',on_time:r.on_time??false,risk_ok:r.risk_ok??false,confirmation_ok:r.confirmation_ok??false,followed:r.cumplio_plan??false,emotion:r.emociones||'',lesson:r.leccion||'',image_paths:r.image_paths||[]}}
-function toRow(t){return {user_id:user.id,fecha:t.date,activo:t.symbol||'NASDAQ',direccion:t.direction||'Compra',resultado:Number(t.pnl||0),riesgo:Number(t.risk||0),contexto:t.zone||'',confirmacion:t.confirmation||'',emociones:t.emotion||'',leccion:t.lesson||'',cumplio_plan:!!t.followed,session:t.session||'NY',context_tf:t.contextTf||'',entry_tf:t.entryTf||'',outcome:t.outcome||'be',zone:t.zone||'',market_view:t.market||'',on_time:!!t.onTime,risk_ok:!!t.riskOk,confirmation_ok:!!t.confirmationOk,followed:!!t.followed,image_paths:t.image_paths||[]}}
-async function refreshSession(){if(!sb){$('authMsg').textContent='Falta configurar la clave publicable de Supabase en index.html.';return}const {data:{session}}=await sb.auth.getSession();if(session){user=session.user;await enterApp()}else{user=null;$('auth').classList.remove('hide');$('app').classList.add('hide')}}
-async function enterApp(){ $('auth').classList.add('hide');$('app').classList.remove('hide');$('who').textContent='Sesión: '+(user.email||'usuario');await loadTrades(); }
-$('login').onclick=async()=>{if(!sb)return message('authMsg','Primero configura la clave publicable en index.html.','error');const {error}=await sb.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});message('authMsg',error?error.message:'Sesión iniciada.',error?'error':'ok');if(!error){const {data:{user:u}}=await sb.auth.getUser();user=u;await enterApp()}};
-$('signup').onclick=async()=>{if(!sb)return message('authMsg','Primero configura la clave publicable en index.html.','error');const {data,error}=await sb.auth.signUp({email:$('email').value.trim(),password:$('password').value,options:{emailRedirectTo:SITE_URL}});message('authMsg',error?error.message:(data.session?'Cuenta creada.':'Cuenta creada. Revisa tu correo para confirmar el registro.'),error?'error':'ok');if(!error&&data.session){user=data.user;await enterApp()}};
-$('logout').onclick=async()=>{await sb.auth.signOut();user=null;trades=[];$('auth').classList.remove('hide');$('app').classList.add('hide')};
-if(sb)sb.auth.onAuthStateChange((_event,session)=>{if(session&&!user){user=session.user;setTimeout(enterApp,0)}else if(!session){user=null;$('auth').classList.remove('hide');$('app').classList.add('hide')}});
-async function loadTrades(){const {data,error}=await sb.from('trades').select('*').order('fecha',{ascending:false}).order('created_at',{ascending:false});if(error){alert('No se pudieron cargar las operaciones: '+error.message);return}trades=(data||[]).map(mapRow);render()}
-function render(){const total=trades.reduce((s,t)=>s+t.pnl,0),wins=trades.filter(t=>t.outcome==='win').length,viol=trades.filter(t=>!compliant(t)).length,good=trades.length-viol;$('total').textContent=fmt(total);$('total').className=total>=0?'green':'red';$('count').textContent=trades.length;$('winrate').textContent=trades.length?Math.round(wins/trades.length*100)+'%':'0%';$('violations').textContent=viol;$('discipline').textContent=trades.length?Math.round(good/trades.length*100)+'%':'—';$('recent').innerHTML=trades.length?'<div class="table-wrap"><table><thead><tr><th>Fecha</th><th>Activo</th><th>Resultado</th><th>Disciplina</th></tr></thead><tbody>'+trades.slice(0,5).map(t=>`<tr><td>${esc(t.date)}</td><td>${esc(t.symbol)}</td><td class="${t.pnl>=0?'green':'red'}">${fmt(t.pnl)}</td><td>${compliant(t)?'En plan':'Fuera de plan'}</td></tr>`).join('')+'</tbody></table></div>':'<div class="empty">Registra tu primer trade para ver tus estadísticas.</div>';renderHistory()}
-async function uploadFiles(files,tradeId){const paths=[];for(const file of files){if(!file.type.startsWith('image/'))continue;if(file.size>5*1024*1024)throw new Error('Cada imagen debe pesar máximo 5 MB.');const safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,'_');const path=`${user.id}/${tradeId}/${crypto.randomUUID()}-${safeName}`;const {error}=await sb.storage.from(BUCKET).upload(path,file,{upsert:false,contentType:file.type});if(error)throw error;paths.push(path)}return paths}
-$('images').onchange=()=>{selectedFiles=Array.from($('images').files||[]);$('imagePreview').innerHTML='';for(const f of selectedFiles){const img=document.createElement('img');img.src=URL.createObjectURL(f);img.alt=f.name;$('imagePreview').append(img)}};
-function resetForm(){$('tradeForm').reset();$('date').value=localDate();$('symbol').value='NASDAQ';$('onTime').checked=$('riskOk').checked=$('confirmationOk').checked=$('followed').checked=true;$('editId').value='';$('formTitle').textContent='Registrar una operación';selectedFiles=[];$('imagePreview').innerHTML='';$('images').value='';message('saveMsg','')}
-$('clearForm').onclick=resetForm;
-$('saveTrade').onclick=async()=>{const btn=$('saveTrade');if(!$('tradeForm').reportValidity())return;btn.disabled=true;message('saveMsg','Guardando operación e imágenes...');try{const id=$('editId').value;const t={};fields.forEach(f=>t[f]=$(f).value);t.pnl=Number(t.pnl||0);t.risk=Number(t.risk||0);t.onTime=$('onTime').checked;t.riskOk=$('riskOk').checked;t.confirmationOk=$('confirmationOk').checked;t.followed=$('followed').checked;t.image_paths=[];let row;
- if(id){const old=trades.find(x=>String(x.id)===String(id));const {data,error}=await sb.from('trades').update(toRow({...t,image_paths:old?.image_paths||[]})).eq('id',id).select().single();if(error)throw error;row=data;const paths=await uploadFiles(selectedFiles,id);const all=[...(old?.image_paths||[]),...paths];if(paths.length){const {error:e2}=await sb.from('trades').update({image_paths:all}).eq('id',id);if(e2)throw e2;row.image_paths=all}}
- else{const {data,error}=await sb.from('trades').insert(toRow(t)).select().single();if(error)throw error;row=data;const paths=await uploadFiles(selectedFiles,row.id);if(paths.length){const {error:e2}=await sb.from('trades').update({image_paths:paths}).eq('id',row.id);if(e2)throw e2}}
- resetForm();await loadTrades();show('history');message('saveMsg','Operación guardada.','ok');
- }catch(e){message('saveMsg','No se pudo guardar: '+e.message,'error')}finally{btn.disabled=false}};
-function weekDates(w){if(!w)return[];const [y,n]=w.split('-W').map(Number);const d=new Date(y,0,1+(n-1)*7);const day=d.getDay()||7;d.setDate(d.getDate()+1-day);const a=localDateFrom(d);d.setDate(d.getDate()+6);return[a,localDateFrom(d)]}
-function localDateFrom(d){const x=new Date(d.getTime()-d.getTimezoneOffset()*60000);return x.toISOString().slice(0,10)}
-function renderWeek(){const w=$('week').value;if(!w){$('weeklyStats').innerHTML='<p class="muted">Selecciona una semana para ver tu resumen.</p>';return}const[a,b]=weekDates(w),ts=trades.filter(t=>t.date>=a&&t.date<=b),sum=ts.reduce((s,t)=>s+t.pnl,0),viol=ts.filter(t=>!compliant(t)).length;$('weeklyStats').innerHTML=`<div class="grid"><div class="card metric"><small>Operaciones</small><strong>${ts.length}</strong></div><div class="card metric"><small>Resultado</small><strong class="${sum>=0?'green':'red'}">${fmt(sum)}</strong></div><div class="card metric"><small>Ganadoras</small><strong>${ts.filter(t=>t.outcome==='win').length}</strong></div><div class="card metric"><small>Fuera de plan</small><strong>${viol}</strong></div></div><p class="note">Periodo: ${a} al ${b}. ${ts.length?'Revisa especialmente las operaciones fuera de plan.':'No hay operaciones registradas esta semana.'}</p>`;const r=reviews[w]||{};$('weekError').value=r.error||'';$('weekRule').value=r.rule||''}
-$('week').onchange=renderWeek;$('saveReview').onclick=()=>{const w=$('week').value;if(!w)return alert('Selecciona una semana.');reviews[w]={error:$('weekError').value,rule:$('weekRule').value};localStorage.setItem('mi_diario_reviews_v2',JSON.stringify(reviews));alert('Revisión semanal guardada en este navegador.')};
-async function signedUrl(path){const {data,error}=await sb.storage.from(BUCKET).createSignedUrl(path,3600);if(error)throw error;return data.signedUrl}
-async function renderGallery(container,paths){if(!paths?.length)return;const urls=[];for(const p of paths){try{urls.push({path:p,url:await signedUrl(p)})}catch(e){console.warn('No se pudo abrir imagen',e)}}if(!urls.length)return;let ix=0;const gal=document.createElement('div');gal.className='gallery';const prev=document.createElement('button');prev.textContent='‹';const stage=document.createElement('div');stage.className='gallery-stage';const img=document.createElement('img');img.alt='Captura del gráfico';const count=document.createElement('div');count.className='note';stage.append(img,count);const next=document.createElement('button');next.textContent='›';const thumbs=document.createElement('div');thumbs.className='thumbs';function paint(){img.src=urls[ix].url;count.textContent=`Imagen ${ix+1} de ${urls.length}`;[...thumbs.children].forEach((x,i)=>x.classList.toggle('active',i===ix))}urls.forEach((u,i)=>{const im=document.createElement('img');im.src=u.url;im.alt=`Miniatura ${i+1}`;im.onclick=()=>{ix=i;paint()};thumbs.append(im)});prev.onclick=()=>{ix=(ix-1+urls.length)%urls.length;paint()};next.onclick=()=>{ix=(ix+1)%urls.length;paint()};gal.append(prev,stage,next);container.append(gal,thumbs);paint()}
-async function renderHistory(){const host=$('historyTable');if(!trades.length){host.innerHTML='<div class="empty">Todavía no tienes operaciones registradas.</div>';return}host.innerHTML='';const wrap=document.createElement('div');wrap.className='table-wrap';const table=document.createElement('table');table.innerHTML='<thead><tr><th>Fecha</th><th>Activo</th><th>Sesión</th><th>Resultado</th><th>Riesgo</th><th>Disciplina</th><th>Acciones</th></tr></thead>';const body=document.createElement('tbody');for(const t of trades){const tr=document.createElement('tr');tr.innerHTML=`<td>${esc(t.date)}</td><td>${esc(t.symbol)}</td><td>${esc(t.session)}</td><td class="${t.pnl>0?'green':t.pnl<0?'red':''}">${fmt(t.pnl)}</td><td>${Number(t.risk||0)}%</td><td>${compliant(t)?'<span class="green">En plan</span>':'<span class="red">Fuera de plan</span>'}</td><td></td>`;const actions=tr.lastElementChild;const edit=document.createElement('button');edit.textContent='Editar';edit.onclick=()=>editTrade(t.id);const del=document.createElement('button');del.textContent='Eliminar';del.className='danger';del.onclick=()=>deleteTrade(t);actions.append(edit,document.createTextNode(' '),del);body.append(tr);const detail=document.createElement('tr');const cell=document.createElement('td');cell.colSpan=7;cell.innerHTML=`<div class="note"><b>Contexto:</b> ${esc(t.zone||'—')} · <b>Confirmación:</b> ${esc(t.confirmation||'—')}<br><b>Emociones:</b> ${esc(t.emotion||'—')}<br><b>Lección:</b> ${esc(t.lesson||'—')}</div>`;detail.append(cell);body.append(detail)}table.append(body);wrap.append(table);host.append(wrap)}
 
- let allImages=[];
-let currentImage=0;
-
-async function renderAllImages(){
- const host=$('allImages');
- host.innerHTML='';
- allImages=[];
- for(const t of trades){
-  for(const path of (t.image_paths||[])){
-   try{
-    const url=await signedUrl(path);
-    allImages.push({url,date:t.date,symbol:t.symbol});
-   }catch(e){console.warn(e)}
-  }
- }
- if(!allImages.length){
-  host.innerHTML='<div class="empty">Todavía no tienes imágenes guardadas.</div>';
-  return;
- }
- host.className='image-grid';
- allImages.forEach((item,i)=>{
-  const card=document.createElement('div');
-  card.className='image-card';
-  card.innerHTML=`<img src="${item.url}"><p>${esc(item.symbol)} · ${esc(item.date)}</p>`;
-  card.onclick=()=>openImage(i);
-  host.append(card);
- });
-}function openImage(i){
- currentImage=i;
- let modal=$('imageModal');
- if(!modal){
-  modal=document.createElement('div');
-  modal.id='imageModal';
-  modal.className='image-modal';
-  modal.innerHTML=`
-   <button id="closeModal">✕</button>
-   <button id="prevModal">‹</button>
-   <img id="modalImg">
-   <button id="nextModal">›</button>
-   <p id="modalCaption"></p>`;
-  document.body.append(modal);
-  $('closeModal').onclick=()=>modal.classList.remove('open');
-  $('prevModal').onclick=()=>openImage((currentImage-1+allImages.length)%allImages.length);
-  $('nextModal').onclick=()=>openImage((currentImage+1)%allImages.length);
- }
- $('modalImg').src=allImages[i].url;
- $('modalCaption').textContent=allImages[i].symbol+' · '+allImages[i].date;
- modal.classList.add('open');
+function show(view){
+document.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.id===view));
+document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.view===view));
+if(view==='history')renderHistory();
+if(view==='review')renderWeek();
 }
-function editTrade(id){const t=trades.find(x=>String(x.id)===String(id));if(!t)return;const vals={date:t.date,symbol:t.symbol,session:t.session,direction:t.direction,contextTf:t.contextTf,entryTf:t.entryTf,outcome:t.outcome,pnl:t.pnl,risk:t.risk,zone:t.zone,confirmation:t.confirmation,market:t.market,emotion:t.emotion,lesson:t.lesson};fields.forEach(f=>$(f).value=vals[f]??'');$('onTime').checked=t.on_time;$('riskOk').checked=t.risk_ok;$('confirmationOk').checked=t.confirmation_ok;$('followed').checked=t.followed;$('editId').value=t.id;$('formTitle').textContent='Editar operación';selectedFiles=[];$('imagePreview').innerHTML='';$('images').value='';show('new');if(t.image_paths?.length){message('saveMsg',`Esta operación ya tiene ${t.image_paths.length} imagen(es). Puedes añadir más; las anteriores se conservan.`)}}
-async function deleteTrade(t){if(!confirm('¿Eliminar esta operación y sus capturas?'))return;try{if(t.image_paths?.length){const {error:e}=await sb.storage.from(BUCKET).remove(t.image_paths);if(e)throw e}const {error}=await sb.from('trades').delete().eq('id',t.id);if(error)throw error;await loadTrades()}catch(e){alert('No se pudo eliminar: '+e.message)}}
-$('export').onclick=()=>{const blob=new Blob([JSON.stringify({trades:trades.map(t=>({...t})),reviews},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='respaldo-diario-trading.json';a.click();URL.revokeObjectURL(a.href)};
-$('importFile').onchange=async e=>{const file=e.target.files[0];if(!file)return;try{const data=JSON.parse(await file.text());if(!Array.isArray(data.trades))throw new Error('El JSON no contiene una lista de operaciones.');if(!confirm(`Se agregarán ${data.trades.length} operaciones a tu cuenta. No se borrará lo que ya tienes. ¿Continuar?`))return;let imported=0;for(const old of data.trades){const legacy=old.date!==undefined||old.pnl!==undefined;const t={date:old.date||old.fecha||localDate(),symbol:old.symbol||old.activo||'NASDAQ',session:old.session||'NY',direction:old.direction||old.direccion||'Compra',contextTf:old.contextTf||'',entryTf:old.entryTf||'',outcome:old.outcome||old.result||'be',pnl:Number(old.pnl??old.resultado??0),risk:Number(old.risk??old.riesgo??0),zone:old.zone||old.context||old.contexto||'',confirmation:old.confirmation||old.confirmacion||'',market:old.market||old.market_view||'',onTime:!!(old.onTime??old.on_time),riskOk:!!(old.riskOk??old.risk_ok),confirmationOk:!!(old.confirmationOk??old.confirmation_ok),followed:!!(old.followed??old.cumplio_plan),emotion:old.emotion||old.emotions||old.emociones||'',lesson:old.lesson||old.leccion||'',image_paths:[]};const {data:row,error}=await sb.from('trades').insert(toRow(t)).select().single();if(error)throw error;const files=[];if(typeof old.image==='string'&&old.image.startsWith('data:image/')){const blob=await(await fetch(old.image)).blob();files.push(new File([blob],`captura-${row.id}.jpg`,{type:blob.type||'image/jpeg'}))}if(Array.isArray(old.images)){for(let i=0;i<old.images.length;i++){const v=old.images[i];if(typeof v==='string'&&v.startsWith('data:image/')){const b=await(await fetch(v)).blob();files.push(new File([b],`captura-${row.id}-${i+1}.jpg`,{type:b.type||'image/jpeg'}))}}}if(files.length){const paths=await uploadFiles(files,row.id);const {error:e2}=await sb.from('trades').update({image_paths:paths}).eq('id',row.id);if(e2)throw e2}imported++}await loadTrades();alert(`Listo: se importaron ${imported} operaciones.`)}catch(err){alert('No se pudo completar la importación: '+err.message)}finally{e.target.value=''}};
-$('week').value=(()=>{const d=new Date();const th=new Date(d);th.setDate(d.getDate()+4-(d.getDay()||7));const y=th.getFullYear();const first=new Date(y,0,1);const w=Math.ceil((((th-first)/86400000)+1)/7);return `${y}-W${String(w).padStart(2,'0')}`})();
-if(sb){refreshSession()}else{$('authMsg').textContent='Falta configurar la clave publicable de Supabase en el archivo index.html. Sigue las instrucciones del archivo LEEME.txt.'}
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>show(b.dataset.view));
+
+function localDate(){
+const d=new Date();
+return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10);
+}
+$('date').value=localDate();
+
+function mapRow(r){
+return {
+id:r.id,date:r.fecha,symbol:r.activo||'NASDAQ',session:r.session||'NY',
+direction:r.direccion||'Compra',contextTf:r.context_tf||'',entryTf:r.entry_tf||'',
+outcome:r.outcome||(Number(r.resultado)>0?'win':Number(r.resultado)<0?'loss':'be'),
+pnl:Number(r.resultado||0),risk:Number(r.riesgo||0),zone:r.zone||r.contexto||'',
+confirmation:r.confirmacion||'',market:r.market_view||'',
+on_time:r.on_time??false,risk_ok:r.risk_ok??false,
+confirmation_ok:r.confirmation_ok??false,followed:r.followed??r.cumplio_plan??false,
+emotion:r.emociones||'',lesson:r.leccion||'',image_paths:r.image_paths||[]
+};
+}
+
+function toRow(t){
+return {
+user_id:user.id,fecha:t.date,activo:t.symbol||'NASDAQ',
+direccion:t.direction||'Compra',resultado:Number(t.pnl||0),riesgo:Number(t.risk||0),
+contexto:t.zone||'',confirmacion:t.confirmation||'',emociones:t.emotion||'',
+leccion:t.lesson||'',cumplio_plan:!!t.followed,session:t.session||'NY',
+context_tf:t.contextTf||'',entry_tf:t.entryTf||'',outcome:t.outcome||'be',
+zone:t.zone||'',market_view:t.market||'',on_time:!!t.onTime,
+risk_ok:!!t.riskOk,confirmation_ok:!!t.confirmationOk,
+followed:!!t.followed,image_paths:t.image_paths||[]
+};
+}
+
+async function refreshSession(){
+if(!sb){$('authMsg').textContent='Falta configurar la clave publicable de Supabase en index.html.';return}
+const {data:{session}}=await sb.auth.getSession();
+if(session){user=session.user;await enterApp()}
+else{user=null;$('auth').classList.remove('hide');$('app').classList.add('hide')}
+}
+
+async function enterApp(){
+$('auth').classList.add('hide');
+$('app').classList.remove('hide');
+$('who').textContent='Sesión: '+(user.email||'usuario');
+await loadTrades();
+}
+
+$('login').onclick=async()=>{
+if(!sb)return message('authMsg','Primero configura la clave publicable en index.html.','error');
+const {error}=await sb.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});
+message('authMsg',error?error.message:'Sesión iniciada.',error?'error':'ok');
+if(!error){const {data:{user:u}}=await sb.auth.getUser();user=u;await enterApp()}
+};
+
+$('signup').onclick=async()=>{
+if(!sb)return message('authMsg','Primero configura la clave publicable en index.html.','error');
+const {data,error}=await sb.auth.signUp({email:$('email').value.trim(),password:$('password').value,options:{emailRedirectTo:SITE_URL}});
+message('authMsg',error?error.message:(data.session?'Cuenta creada.':'Cuenta creada. Revisa tu correo para confirmar el registro.'),error?'error':'ok');
+if(!error&&data.session){user=data.user;await enterApp()}
+};
+
+$('logout').onclick=async()=>{
+await sb.auth.signOut();
+user=null;trades=[];
+$('auth').classList.remove('hide');
+$('app').classList.add('hide');
+};
+
+if(sb)sb.auth.onAuthStateChange((_event,session)=>{
+if(session&&!user){user=session.user;setTimeout(enterApp,0)}
+else if(!session){user=null;$('auth').classList.remove('hide');$('app').classList.add('hide')}
+});
+
+async function loadTrades(){
+const {data,error}=await sb.from('trades').select('*').order('fecha',{ascending:false}).order('created_at',{ascending:false});
+if(error){alert('No se pudieron cargar las operaciones: '+error.message);return}
+trades=(data||[]).map(mapRow);
+render();
+}
+
+function render(){
+const total=trades.reduce((s,t)=>s+t.pnl,0);
+const wins=trades.filter(t=>t.outcome==='win').length;
+const viol=trades.filter(t=>!compliant(t)).length;
+const good=trades.length-viol;
+$('total').textContent=fmt(total);
+$('total').className=total>=0?'green':'red';
+$('count').textContent=trades.length;
+$('winrate').textContent=trades.length?Math.round(wins/trades.length*100)+'%':'0%';
+$('violations').textContent=viol;
+$('discipline').textContent=trades.length?Math.round(good/trades.length*100)+'%':'—';
+$('recent').innerHTML=trades.length?
+'<div class="table-wrap"><table><thead><tr><th>Fecha</th><th>Activo</th><th>Resultado</th><th>Disciplina</th></tr></thead><tbody>'+
+trades.slice(0,5).map(t=>`<tr><td>${esc(t.date)}</td><td>${esc(t.symbol)}</td><td class="${t.pnl>=0?'green':'red'}">${fmt(t.pnl)}</td><td>${compliant(t)?'En plan':'Fuera de plan'}</td></tr>`).join('')+
+'</tbody></table></div>':
+'<div class="empty">Registra tu primer trade para ver tus estadísticas.</div>';
+renderHistory();
+}
+
+async function uploadFiles(files,tradeId){
+const paths=[];
+for(const file of files){
+if(!file.type.startsWith('image/'))continue;
+if(file.size>5*1024*1024)throw new Error('Cada imagen debe pesar máximo 5 MB.');
+const safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+const path=`${user.id}/${tradeId}/${crypto.randomUUID()}-${safeName}`;
+const {error}=await sb.storage.from(BUCKET).upload(path,file,{upsert:false,contentType:file.type});
+if(error)throw error;
+paths.push(path);
+}
+return paths;
+}
+
+$('images').onchange=()=>{
+selectedFiles=Array.from($('images').files||[]);
+$('imagePreview').innerHTML='';
+for(const f of selectedFiles){
+const img=document.createElement('img');
+img.src=URL.createObjectURL(f);
+img.alt=f.name;
+$('imagePreview').append(img);
+}
+};
+
+function resetForm(){
+$('tradeForm').reset();
+$('date').value=localDate();
+$('symbol').value='NASDAQ';
+$('onTime').checked=$('riskOk').checked=$('confirmationOk').checked=$('followed').checked=true;
+$('editId').value='';
+$('formTitle').textContent='Registrar una operación';
+selectedFiles=[];
+$('imagePreview').innerHTML='';
+$('images').value='';
+message('saveMsg','');
+}
+$('clearForm').onclick=resetForm;
+
+$('saveTrade').onclick=async()=>{
+const btn=$('saveTrade');
+if(!$('tradeForm').reportValidity())return;
+btn.disabled=true;
+message('saveMsg','Guardando operación e imágenes...');
+try{
+const id=$('editId').value;
+const t={};
+fields.forEach(f=>t[f]=$(f).value);
+t.pnl=Number(t.pnl||0);
+t.risk=Number(t.risk||0);
+t.onTime=$('onTime').checked;
+t.riskOk=$('riskOk').checked;
+t.confirmationOk=$('confirmationOk').checked;
+t.followed=$('followed').checked;
+t.image_paths=[];
+let row;
+
+if(id){
+const old=trades.find(x=>String(x.id)===String(id));
+const {data,error}=await sb.from('trades').update(toRow({...t,image_paths:old?.image_paths||[]})).eq('id',id).select().single();
+if(error)throw error;
+row=data;
+const paths=await uploadFiles(selectedFiles,id);
+const all=[...(old?.image_paths||[]),...paths];
+if(paths.length){
+const {error:e2}=await sb.from('trades').update({image_paths:all}).eq('id',id);
+if(e2)throw e2;
+row.image_paths=all;
+}
+}else{
+const {data,error}=await sb.from('trades').insert(toRow(t)).select().single();
+if(error)throw error;
+row=data;
+const paths=await uploadFiles(selectedFiles,row.id);
+if(paths.length){
+const {error:e2}=await sb.from('trades').update({image_paths:paths}).eq('id',row.id);
+if(e2)throw e2;
+}
+}
+resetForm();
+await loadTrades();
+show('history');
+message('saveMsg','Operación guardada.','ok');
+}catch(e){
+message('saveMsg','No se pudo guardar: '+e.message,'error');
+}finally{btn.disabled=false}
+};
+
+function weekDates(w){
+if(!w)return[];
+const [y,n]=w.split('-W').map(Number);
+const d=new Date(y,0,1+(n-1)*7);
+const day=d.getDay()||7;
+d.setDate(d.getDate()+1-day);
+const a=localDateFrom(d);
+d.setDate(d.getDate()+6);
+return[a,localDateFrom(d)];
+}
+function localDateFrom(d){
+const x=new Date(d.getTime()-d.getTimezoneOffset()*60000);
+return x.toISOString().slice(0,10);
+}
+
+function renderWeek(){
+const w=$('week').value;
+if(!w){$('weeklyStats').innerHTML='<p class="muted">Selecciona una semana para ver tu resumen.</p>';return}
+const[a,b]=weekDates(w);
+const ts=trades.filter(t=>t.date>=a&&t.date<=b);
+const sum=ts.reduce((s,t)=>s+t.pnl,0);
+const viol=ts.filter(t=>!compliant(t)).length;
+$('weeklyStats').innerHTML=`<div class="grid"><div class="card metric"><small>Operaciones</small><strong>${ts.length}</strong></div><div class="card metric"><small>Resultado</small><strong class="${sum>=0?'green':'red'}">${fmt(sum)}</strong></div><div class="card metric"><small>Ganadoras</small><strong>${ts.filter(t=>t.outcome==='win').length}</strong></div><div class="card metric"><small>Fuera de plan</small><strong>${viol}</strong></div></div><p class="note">Periodo: ${a} al ${b}. ${ts.length?'Revisa especialmente las operaciones fuera de plan.':'No hay operaciones registradas esta semana.'}</p>`;
+const r=reviews[w]||{};
+$('weekError').value=r.error||'';
+$('weekRule').value=r.rule||'';
+}
+
+$('week').onchange=renderWeek;
+$('saveReview').onclick=()=>{
+const w=$('week').value;
+if(!w)return alert('Selecciona una semana.');
+reviews[w]={error:$('weekError').value,rule:$('weekRule').value};
+localStorage.setItem('mi_diario_reviews_v2',JSON.stringify(reviews));
+alert('Revisión semanal guardada en este navegador.');
+};
+
+async function signedUrl(path){
+const {data,error}=await sb.storage.from(BUCKET).createSignedUrl(path,3600);
+if(error)throw error;
+return data.signedUrl;
+}
+
+/* Visor de imágenes ampliadas */
+function ensureModal(){
+if($('imageModal'))return;
+const modal=document.createElement('div');
+modal.id='imageModal';
+modal.className='image-modal';
+modal.innerHTML=`
+<button id="closeModal" type="button">✕</button>
+<button id="prevModal" type="button">‹</button>
+<img id="modalImg" alt="Captura ampliada">
+<button id="nextModal" type="button">›</button>
+<p id="modalCaption"></p>`;
+document.body.append(modal);
+$('closeModal').onclick=()=>modal.classList.remove('open');
+$('prevModal').onclick=()=>showModalImage(modalIndex-1);
+$('nextModal').onclick=()=>showModalImage(modalIndex+1);
+modal.onclick=e=>{if(e.target===modal)modal.classList.remove('open')};
+}
+
+function showModalImage(index){
+if(!modalImages.length)return;
+modalIndex=(index+modalImages.length)%modalImages.length;
+$('modalImg').src=modalImages[modalIndex].url;
+$('modalCaption').textContent=`Imagen ${modalIndex+1} de ${modalImages.length}`;
+$('imageModal').classList.add('open');
+}
+
+async function renderGallery(container,paths){
+container.innerHTML='';
+if(!paths?.length){
+container.innerHTML='<p class="note">Esta operación no tiene capturas.</p>';
+return;
+}
+
+const urls=[];
+for(const p of paths){
+try{urls.push({url:await signedUrl(p)})}
+catch(e){console.warn('No se pudo abrir imagen',e)}
+}
+
+if(!urls.length){
+container.innerHTML='<p class="note">No se pudieron cargar las imágenes.</p>';
+return;
+}
+
+let ix=0;
+const gal=document.createElement('div');
+gal.className='gallery';
+
+const prev=document.createElement('button');
+prev.type='button';
+prev.textContent='‹';
+
+const stage=document.createElement('div');
+stage.className='gallery-stage';
+
+const img=document.createElement('img');
+img.alt='Captura del gráfico';
+img.title='Haz clic para ampliar';
+
+const count=document.createElement('div');
+count.className='note';
+stage.append(img,count);
+
+const next=document.createElement('button');
+next.type='button';
+next.textContent='›';
+
+const thumbs=document.createElement('div');
+thumbs.className='thumbs';
+
+function paint(){
+img.src=urls[ix].url;
+count.textContent=`Imagen ${ix+1} de ${urls.length} · Haz clic para ampliar`;
+[...thumbs.children].forEach((x,i)=>x.classList.toggle('active',i===ix));
+}
+
+urls.forEach((u,i)=>{
+const im=document.createElement('img');
+im.src=u.url;
+im.alt=`Miniatura ${i+1}`;
+im.onclick=()=>{ix=i;paint()};
+thumbs.append(im);
+});
+
+prev.onclick=()=>{ix=(ix-1+urls.length)%urls.length;paint()};
+next.onclick=()=>{ix=(ix+1)%urls.length;paint()};
+img.onclick=()=>{
+modalImages=urls;
+ensureModal();
+showModalImage(ix);
+};
+
+gal.append(prev,stage,next);
+container.append(gal,thumbs);
+paint();
+}
+
+/* Historial con imágenes ocultas hasta pulsar el botón */
+async function renderHistory(){
+const host=$('historyTable');
+if(!trades.length){
+host.innerHTML='<div class="empty">Todavía no tienes operaciones registradas.</div>';
+return;
+}
+
+host.innerHTML='';
+const wrap=document.createElement('div');
+wrap.className='table-wrap';
+const table=document.createElement('table');
+table.innerHTML='<thead><tr><th>Fecha</th><th>Activo</th><th>Sesión</th><th>Resultado</th><th>Riesgo</th><th>Disciplina</th><th>Acciones</th></tr></thead>';
+const body=document.createElement('tbody');
+
+for(const t of trades){
+const tr=document.createElement('tr');
+tr.innerHTML=`<td>${esc(t.date)}</td><td>${esc(t.symbol)}</td><td>${esc(t.session)}</td><td class="${t.pnl>0?'green':t.pnl<0?'red':''}">${fmt(t.pnl)}</td><td>${Number(t.risk||0)}%</td><td>${compliant(t)?'<span class="green">En plan</span>':'<span class="red">Fuera de plan</span>'}</td><td></td>`;
+
+const actions=tr.lastElementChild;
+const edit=document.createElement('button');
+edit.textContent='Editar';
+edit.onclick=()=>editTrade(t.id);
+
+const del=document.createElement('button');
+del.textContent='Eliminar';
+del.className='danger';
+del.onclick=()=>deleteTrade(t);
+
+actions.append(edit,document.createTextNode(' '),del);
+body.append(tr);
+
+const detail=document.createElement('tr');
+const cell=document.createElement('td');
+cell.colSpan=7;
+
+const info=document.createElement('div');
+info.className='note';
+info.innerHTML=`<b>Contexto:</b> ${esc(t.zone||'—')} · <b>Confirmación:</b> ${esc(t.confirmation||'—')}<br><b>Emociones:</b> ${esc(t.emotion||'—')}<br><b>Lección:</b> ${esc(t.lesson||'—')}`;
+cell.append(info);
+
+if(t.image_paths?.length){
+const toggle=document.createElement('button');
+toggle.type='button';
+toggle.className='gallery-toggle';
+toggle.textContent=`Ver imágenes (${t.image_paths.length})`;
+
+const gallery=document.createElement('div');
+gallery.className='trade-gallery';
+
+let loaded=false;
+toggle.onclick=async()=>{
+const opening=!gallery.classList.contains('open');
+gallery.classList.toggle('open',opening);
+toggle.textContent=opening?'Ocultar imágenes':'Ver imágenes ('+t.image_paths.length+')';
+
+if(opening&&!loaded){
+toggle.disabled=true;
+toggle.textContent='Cargando imágenes...';
+await renderGallery(gallery,t.image_paths);
+loaded=true;
+toggle.disabled=false;
+toggle.textContent='Ocultar imágenes';
+}
+};
+
+cell.append(toggle,gallery);
+}else{
+const noImages=document.createElement('div');
+noImages.className='note';
+noImages.textContent='Sin imágenes adjuntas.';
+cell.append(noImages);
+}
+
+detail.append(cell);
+body.append(detail);
+}
+
+table.append(body);
+wrap.append(table);
+host.append(wrap);
+}
+
+function editTrade(id){
+const t=trades.find(x=>String(x.id)===String(id));
+if(!t)return;
+const vals={
+date:t.date,symbol:t.symbol,session:t.session,direction:t.direction,
+contextTf:t.contextTf,entryTf:t.entryTf,outcome:t.outcome,pnl:t.pnl,
+risk:t.risk,zone:t.zone,confirmation:t.confirmation,market:t.market,
+emotion:t.emotion,lesson:t.lesson
+};
+fields.forEach(f=>$(f).value=vals[f]??'');
+$('onTime').checked=t.on_time;
+$('riskOk').checked=t.risk_ok;
+$('confirmationOk').checked=t.confirmation_ok;
+$('followed').checked=t.followed;
+$('editId').value=t.id;
+$('formTitle').textContent='Editar operación';
+selectedFiles=[];
+$('imagePreview').innerHTML='';
+$('images').value='';
+show('new');
+if(t.image_paths?.length){
+message('saveMsg',`Esta operación ya tiene ${t.image_paths.length} imagen(es). Puedes añadir más; las anteriores se conservan.`);
+}
+}
+
+async function deleteTrade(t){
+if(!confirm('¿Eliminar esta operación y sus capturas?'))return;
+try{
+if(t.image_paths?.length){
+const {error:e}=await sb.storage.from(BUCKET).remove(t.image_paths);
+if(e)throw e;
+}
+const {error}=await sb.from('trades').delete().eq('id',t.id);
+if(error)throw error;
+await loadTrades();
+}catch(e){alert('No se pudo eliminar: '+e.message)}
+}
+
+$('export').onclick=()=>{
+const blob=new Blob([JSON.stringify({trades:trades.map(t=>({...t})),reviews},null,2)],{type:'application/json'});
+const a=document.createElement('a');
+a.href=URL.createObjectURL(blob);
+a.download='respaldo-diario-trading.json';
+a.click();
+URL.revokeObjectURL(a.href);
+};
+
+$('importFile').onchange=async e=>{
+const file=e.target.files[0];
+if(!file)return;
+try{
+const data=JSON.parse(await file.text());
+if(!Array.isArray(data.trades))throw new Error('El JSON no contiene una lista de operaciones.');
+if(!confirm(`Se agregarán ${data.trades.length} operaciones a tu cuenta. No se borrará lo que ya tienes. ¿Continuar?`))return;
+let imported=0;
+
+for(const old of data.trades){
+const t={
+date:old.date||old.fecha||localDate(),
+symbol:old.symbol||old.activo||'NASDAQ',
+session:old.session||'NY',
+direction:old.direction||old.direccion||'Compra',
+contextTf:old.contextTf||'',
+entryTf:old.entryTf||'',
+outcome:old.outcome||old.result||'be',
+pnl:Number(old.pnl??old.resultado??0),
+risk:Number(old.risk??old.riesgo??0),
+zone:old.zone||old.context||old.contexto||'',
+confirmation:old.confirmation||old.confirmacion||'',
+market:old.market||old.market_view||'',
+onTime:!!(old.onTime??old.on_time),
+riskOk:!!(old.riskOk??old.risk_ok),
+confirmationOk:!!(old.confirmationOk??old.confirmation_ok),
+followed:!!(old.followed??old.cumplio_plan),
+emotion:old.emotion||old.emotions||old.emociones||'',
+lesson:old.lesson||old.leccion||'',
+image_paths:[]
+};
+
+const {data:row,error}=await sb.from('trades').insert(toRow(t)).select().single();
+if(error)throw error;
+
+const files=[];
+if(typeof old.image==='string'&&old.image.startsWith('data:image/')){
+const blob=await(await fetch(old.image)).blob();
+files.push(new File([blob],`captura-${row.id}.jpg`,{type:blob.type||'image/jpeg'}));
+}
+if(Array.isArray(old.images)){
+for(let i=0;i<old.images.length;i++){
+const v=old.images[i];
+if(typeof v==='string'&&v.startsWith('data:image/')){
+const b=await(await fetch(v)).blob();
+files.push(new File([b],`captura-${row.id}-${i+1}.jpg`,{type:b.type||'image/jpeg'}));
+}
+}
+}
+if(files.length){
+const paths=await uploadFiles(files,row.id);
+const {error:e2}=await sb.from('trades').update({image_paths:paths}).eq('id',row.id);
+if(e2)throw e2;
+}
+imported++;
+}
+await loadTrades();
+alert(`Listo: se importaron ${imported} operaciones.`);
+}catch(err){
+alert('No se pudo completar la importación: '+err.message);
+}finally{e.target.value=''}
+};
+
+$('week').value=(()=>{
+const d=new Date();
+const th=new Date(d);
+th.setDate(d.getDate()+4-(d.getDay()||7));
+const y=th.getFullYear();
+const first=new Date(y,0,1);
+const w=Math.ceil((((th-first)/86400000)+1)/7);
+return `${y}-W${String(w).padStart(2,'0')}`;
+})();
+
+if(sb){refreshSession()}
+else{$('authMsg').textContent='Falta configurar la clave publicable de Supabase en el archivo index.html. Sigue las instrucciones del archivo LEEME.txt.'}
 </script>
-</body></html>
+</body>
+</html>
