@@ -51,8 +51,6 @@ th{color:var(--muted);font-weight:600}
 .authbox{max-width:650px;margin:18px auto}
 .authbox form{margin-bottom:10px}
 .hide{display:none!important}
-.trade{border-top:1px solid var(--line);padding:16px 0}
-.tradehead{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .image-preview{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 .image-preview img{width:115px;height:80px;object-fit:cover;border-radius:8px}
 .gallery-toggle{margin-top:10px}
@@ -71,17 +69,14 @@ th{color:var(--muted);font-weight:600}
 #closeModal{position:absolute;top:15px;right:20px}
 #modalCaption{position:absolute;bottom:12px;width:100%;text-align:center;color:white}
 .mentor-intro{border:1px solid #354d75;background:#111e35;padding:16px;border-radius:12px;margin-bottom:15px}
-.mentor-chat{display:flex;flex-direction:column;gap:12px;margin:18px 0}
+.mentor-chat{display:flex;flex-direction:column;gap:12px;margin:18px 0;max-height:520px;overflow-y:auto}
 .chat-message{max-width:90%;padding:14px 16px;border-radius:13px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.7}
 .chat-message.user{align-self:flex-end;background:#20385f;border:1px solid #365c91}
 .chat-message.assistant{align-self:flex-start;background:#0d1527;border:1px solid var(--line)}
 .chat-message small{display:block;color:var(--muted);font-size:11px;margin-bottom:6px}
 .mentor-question{min-height:100px}
 .mentor-chat-empty{text-align:center;color:var(--muted);padding:25px;border:1px dashed var(--line);border-radius:12px}
-.mentor-tools{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
-.mentor-tool{background:#0d1527;border:1px solid var(--line);border-radius:12px;padding:14px}
-.mentor-tool h3{font-size:15px;margin:0 0 8px}
-@media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}.mentor-tools{grid-template-columns:1fr}}
+@media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}}
 @media(max-width:520px){
 main{padding:0 12px 30px}
 header{padding:22px 12px 12px}
@@ -215,42 +210,20 @@ form{grid-template-columns:1fr}
 <label style="margin-top:14px">¿Cuál fue mi principal error?<textarea id="weekError" placeholder="Describe tu principal error de la semana..."></textarea></label>
 <label style="margin-top:10px">¿Qué regla voy a cumplir la próxima semana?<textarea id="weekRule" placeholder="Escribe la regla que quieres trabajar..."></textarea></label>
 <div class="actions">
-<button class="primary" id="analyzeWeek" type="button">🧠 Analizar esta semana con mi mentor</button>
-<button id="saveReview">Guardar revisión</button>
+<button class="primary" id="saveReview">Guardar revisión</button>
 </div>
-<p id="weekMentorStatus" class="note" aria-live="polite"></p>
-<p class="note">Las notas de revisión semanal se guardan en este navegador. El análisis del mentor utiliza únicamente los trades de la semana seleccionada.</p>
+<p class="note">Esta revisión es personal. Tus notas se guardan en este navegador y no se envían al mentor.</p>
 </div>
 </section>
 
 <section id="mentor" class="view">
 <div class="panel">
-<h2>🧠 Tu Mentor de Trading</h2>
+<h2>🧠 Tu Mentor Psicológico</h2>
 
 <div class="mentor-intro">
-<strong>Un mentor que analiza tus decisiones, no solamente tus ganancias.</strong>
-<p class="note">Puedes conversar sobre psicología, analizar una operación concreta o revisar tu semana. Cada modo utiliza únicamente la información necesaria.</p>
-</div>
-
-<div class="mentor-tools">
-<div class="mentor-tool">
-<h3>🔎 Análisis individual</h3>
-<label>Selecciona la operación que quieres analizar:
-<select id="tradeToAnalyze">
-<option value="">Cargando operaciones...</option>
-</select>
-</label>
-<div class="actions">
-<button class="primary" id="analyzeTrade" type="button">Analizar trade seleccionado</button>
-</div>
-<p class="note">El mentor recibirá solo esa operación y sus capturas.</p>
-</div>
-
-<div class="mentor-tool">
-<h3>💬 Conversación libre</h3>
-<p class="note">Habla de tus emociones, dudas, disciplina o cualquier situación relacionada con tu trading.</p>
-<p class="note">Este modo no envía tus operaciones ni sus capturas.</p>
-</div>
+<strong>Un mentor para trabajar tu mentalidad como trader.</strong>
+<p class="note">Cuéntale lo que piensas, lo que sientes y las dificultades que enfrentas. Te escuchará, te hará preguntas y te ayudará a trabajar tu disciplina, paciencia y relación con las pérdidas.</p>
+<p class="note">Esta conversación no utiliza tus operaciones, estadísticas ni capturas.</p>
 </div>
 
 <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
@@ -262,8 +235,8 @@ form{grid-template-columns:1fr}
 <div class="mentor-chat-empty">Tu conversación aparecerá aquí.</div>
 </div>
 
-<label>Escribe tu pregunta o mensaje:
-<textarea id="mentorQuestion" class="mentor-question" placeholder="Ej. Hoy tuve una pérdida y sentí ganas de recuperar el dinero. ¿Qué estoy haciendo mal?"></textarea>
+<label>Cuéntame qué está pasando:
+<textarea id="mentorQuestion" class="mentor-question" placeholder="Ej. Hoy tuve una pérdida y sentí ganas de recuperar el dinero. Quiero entender por qué reaccioné así."></textarea>
 </label>
 
 <div class="actions">
@@ -272,7 +245,7 @@ form{grid-template-columns:1fr}
 </div>
 
 <p id="mentorStatus" class="note" aria-live="polite"></p>
-<p class="note">Tu conversación se guarda en Supabase. La memoria resumida del mentor se administra desde bright-function.</p>
+<p class="note">Tu conversación se guarda en Supabase. El mentor utilizará lo que le cuentes para ayudarte a trabajar tu mentalidad.</p>
 </div>
 </section>
 
@@ -328,12 +301,10 @@ return !!(t.on_time&&t.risk_ok&&t.confirmation_ok&&t.followed);
 function show(view){
 document.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.id===view));
 document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.view===view));
+
 if(view==='history')renderHistory();
 if(view==='review')renderWeek();
-if(view==='mentor'){
-renderTradeSelector();
-loadMentorMessages();
-}
+if(view==='mentor')loadMentorMessages();
 }
 
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>show(b.dataset.view));
@@ -457,7 +428,6 @@ return;
 
 trades=(data||[]).map(mapRow);
 render();
-renderTradeSelector();
 }
 
 function render(){
@@ -646,28 +616,10 @@ alert('Revisión semanal guardada en este navegador.');
 };
 
 /* =====================================
-   MENTOR IA - HISTORIAL Y MODOS
+   MENTOR PSICOLÓGICO
+   Solo recibe mensajes y conversación.
+   Nunca recibe operaciones ni capturas.
 ===================================== */
-
-function renderTradeSelector(){
-const select=$('tradeToAnalyze');
-if(!select)return;
-
-const previous=select.value;
-
-select.innerHTML='<option value="">Selecciona una operación...</option>';
-
-trades.forEach(t=>{
-const option=document.createElement('option');
-option.value=String(t.id);
-option.textContent=`${t.date} · ${t.symbol} · ${t.direction} · ${fmt(t.pnl)}`;
-select.append(option);
-});
-
-if(trades.some(t=>String(t.id)===previous)){
-select.value=previous;
-}
-}
 
 function renderMentorChat(){
 const host=$('mentorChat');
@@ -683,7 +635,7 @@ const bubble=document.createElement('div');
 bubble.className='chat-message '+(m.role==='user'?'user':'assistant');
 
 const label=document.createElement('small');
-label.textContent=m.role==='user'?'Tú':'🧠 Mentor IA';
+label.textContent=m.role==='user'?'Tú':'🧠 Mentor psicológico';
 
 const content=document.createElement('div');
 content.textContent=m.content;
@@ -717,7 +669,7 @@ created_at:m.created_at
 }));
 
 renderMentorChat();
-message('mentorStatus','Historial recuperado correctamente.','ok');
+message('mentorStatus','Conversación recuperada.','ok');
 
 }catch(e){
 message('mentorStatus','No se pudo recuperar el historial: '+e.message,'error');
@@ -749,93 +701,42 @@ renderMentorChat();
 return saved;
 }
 
-function prepareTradeForMentor(t){
-return {
-id:t.id,
-date:t.date,
-symbol:t.symbol,
-session:t.session,
-direction:t.direction,
-contextTf:t.contextTf,
-entryTf:t.entryTf,
-outcome:t.outcome,
-pnl:t.pnl,
-risk:t.risk,
-zone:t.zone,
-confirmation:t.confirmation,
-market:t.market,
-on_time:t.on_time,
-risk_ok:t.risk_ok,
-confirmation_ok:t.confirmation_ok,
-followed:t.followed,
-emotion:t.emotion,
-lesson:t.lesson,
-image_paths:Array.isArray(t.image_paths)?t.image_paths:[]
-};
-}
-
-async function sendToMentor({question,mode,tradeId=null,weekStart=null,weekEnd=null,weekTrades=[]}){
-if(mentorSending)return;
+async function sendToMentor({question}){
+if(mentorSending)return false;
 
 if(!sb||!user){
 message('mentorStatus','Primero inicia sesión en tu diario.','error');
-return;
+return false;
 }
 
 if(!question.trim()){
-message('mentorStatus','Escribe una pregunta o mensaje primero.','error');
-return;
+message('mentorStatus','Escribe un mensaje primero.','error');
+return false;
 }
 
 mentorSending=true;
 const askButton=$('askMentor');
-const tradeButton=$('analyzeTrade');
-const weekButton=$('analyzeWeek');
 
 askButton.disabled=true;
-tradeButton.disabled=true;
-weekButton.disabled=true;
 askButton.textContent='Consultando...';
 
 try{
-message('mentorStatus','Tu mentor está analizando la información...');
+message('mentorStatus','Tu mentor está leyendo tu mensaje...');
 
-/* Capturamos el historial anterior al mensaje actual. */
 const previousHistory=mentorMessages.slice(-16).map(m=>({
 role:m.role==='assistant'?'model':'user',
 content:m.content
 }));
 
-/* Guardamos la pregunta del usuario. */
 await saveMentorMessage('user',question);
 
-const selectedTrades=mode==='chat'
-? []
-: mode==='trade_analysis'
-? trades.filter(t=>String(t.id)===String(tradeId)).map(prepareTradeForMentor)
-: weekTrades.map(prepareTradeForMentor);
-
-if(mode==='trade_analysis'&&selectedTrades.length!==1){
-throw new Error('No se encontró la operación seleccionada. Actualiza el historial.');
-}
-
-const body={
+const {data,error}=await sb.functions.invoke(MENTOR_FUNCTION,{
+body:{
 question,
-mode,
-trades:selectedTrades,
-history:mode==='chat'?previousHistory:[],
-};
-
-if(mode==='trade_analysis'){
-body.trade_id=String(tradeId);
+mode:'chat',
+history:previousHistory
 }
-
-if(mode==='weekly_review'){
-body.week_start=weekStart;
-body.week_end=weekEnd;
-}
-
-const {data,error}=await sb.functions.invoke(MENTOR_FUNCTION,{body});
+});
 
 if(error){
 let detail=error.message||'No se pudo conectar con el mentor.';
@@ -855,116 +756,28 @@ if(!data?.answer)throw new Error('El mentor no devolvió una respuesta.');
 
 await saveMentorMessage('assistant',data.answer);
 
-const loaded=Number(data.images_loaded||0);
-const failed=Number(data.images_failed||0);
-
-message(
-'mentorStatus',
-`Respuesta guardada. Operaciones analizadas: ${data.trades_received??selectedTrades.length}. Imágenes recibidas: ${loaded}${failed?`. Imágenes no disponibles: ${failed}`:''}.`,
-'ok'
-);
+message('mentorStatus','Respuesta guardada correctamente.','ok');
 
 return true;
 
 }catch(e){
-message('mentorStatus','No se pudo completar el análisis: '+e.message,'error');
+message('mentorStatus','No se pudo completar la conversación: '+e.message,'error');
 return false;
 
 }finally{
 mentorSending=false;
 askButton.disabled=false;
-tradeButton.disabled=false;
-weekButton.disabled=false;
 askButton.textContent='Enviar mensaje';
 }
 }
 
-/* MODO 1: CONVERSACIÓN. No envía trades. */
-
 $('askMentor').onclick=async()=>{
 const question=$('mentorQuestion').value.trim();
-if(!question)return message('mentorStatus','Escribe una pregunta o mensaje primero.','error');
+if(!question)return message('mentorStatus','Escribe un mensaje primero.','error');
 
-const success=await sendToMentor({
-question,
-mode:'chat'
-});
+const success=await sendToMentor({question});
 
 if(success)$('mentorQuestion').value='';
-};
-
-/* MODO 2: ANÁLISIS DE UNA OPERACIÓN. */
-
-$('analyzeTrade').onclick=async()=>{
-const tradeId=$('tradeToAnalyze').value;
-
-if(!tradeId){
-message('mentorStatus','Primero selecciona una operación del listado.','error');
-return;
-}
-
-const t=trades.find(x=>String(x.id)===String(tradeId));
-if(!t){
-message('mentorStatus','No se encontró esa operación. Actualiza el historial.','error');
-return;
-}
-
-const question=
-`Analiza exclusivamente esta operación del ${t.date} (${t.symbol}). `+
-`Evalúa mi lectura, ejecución, confirmaciones y errores usando los datos y capturas disponibles. `+
-`Distingue hechos, interpretaciones y aspectos no verificables.`;
-
-const success=await sendToMentor({
-question,
-mode:'trade_analysis',
-tradeId
-});
-
-if(success){
-show('mentor');
-}
-};
-
-/* MODO 3: REVISIÓN DE LA SEMANA SELECCIONADA. */
-
-$('analyzeWeek').onclick=async()=>{
-const week=$('week').value;
-
-if(!week){
-message('weekMentorStatus','Selecciona una semana primero.','error');
-return;
-}
-
-const [weekStart,weekEnd]=weekDates(week);
-const weekTrades=getTradesForSelectedWeek();
-
-if(!weekTrades.length){
-message('weekMentorStatus','No hay operaciones registradas en esa semana. No se enviará un análisis vacío.','error');
-return;
-}
-
-const question=
-`Haz una revisión de mis operaciones de la semana ${weekStart} al ${weekEnd}. `+
-`Compara únicamente estas operaciones. Identifica fortalezas, errores comprobados y patrones solo si hay evidencia suficiente. `+
-`Mis notas de la semana: error principal: ${$('weekError').value || 'No especificado'}. `+
-`Regla que quiero trabajar: ${$('weekRule').value || 'No especificada'}.`;
-
-message('weekMentorStatus',`Preparando ${weekTrades.length} operación(es) de la semana...`);
-
-const success=await sendToMentor({
-question,
-mode:'weekly_review',
-weekStart,
-weekEnd,
-weekTrades
-});
-
-if(success){
-message('weekMentorStatus','Revisión semanal completada. La respuesta quedó guardada en la conversación del mentor.','ok');
-show('mentor');
-}else{
-message('weekMentorStatus','No se pudo completar la revisión. Consulta el mensaje de error en el Mentor IA.','error');
-}
 };
 
 $('clearMentor').onclick=()=>{
@@ -1376,7 +1189,6 @@ refreshSession();
 }else{
 $('authMsg').textContent='Falta configurar la clave publicable de Supabase en el archivo index.html.';
 }
-
 </script>
 </body>
 </html>
