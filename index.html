@@ -1,4 +1,3 @@
-```html
 <!doctype html>
 <html lang="es">
 <head>
@@ -78,7 +77,8 @@ th{color:var(--muted);font-weight:600}
 .mentor-chat-empty{text-align:center;color:var(--muted);padding:25px;border:1px dashed var(--line);border-radius:12px}
 .checklist{display:grid;gap:10px;margin-top:15px}
 .check-item{display:flex;align-items:flex-start;gap:12px;padding:14px;background:#0d1527;border:1px solid var(--line);border-radius:11px;cursor:pointer;color:var(--text);font-size:14px}
-.check-item input{width:19px;height:19px;margin:1px 0 0;accent-color:var(--green);flex-shrink:0}
+.check-item input[type="checkbox"]{width:19px;height:19px;margin:1px 0 0;accent-color:var(--green);flex-shrink:0}
+.check-item input[type="time"]{width:auto;max-width:180px;margin-top:8px;display:block}
 .progress-track{height:10px;background:#0d1527;border-radius:20px;overflow:hidden;margin-top:12px}
 .progress-fill{height:100%;width:0;background:var(--green);transition:width .2s}
 .existing-image{position:relative}
@@ -211,7 +211,16 @@ form{grid-template-columns:1fr}
 <label class="check-item"><input type="checkbox" data-check="fvg"> <span><b>2. FVG alineado</b><br><span class="muted">El FVG está alineado con mi DOL.</span></span></label>
 <label class="check-item"><input type="checkbox" data-check="tapeo"> <span><b>3. Tapeo</b><br><span class="muted">Identifiqué el tapeo que estoy esperando.</span></span></label>
 <label class="check-item"><input type="checkbox" data-check="confirmacion"> <span><b>4. Confirmación</b><br><span class="muted">Tengo la confirmación de mi modelo iFVG.</span></span></label>
-<label class="check-item"><input type="checkbox" data-check="horario"> <span><b>5. Horario de operación</b><br><span class="muted">Estoy dentro de mi horario establecido.</span></span></label>
+
+<div class="check-item">
+<input type="checkbox" data-check="horario" id="checkHorario">
+<div style="flex:1">
+<b>5. Horario de operación</b>
+<p class="muted" style="margin:4px 0 0">Selecciona la hora en la que vas a operar.</p>
+<input type="time" id="checkTime" aria-label="Hora de operación">
+</div>
+</div>
+
 </div>
 <div style="margin-top:18px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">
 <strong id="checkCount">0 de 5 completados</strong>
@@ -281,6 +290,7 @@ let reviews=JSON.parse(localStorage.getItem('mi_diario_reviews_v2')||'{}');
 let modalImages=[],modalIndex=0,mentorMessages=[],mentorSending=false;
 const fields=['date','entryTime','symbol','session','direction','contextTf','entryTf','outcome','pnl','risk','zone','confirmation','market','emotion','lesson'];
 const CHECKLIST_KEY='mi_diario_checklist_v1';
+const CHECKLIST_TIME_KEY='mi_diario_checklist_hora_v1';
 
 function message(id,txt,kind=''){
 const el=$(id);el.textContent=txt;el.className='note '+(kind==='error'?'red':kind==='ok'?'green':'');
@@ -465,26 +475,50 @@ function updateChecklist(){
 const checks=[...document.querySelectorAll('[data-check]')];
 const completed=checks.filter(c=>c.checked).length;
 const percent=Math.round(completed/checks.length*100);
+
 $('checkCount').textContent=`${completed} de ${checks.length} completados`;
 $('checkPercent').textContent=percent+'%';
 $('checkBar').style.width=percent+'%';
+
 $('checkWarning').textContent=completed===checks.length
 ?'Checklist completa. Ya revisaste tus cinco puntos.'
 :`Te faltan ${checks.length-completed} puntos. No te adelantes a tu modelo.`;
+
 const state={};
 checks.forEach(c=>state[c.dataset.check]=c.checked);
+
 localStorage.setItem(CHECKLIST_KEY,JSON.stringify(state));
+localStorage.setItem(CHECKLIST_TIME_KEY,$('checkTime').value);
 }
+
 function loadChecklist(){
 let saved={};
-try{saved=JSON.parse(localStorage.getItem(CHECKLIST_KEY)||'{}');}catch(e){}
-document.querySelectorAll('[data-check]').forEach(c=>c.checked=!!saved[c.dataset.check]);
+
+try{
+saved=JSON.parse(localStorage.getItem(CHECKLIST_KEY)||'{}');
+}catch(e){}
+
+document.querySelectorAll('[data-check]').forEach(c=>{
+c.checked=!!saved[c.dataset.check];
+});
+
+$('checkTime').value=localStorage.getItem(CHECKLIST_TIME_KEY)||'';
+
 updateChecklist();
 }
-document.querySelectorAll('[data-check]').forEach(c=>c.addEventListener('change',updateChecklist));
+
+document.querySelectorAll('[data-check]').forEach(c=>{
+c.addEventListener('change',updateChecklist);
+});
+
+$('checkTime').addEventListener('change',updateChecklist);
+
 $('resetChecklist').onclick=()=>{
 if(!confirm('¿Quieres reiniciar los cinco puntos de tu checklist?'))return;
+
 document.querySelectorAll('[data-check]').forEach(c=>c.checked=false);
+$('checkTime').value='';
+
 updateChecklist();
 };
 
@@ -869,4 +903,3 @@ else{$('authMsg').textContent='Falta configurar la clave publicable de Supabase 
 </script>
 </body>
 </html>
-```
