@@ -98,7 +98,6 @@ form{grid-template-columns:1fr}
 </header>
 
 <main>
-
 <section id="auth" class="panel authbox">
 <h2>Entrar a tu diario</h2>
 <p class="note">Crea tu cuenta con tu correo y una contraseña. Tus operaciones e imágenes serán privadas.</p>
@@ -114,7 +113,6 @@ form{grid-template-columns:1fr}
 </section>
 
 <div id="app" class="hide">
-
 <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;margin:12px 0">
 <span id="who" class="muted"></span>
 <button id="logout">Cerrar sesión</button>
@@ -136,15 +134,8 @@ form{grid-template-columns:1fr}
 <div class="card metric"><small>Trades fuera de plan</small><strong id="violations">0</strong></div>
 </div>
 <div class="two">
-<div class="panel">
-<h2>Disciplina</h2>
-<div id="discipline" style="font-size:30px;font-weight:700">—</div>
-<p class="note">Porcentaje de operaciones en las que respetaste tus reglas registradas.</p>
-</div>
-<div class="panel">
-<h2>Recordatorio</h2>
-<p>Un trade ganador fuera de tu plan sigue siendo un error de ejecución. Una pérdida respetando tu plan puede ser una buena operación.</p>
-</div>
+<div class="panel"><h2>Disciplina</h2><div id="discipline" style="font-size:30px;font-weight:700">—</div><p class="note">Porcentaje de operaciones en las que respetaste tus reglas registradas.</p></div>
+<div class="panel"><h2>Recordatorio</h2><p>Un trade ganador fuera de tu plan sigue siendo un error de ejecución. Una pérdida respetando tu plan puede ser una buena operación.</p></div>
 </div>
 <div class="panel"><h2>Últimas operaciones</h2><div id="recent"></div></div>
 </section>
@@ -195,9 +186,7 @@ form{grid-template-columns:1fr}
 <button id="export">Exportar respaldo JSON</button>
 </div>
 <div id="historyTable" class="table-wrap"></div>
-<div class="actions">
-<label style="display:inline-block">Importar respaldo JSON<input id="importFile" type="file" accept=".json,application/json"></label>
-</div>
+<div class="actions"><label style="display:inline-block">Importar respaldo JSON<input id="importFile" type="file" accept=".json,application/json"></label></div>
 <p class="note">La importación agrega operaciones al historial actual; no reemplaza ni borra tus registros.</p>
 </div>
 </section>
@@ -209,9 +198,7 @@ form{grid-template-columns:1fr}
 <div id="weeklyStats" style="margin-top:15px"></div>
 <label style="margin-top:14px">¿Cuál fue mi principal error?<textarea id="weekError" placeholder="Describe tu principal error de la semana..."></textarea></label>
 <label style="margin-top:10px">¿Qué regla voy a cumplir la próxima semana?<textarea id="weekRule" placeholder="Escribe la regla que quieres trabajar..."></textarea></label>
-<div class="actions">
-<button class="primary" id="saveReview">Guardar revisión</button>
-</div>
+<div class="actions"><button class="primary" id="saveReview">Guardar revisión</button></div>
 <p class="note">Esta revisión es personal. Tus notas se guardan en este navegador y no se envían al mentor.</p>
 </div>
 </section>
@@ -219,36 +206,27 @@ form{grid-template-columns:1fr}
 <section id="mentor" class="view">
 <div class="panel">
 <h2>🧠 Tu Mentor Psicológico</h2>
-
 <div class="mentor-intro">
 <strong>Un mentor para trabajar tu mentalidad como trader.</strong>
 <p class="note">Cuéntale lo que piensas, lo que sientes y las dificultades que enfrentas. Te escuchará, te hará preguntas y te ayudará a trabajar tu disciplina, paciencia y relación con las pérdidas.</p>
 <p class="note">Esta conversación no utiliza tus operaciones, estadísticas ni capturas.</p>
 </div>
-
 <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
 <strong>💬 Conversación con tu mentor</strong>
 <button id="reloadMentor" type="button">Actualizar historial</button>
 </div>
-
-<div id="mentorChat" class="mentor-chat">
-<div class="mentor-chat-empty">Tu conversación aparecerá aquí.</div>
-</div>
-
+<div id="mentorChat" class="mentor-chat"><div class="mentor-chat-empty">Tu conversación aparecerá aquí.</div></div>
 <label>Cuéntame qué está pasando:
 <textarea id="mentorQuestion" class="mentor-question" placeholder="Ej. Hoy tuve una pérdida y sentí ganas de recuperar el dinero. Quiero entender por qué reaccioné así."></textarea>
 </label>
-
 <div class="actions">
 <button class="primary" id="askMentor">Enviar mensaje</button>
 <button id="clearMentor">Limpiar pregunta</button>
 </div>
-
 <p id="mentorStatus" class="note" aria-live="polite"></p>
 <p class="note">Tu conversación se guarda en Supabase. El mentor utilizará lo que le cuentes para ayudarte a trabajar tu mentalidad.</p>
 </div>
 </section>
-
 </div>
 </main>
 
@@ -257,198 +235,92 @@ Diario privado · Operaciones e imágenes sincronizadas con Supabase.
 </footer>
 
 <script>
-const SUPABASE_URL = 'https://sjznumwynuguxvlhbmwh.supabase.co';
-const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_K5-lrmjbJOxls0yOwYX9aw_WmeQG0N4';
-const SITE_URL = 'https://eduardobenjamin117-creator.github.io/mentor-trading/';
-const BUCKET = 'trade-images';
-const MENTOR_FUNCTION = 'bright-function';
-
-const $ = id => document.getElementById(id);
-
-const supabaseReady = window.supabase &&
-SUPABASE_PUBLISHABLE_KEY !== 'PEGA_AQUI_TU_CLAVE_PUBLICABLE';
-
-const sb = supabaseReady
-? window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY)
-: null;
+const SUPABASE_URL='https://sjznumwynuguxvlhbmwh.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY='sb_publishable_K5-lrmjbJOxls0yOwYX9aw_WmeQG0N4';
+const SITE_URL='https://eduardobenjamin117-creator.github.io/mentor-trading/';
+const BUCKET='trade-images';
+const MENTOR_FUNCTION='bright-function';
+const $=id=>document.getElementById(id);
+const supabaseReady=window.supabase&&SUPABASE_PUBLISHABLE_KEY!=='PEGA_AQUI_TU_CLAVE_PUBLICABLE';
+const sb=supabaseReady?window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY):null;
 
 let user=null,trades=[],selectedFiles=[];
 let reviews=JSON.parse(localStorage.getItem('mi_diario_reviews_v2')||'{}');
-let modalImages=[],modalIndex=0;
-let mentorMessages=[];
-let mentorSending=false;
-
+let modalImages=[],modalIndex=0,mentorMessages=[],mentorSending=false;
 const fields=['date','symbol','session','direction','contextTf','entryTf','outcome','pnl','risk','zone','confirmation','market','emotion','lesson'];
 
 function message(id,txt,kind=''){
-const el=$(id);
-el.textContent=txt;
-el.className='note '+(kind==='error'?'red':kind==='ok'?'green':'');
+const el=$(id);el.textContent=txt;el.className='note '+(kind==='error'?'red':kind==='ok'?'green':'');
 }
-
-function esc(s){
-return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
-
-function fmt(n){
-return (Number(n)>0?'+':'')+Number(n||0).toFixed(2)+'%';
-}
-
-function compliant(t){
-return !!(t.on_time&&t.risk_ok&&t.confirmation_ok&&t.followed);
-}
-
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function fmt(n){return(Number(n)>0?'+':'')+Number(n||0).toFixed(2)+'%';}
+function compliant(t){return!!(t.on_time&&t.risk_ok&&t.confirmation_ok&&t.followed);}
 function show(view){
 document.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.id===view));
 document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.view===view));
-
 if(view==='history')renderHistory();
 if(view==='review')renderWeek();
 if(view==='mentor')loadMentorMessages();
 }
-
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>show(b.dataset.view));
-
-function localDate(){
-const d=new Date();
-return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10);
-}
-
+function localDate(){const d=new Date();return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10);}
 $('date').value=localDate();
 
 function mapRow(r){
-return {
-id:r.id,date:r.fecha,symbol:r.activo||'NASDAQ',session:r.session||'NY',
-direction:r.direccion||'Compra',contextTf:r.context_tf||'',entryTf:r.entry_tf||'',
-outcome:r.outcome||(Number(r.resultado)>0?'win':Number(r.resultado)<0?'loss':'be'),
-pnl:Number(r.resultado||0),risk:Number(r.riesgo||0),zone:r.zone||r.contexto||'',
-confirmation:r.confirmacion||'',market:r.market_view||'',
-on_time:r.on_time??false,risk_ok:r.risk_ok??false,
-confirmation_ok:r.confirmation_ok??false,followed:r.followed??r.cumplio_plan??false,
-emotion:r.emociones||'',lesson:r.leccion||'',image_paths:r.image_paths||[]
-};
+return{id:r.id,date:r.fecha,symbol:r.activo||'NASDAQ',session:r.session||'NY',direction:r.direccion||'Compra',contextTf:r.context_tf||'',entryTf:r.entry_tf||'',outcome:r.outcome||(Number(r.resultado)>0?'win':Number(r.resultado)<0?'loss':'be'),pnl:Number(r.resultado||0),risk:Number(r.riesgo||0),zone:r.zone||r.contexto||'',confirmation:r.confirmacion||'',market:r.market_view||'',on_time:r.on_time??false,risk_ok:r.risk_ok??false,confirmation_ok:r.confirmation_ok??false,followed:r.followed??r.cumplio_plan??false,emotion:r.emociones||'',lesson:r.leccion||'',image_paths:r.image_paths||[]};
 }
-
 function toRow(t){
-return {
-user_id:user.id,fecha:t.date,activo:t.symbol||'NASDAQ',
-direccion:t.direction||'Compra',resultado:Number(t.pnl||0),riesgo:Number(t.risk||0),
-contexto:t.zone||'',confirmacion:t.confirmation||'',emociones:t.emotion||'',
-leccion:t.lesson||'',cumplio_plan:!!t.followed,session:t.session||'NY',
-context_tf:t.contextTf||'',entry_tf:t.entryTf||'',outcome:t.outcome||'be',
-zone:t.zone||'',market_view:t.market||'',on_time:!!t.onTime,
-risk_ok:!!t.riskOk,confirmation_ok:!!t.confirmationOk,
-followed:!!t.followed,image_paths:t.image_paths||[]
-};
+return{user_id:user.id,fecha:t.date,activo:t.symbol||'NASDAQ',direccion:t.direction||'Compra',resultado:Number(t.pnl||0),riesgo:Number(t.risk||0),contexto:t.zone||'',confirmacion:t.confirmation||'',emociones:t.emotion||'',leccion:t.lesson||'',cumplio_plan:!!t.followed,session:t.session||'NY',context_tf:t.contextTf||'',entry_tf:t.entryTf||'',outcome:t.outcome||'be',zone:t.zone||'',market_view:t.market||'',on_time:!!t.onTime,risk_ok:!!t.riskOk,confirmation_ok:!!t.confirmationOk,followed:!!t.followed,image_paths:t.image_paths||[]};
 }
 
 async function refreshSession(){
-if(!sb){
-$('authMsg').textContent='Falta configurar la clave publicable de Supabase en index.html.';
-return;
+if(!sb){$('authMsg').textContent='Falta configurar la clave publicable de Supabase en index.html.';return;}
+const{data:{session}}=await sb.auth.getSession();
+if(session){user=session.user;await enterApp();}
+else{user=null;$('auth').classList.remove('hide');$('app').classList.add('hide');}
 }
-const {data:{session}}=await sb.auth.getSession();
-if(session){
-user=session.user;
-await enterApp();
-}else{
-user=null;
-$('auth').classList.remove('hide');
-$('app').classList.add('hide');
-}
-}
-
 async function enterApp(){
-$('auth').classList.add('hide');
-$('app').classList.remove('hide');
+$('auth').classList.add('hide');$('app').classList.remove('hide');
 $('who').textContent='Sesión: '+(user.email||'usuario');
-await loadTrades();
-await loadMentorMessages();
+await loadTrades();await loadMentorMessages();
 }
-
 $('login').onclick=async()=>{
 if(!sb)return message('authMsg','Primero configura la clave publicable de Supabase.','error');
-const {error}=await sb.auth.signInWithPassword({
-email:$('email').value.trim(),
-password:$('password').value
-});
+const{error}=await sb.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});
 message('authMsg',error?error.message:'Sesión iniciada.',error?'error':'ok');
-if(!error){
-const {data:{user:u}}=await sb.auth.getUser();
-user=u;
-await enterApp();
-}
+if(!error){const{data:{user:u}}=await sb.auth.getUser();user=u;await enterApp();}
 };
-
 $('signup').onclick=async()=>{
 if(!sb)return message('authMsg','Primero configura la clave publicable de Supabase.','error');
-const {data,error}=await sb.auth.signUp({
-email:$('email').value.trim(),
-password:$('password').value,
-options:{emailRedirectTo:SITE_URL}
-});
+const{data,error}=await sb.auth.signUp({email:$('email').value.trim(),password:$('password').value,options:{emailRedirectTo:SITE_URL}});
 message('authMsg',error?error.message:(data.session?'Cuenta creada.':'Cuenta creada. Revisa tu correo para confirmar el registro.'),error?'error':'ok');
-if(!error&&data.session){
-user=data.user;
-await enterApp();
-}
+if(!error&&data.session){user=data.user;await enterApp();}
 };
-
 $('logout').onclick=async()=>{
-await sb.auth.signOut();
-user=null;
-trades=[];
-mentorMessages=[];
-$('auth').classList.remove('hide');
-$('app').classList.add('hide');
+await sb.auth.signOut();user=null;trades=[];mentorMessages=[];
+$('auth').classList.remove('hide');$('app').classList.add('hide');
 };
-
 if(sb)sb.auth.onAuthStateChange((_event,session)=>{
-if(session&&!user){
-user=session.user;
-setTimeout(enterApp,0);
-}else if(!session){
-user=null;
-mentorMessages=[];
-$('auth').classList.remove('hide');
-$('app').classList.add('hide');
-}
+if(session&&!user){user=session.user;setTimeout(enterApp,0);}
+else if(!session){user=null;mentorMessages=[];$('auth').classList.remove('hide');$('app').classList.add('hide');}
 });
 
 async function loadTrades(){
-const {data,error}=await sb.from('trades')
-.select('*')
-.order('fecha',{ascending:false})
-.order('created_at',{ascending:false});
-
-if(error){
-alert('No se pudieron cargar las operaciones: '+error.message);
-return;
+const{data,error}=await sb.from('trades').select('*').order('fecha',{ascending:false}).order('created_at',{ascending:false});
+if(error){alert('No se pudieron cargar las operaciones: '+error.message);return;}
+trades=(data||[]).map(mapRow);render();
 }
-
-trades=(data||[]).map(mapRow);
-render();
-}
-
 function render(){
 const total=trades.reduce((s,t)=>s+t.pnl,0);
 const wins=trades.filter(t=>t.outcome==='win').length;
 const viol=trades.filter(t=>!compliant(t)).length;
 const good=trades.length-viol;
-
-$('total').textContent=fmt(total);
-$('total').className=total>=0?'green':'red';
+$('total').textContent=fmt(total);$('total').className=total>=0?'green':'red';
 $('count').textContent=trades.length;
 $('winrate').textContent=trades.length?Math.round(wins/trades.length*100)+'%':'0%';
 $('violations').textContent=viol;
 $('discipline').textContent=trades.length?Math.round(good/trades.length*100)+'%':'—';
-
-$('recent').innerHTML=trades.length?
-'<div class="table-wrap"><table><thead><tr><th>Fecha</th><th>Activo</th><th>Resultado</th><th>Disciplina</th></tr></thead><tbody>'+
-trades.slice(0,5).map(t=>`<tr><td>${esc(t.date)}</td><td>${esc(t.symbol)}</td><td class="${t.pnl>=0?'green':'red'}">${fmt(t.pnl)}</td><td>${compliant(t)?'En plan':'Fuera de plan'}</td></tr>`).join('')+
-'</tbody></table></div>':
-'<div class="empty">Registra tu primer trade para ver tus estadísticas.</div>';
-
+$('recent').innerHTML=trades.length?'<div class="table-wrap"><table><thead><tr><th>Fecha</th><th>Activo</th><th>Resultado</th><th>Disciplina</th></tr></thead><tbody>'+trades.slice(0,5).map(t=>`<tr><td>${esc(t.date)}</td><td>${esc(t.symbol)}</td><td class="${t.pnl>=0?'green':'red'}">${fmt(t.pnl)}</td><td>${compliant(t)?'En plan':'Fuera de plan'}</td></tr>`).join('')+'</tbody></table></div>':'<div class="empty">Registra tu primer trade para ver tus estadísticas.</div>';
 renderHistory();
 }
 
@@ -459,368 +331,140 @@ if(!file.type.startsWith('image/'))continue;
 if(file.size>5*1024*1024)throw new Error('Cada imagen debe pesar máximo 5 MB.');
 const safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
 const path=`${user.id}/${tradeId}/${crypto.randomUUID()}-${safeName}`;
-const {error}=await sb.storage.from(BUCKET).upload(path,file,{
-upsert:false,contentType:file.type
-});
-if(error)throw error;
-paths.push(path);
+const{error}=await sb.storage.from(BUCKET).upload(path,file,{upsert:false,contentType:file.type});
+if(error)throw error;paths.push(path);
 }
 return paths;
 }
-
 $('images').onchange=()=>{
-selectedFiles=Array.from($('images').files||[]);
-$('imagePreview').innerHTML='';
-for(const f of selectedFiles){
-const img=document.createElement('img');
-img.src=URL.createObjectURL(f);
-img.alt=f.name;
-$('imagePreview').append(img);
-}
+selectedFiles=Array.from($('images').files||[]);$('imagePreview').innerHTML='';
+for(const f of selectedFiles){const img=document.createElement('img');img.src=URL.createObjectURL(f);img.alt=f.name;$('imagePreview').append(img);}
 };
-
 function resetForm(){
-$('tradeForm').reset();
-$('date').value=localDate();
-$('symbol').value='NASDAQ';
+$('tradeForm').reset();$('date').value=localDate();$('symbol').value='NASDAQ';
 $('onTime').checked=$('riskOk').checked=$('confirmationOk').checked=$('followed').checked=true;
-$('editId').value='';
-$('formTitle').textContent='Registrar una operación';
-selectedFiles=[];
-$('imagePreview').innerHTML='';
-$('images').value='';
-message('saveMsg','');
+$('editId').value='';$('formTitle').textContent='Registrar una operación';
+selectedFiles=[];$('imagePreview').innerHTML='';$('images').value='';message('saveMsg','');
 }
-
 $('clearForm').onclick=resetForm;
 
 $('saveTrade').onclick=async()=>{
-const btn=$('saveTrade');
-if(!$('tradeForm').reportValidity())return;
-btn.disabled=true;
-message('saveMsg','Guardando operación e imágenes...');
-
+const btn=$('saveTrade');if(!$('tradeForm').reportValidity())return;
+btn.disabled=true;message('saveMsg','Guardando operación e imágenes...');
 try{
-const id=$('editId').value;
-const t={};
-fields.forEach(f=>t[f]=$(f).value);
-t.pnl=Number(t.pnl||0);
-t.risk=Number(t.risk||0);
-t.onTime=$('onTime').checked;
-t.riskOk=$('riskOk').checked;
-t.confirmationOk=$('confirmationOk').checked;
-t.followed=$('followed').checked;
-t.image_paths=[];
-let row;
-
+const id=$('editId').value;const t={};fields.forEach(f=>t[f]=$(f).value);
+t.pnl=Number(t.pnl||0);t.risk=Number(t.risk||0);
+t.onTime=$('onTime').checked;t.riskOk=$('riskOk').checked;t.confirmationOk=$('confirmationOk').checked;t.followed=$('followed').checked;
+t.image_paths=[];let row;
 if(id){
 const old=trades.find(x=>String(x.id)===String(id));
-const {data,error}=await sb.from('trades')
-.update(toRow({...t,image_paths:old?.image_paths||[]}))
-.eq('id',id).select().single();
-if(error)throw error;
-row=data;
-
-const paths=await uploadFiles(selectedFiles,id);
-const all=[...(old?.image_paths||[]),...paths];
-
-if(paths.length){
-const {error:e2}=await sb.from('trades').update({image_paths:all}).eq('id',id);
-if(e2)throw e2;
-row.image_paths=all;
-}
+const{data,error}=await sb.from('trades').update(toRow({...t,image_paths:old?.image_paths||[]})).eq('id',id).select().single();
+if(error)throw error;row=data;
+const paths=await uploadFiles(selectedFiles,id);const all=[...(old?.image_paths||[]),...paths];
+if(paths.length){const{error:e2}=await sb.from('trades').update({image_paths:all}).eq('id',id);if(e2)throw e2;row.image_paths=all;}
 }else{
-const {data,error}=await sb.from('trades').insert(toRow(t)).select().single();
-if(error)throw error;
-row=data;
-
+const{data,error}=await sb.from('trades').insert(toRow(t)).select().single();
+if(error)throw error;row=data;
 const paths=await uploadFiles(selectedFiles,row.id);
-if(paths.length){
-const {error:e2}=await sb.from('trades').update({image_paths:paths}).eq('id',row.id);
-if(e2)throw e2;
+if(paths.length){const{error:e2}=await sb.from('trades').update({image_paths:paths}).eq('id',row.id);if(e2)throw e2;}
 }
-}
-
-resetForm();
-await loadTrades();
-show('history');
-message('saveMsg','Operación guardada.','ok');
-
-}catch(e){
-message('saveMsg','No se pudo guardar: '+e.message,'error');
-}finally{
-btn.disabled=false;
-}
+resetForm();await loadTrades();show('history');message('saveMsg','Operación guardada.','ok');
+}catch(e){message('saveMsg','No se pudo guardar: '+e.message,'error');}
+finally{btn.disabled=false;}
 };
 
 function weekDates(w){
-if(!w)return[];
-const [y,n]=w.split('-W').map(Number);
-const d=new Date(y,0,1+(n-1)*7);
-const day=d.getDay()||7;
-d.setDate(d.getDate()+1-day);
-const a=localDateFrom(d);
-d.setDate(d.getDate()+6);
-return[a,localDateFrom(d)];
+if(!w)return[];const[y,n]=w.split('-W').map(Number);const d=new Date(y,0,1+(n-1)*7);const day=d.getDay()||7;d.setDate(d.getDate()+1-day);const a=localDateFrom(d);d.setDate(d.getDate()+6);return[a,localDateFrom(d)];
 }
-
-function localDateFrom(d){
-const x=new Date(d.getTime()-d.getTimezoneOffset()*60000);
-return x.toISOString().slice(0,10);
-}
-
+function localDateFrom(d){const x=new Date(d.getTime()-d.getTimezoneOffset()*60000);return x.toISOString().slice(0,10);}
 function getTradesForSelectedWeek(){
-const dates=weekDates($('week').value);
-if(dates.length!==2)return [];
-const [a,b]=dates;
-return trades.filter(t=>t.date>=a&&t.date<=b);
+const dates=weekDates($('week').value);if(dates.length!==2)return[];
+const[a,b]=dates;return trades.filter(t=>t.date>=a&&t.date<=b);
 }
-
 function renderWeek(){
 const w=$('week').value;
-if(!w){
-$('weeklyStats').innerHTML='<p class="muted">Selecciona una semana para ver tu resumen.</p>';
-return;
+if(!w){$('weeklyStats').innerHTML='<p class="muted">Selecciona una semana para ver tu resumen.</p>';return;}
+const[a,b]=weekDates(w);const ts=getTradesForSelectedWeek();const sum=ts.reduce((s,t)=>s+t.pnl,0);const viol=ts.filter(t=>!compliant(t)).length;
+$('weeklyStats').innerHTML=`<div class="grid"><div class="card metric"><small>Operaciones</small><strong>${ts.length}</strong></div><div class="card metric"><small>Resultado</small><strong class="${sum>=0?'green':'red'}">${fmt(sum)}</strong></div><div class="card metric"><small>Ganadoras</small><strong>${ts.filter(t=>t.outcome==='win').length}</strong></div><div class="card metric"><small>Fuera de plan</small><strong>${viol}</strong></div></div><p class="note">Periodo: ${a} al ${b}. ${ts.length?'Revisa especialmente las operaciones fuera de plan.':'No hay operaciones registradas esta semana.'}</p>`;
+const r=reviews[w]||{};$('weekError').value=r.error||'';$('weekRule').value=r.rule||'';
 }
-
-const[a,b]=weekDates(w);
-const ts=getTradesForSelectedWeek();
-const sum=ts.reduce((s,t)=>s+t.pnl,0);
-const viol=ts.filter(t=>!compliant(t)).length;
-
-$('weeklyStats').innerHTML=`
-<div class="grid">
-<div class="card metric"><small>Operaciones</small><strong>${ts.length}</strong></div>
-<div class="card metric"><small>Resultado</small><strong class="${sum>=0?'green':'red'}">${fmt(sum)}</strong></div>
-<div class="card metric"><small>Ganadoras</small><strong>${ts.filter(t=>t.outcome==='win').length}</strong></div>
-<div class="card metric"><small>Fuera de plan</small><strong>${viol}</strong></div>
-</div>
-<p class="note">Periodo: ${a} al ${b}. ${ts.length?'Revisa especialmente las operaciones fuera de plan.':'No hay operaciones registradas esta semana.'}</p>`;
-
-const r=reviews[w]||{};
-$('weekError').value=r.error||'';
-$('weekRule').value=r.rule||'';
-}
-
 $('week').onchange=renderWeek;
-
 $('saveReview').onclick=()=>{
-const w=$('week').value;
-if(!w)return alert('Selecciona una semana.');
-reviews[w]={
-error:$('weekError').value,
-rule:$('weekRule').value
-};
-localStorage.setItem('mi_diario_reviews_v2',JSON.stringify(reviews));
-alert('Revisión semanal guardada en este navegador.');
+const w=$('week').value;if(!w)return alert('Selecciona una semana.');
+reviews[w]={error:$('weekError').value,rule:$('weekRule').value};
+localStorage.setItem('mi_diario_reviews_v2',JSON.stringify(reviews));alert('Revisión semanal guardada en este navegador.');
 };
 
-/* =====================================
-   MENTOR PSICOLÓGICO
-   Solo recibe mensajes y conversación.
-   Nunca recibe operaciones ni capturas.
-===================================== */
-
+/* MENTOR PSICOLÓGICO: solo recibe mensajes y conversación */
 function renderMentorChat(){
-const host=$('mentorChat');
-host.innerHTML='';
-
-if(!mentorMessages.length){
-host.innerHTML='<div class="mentor-chat-empty">Todavía no hay mensajes. Puedes comenzar a conversar con tu mentor.</div>';
-return;
-}
-
+const host=$('mentorChat');host.innerHTML='';
+if(!mentorMessages.length){host.innerHTML='<div class="mentor-chat-empty">Todavía no hay mensajes. Puedes comenzar a conversar con tu mentor.</div>';return;}
 mentorMessages.forEach(m=>{
-const bubble=document.createElement('div');
-bubble.className='chat-message '+(m.role==='user'?'user':'assistant');
-
-const label=document.createElement('small');
-label.textContent=m.role==='user'?'Tú':'🧠 Mentor psicológico';
-
-const content=document.createElement('div');
-content.textContent=m.content;
-
-bubble.append(label,content);
-host.append(bubble);
+const bubble=document.createElement('div');bubble.className='chat-message '+(m.role==='user'?'user':'assistant');
+const label=document.createElement('small');label.textContent=m.role==='user'?'Tú':'🧠 Mentor psicológico';
+const content=document.createElement('div');content.textContent=m.content;
+bubble.append(label,content);host.append(bubble);
 });
-
 host.scrollTop=host.scrollHeight;
 }
-
 async function loadMentorMessages(){
-if(!sb||!user)return;
-
-message('mentorStatus','Recuperando tu conversación...');
-
+if(!sb||!user)return;message('mentorStatus','Recuperando tu conversación...');
 try{
-const {data,error}=await sb.from('mentor_messages')
-.select('id,role,content,created_at')
-.eq('user_id',user.id)
-.order('created_at',{ascending:true})
-.limit(200);
-
+const{data,error}=await sb.from('mentor_messages').select('id,role,content,created_at').eq('user_id',user.id).order('created_at',{ascending:true}).limit(200);
 if(error)throw error;
-
-mentorMessages=(data||[]).map(m=>({
-id:m.id,
-role:m.role,
-content:m.content,
-created_at:m.created_at
-}));
-
-renderMentorChat();
-message('mentorStatus','Conversación recuperada.','ok');
-
-}catch(e){
-message('mentorStatus','No se pudo recuperar el historial: '+e.message,'error');
+mentorMessages=(data||[]).map(m=>({id:m.id,role:m.role,content:m.content,created_at:m.created_at}));
+renderMentorChat();message('mentorStatus','Conversación recuperada.','ok');
+}catch(e){message('mentorStatus','No se pudo recuperar el historial: '+e.message,'error');}
 }
-}
-
 async function saveMentorMessage(role,content){
-const {data,error}=await sb.from('mentor_messages')
-.insert({
-user_id:user.id,
-role:role,
-content:content
-})
-.select('id,role,content,created_at')
-.single();
-
+const{data,error}=await sb.from('mentor_messages').insert({user_id:user.id,role:role,content:content}).select('id,role,content,created_at').single();
 if(error)throw error;
-
-const saved={
-id:data.id,
-role:data.role,
-content:data.content,
-created_at:data.created_at
-};
-
-mentorMessages.push(saved);
-renderMentorChat();
-
-return saved;
+const saved={id:data.id,role:data.role,content:data.content,created_at:data.created_at};
+mentorMessages.push(saved);renderMentorChat();return saved;
 }
-
 async function sendToMentor({question}){
 if(mentorSending)return false;
-
-if(!sb||!user){
-message('mentorStatus','Primero inicia sesión en tu diario.','error');
-return false;
-}
-
-if(!question.trim()){
-message('mentorStatus','Escribe un mensaje primero.','error');
-return false;
-}
-
-mentorSending=true;
-const askButton=$('askMentor');
-
-askButton.disabled=true;
-askButton.textContent='Consultando...';
-
+if(!sb||!user){message('mentorStatus','Primero inicia sesión en tu diario.','error');return false;}
+if(!question.trim()){message('mentorStatus','Escribe un mensaje primero.','error');return false;}
+mentorSending=true;const askButton=$('askMentor');askButton.disabled=true;askButton.textContent='Consultando...';
 try{
 message('mentorStatus','Tu mentor está leyendo tu mensaje...');
-
-const previousHistory=mentorMessages.slice(-16).map(m=>({
-role:m.role==='assistant'?'model':'user',
-content:m.content
-}));
-
+const previousHistory=mentorMessages.slice(-16).map(m=>({role:m.role==='assistant'?'model':'user',content:m.content}));
 await saveMentorMessage('user',question);
-
-const {data,error}=await sb.functions.invoke(MENTOR_FUNCTION,{
-body:{
-question,
-mode:'chat',
-history:previousHistory
-}
-});
-
+const{data,error}=await sb.functions.invoke(MENTOR_FUNCTION,{body:{question,mode:'chat',history:previousHistory}});
 if(error){
 let detail=error.message||'No se pudo conectar con el mentor.';
-
-if(error.context){
-try{
-const responseBody=await error.context.json();
-if(responseBody.error)detail=responseBody.error;
-}catch{}
-}
-
+if(error.context){try{const responseBody=await error.context.json();if(responseBody.error)detail=responseBody.error;}catch{}}
 throw new Error(detail);
 }
-
 if(data?.error)throw new Error(data.error);
 if(!data?.answer)throw new Error('El mentor no devolvió una respuesta.');
-
-await saveMentorMessage('assistant',data.answer);
-
-message('mentorStatus','Respuesta guardada correctamente.','ok');
-
-return true;
-
-}catch(e){
-message('mentorStatus','No se pudo completar la conversación: '+e.message,'error');
-return false;
-
-}finally{
-mentorSending=false;
-askButton.disabled=false;
-askButton.textContent='Enviar mensaje';
+await saveMentorMessage('assistant',data.answer);message('mentorStatus','Respuesta guardada correctamente.','ok');return true;
+}catch(e){message('mentorStatus','No se pudo completar la conversación: '+e.message,'error');return false;}
+finally{mentorSending=false;askButton.disabled=false;askButton.textContent='Enviar mensaje';}
 }
-}
-
 $('askMentor').onclick=async()=>{
-const question=$('mentorQuestion').value.trim();
-if(!question)return message('mentorStatus','Escribe un mensaje primero.','error');
-
-const success=await sendToMentor({question});
-
-if(success)$('mentorQuestion').value='';
+const question=$('mentorQuestion').value.trim();if(!question)return message('mentorStatus','Escribe un mensaje primero.','error');
+const success=await sendToMentor({question});if(success)$('mentorQuestion').value='';
 };
-
-$('clearMentor').onclick=()=>{
-$('mentorQuestion').value='';
-$('mentorQuestion').focus();
-};
-
+$('clearMentor').onclick=()=>{$('mentorQuestion').value='';$('mentorQuestion').focus();};
 $('reloadMentor').onclick=loadMentorMessages;
 
-/* =====================================
-   IMÁGENES Y GALERÍA
-===================================== */
-
+/* IMÁGENES Y GALERÍA */
 async function signedUrl(path){
-const {data,error}=await sb.storage.from(BUCKET).createSignedUrl(path,3600);
-if(error)throw error;
-return data.signedUrl;
+const{data,error}=await sb.storage.from(BUCKET).createSignedUrl(path,3600);
+if(error)throw error;return data.signedUrl;
 }
-
 function ensureModal(){
 if($('imageModal'))return;
-
-const modal=document.createElement('div');
-modal.id='imageModal';
-modal.className='image-modal';
-
-modal.innerHTML=`
-<button id="closeModal" type="button">✕</button>
-<button id="prevModal" type="button">‹</button>
-<img id="modalImg" alt="Captura ampliada">
-<button id="nextModal" type="button">›</button>
-<p id="modalCaption"></p>`;
-
+const modal=document.createElement('div');modal.id='imageModal';modal.className='image-modal';
+modal.innerHTML=`<button id="closeModal" type="button">✕</button><button id="prevModal" type="button">‹</button><img id="modalImg" alt="Captura ampliada"><button id="nextModal" type="button">›</button><p id="modalCaption"></p>`;
 document.body.append(modal);
-
 $('closeModal').onclick=()=>modal.classList.remove('open');
 $('prevModal').onclick=()=>showModalImage(modalIndex-1);
 $('nextModal').onclick=()=>showModalImage(modalIndex+1);
-modal.onclick=e=>{
-if(e.target===modal)modal.classList.remove('open');
-};
+modal.onclick=e=>{if(e.target===modal)modal.classList.remove('open');};
 }
-
 function showModalImage(index){
 if(!modalImages.length)return;
 modalIndex=(index+modalImages.length)%modalImages.length;
@@ -829,366 +473,200 @@ $('modalCaption').textContent=`Imagen ${modalIndex+1} de ${modalImages.length}`;
 $('imageModal').classList.add('open');
 }
 
-async function renderGallery(container,paths){
+/* GALERÍA CON ELIMINACIÓN INDIVIDUAL */
+async function renderGallery(container,trade){
 container.innerHTML='';
-
-if(!paths?.length){
-container.innerHTML='<p class="note">Esta operación no tiene capturas.</p>';
-return;
+if(!trade.image_paths?.length){
+container.innerHTML='<p class="note">Esta operación ya no tiene capturas.</p>';return;
 }
-
 const urls=[];
-
-for(const p of paths){
-try{
-urls.push({url:await signedUrl(p)});
-}catch(e){
-console.warn('No se pudo abrir imagen',e);
+for(const path of trade.image_paths){
+try{urls.push({path,url:await signedUrl(path)});}
+catch(e){console.warn('No se pudo abrir imagen',e);}
 }
-}
-
-if(!urls.length){
-container.innerHTML='<p class="note">No se pudieron cargar las imágenes.</p>';
-return;
-}
+if(!urls.length){container.innerHTML='<p class="note">No se pudieron cargar las imágenes.</p>';return;}
 
 let ix=0;
-
-const gal=document.createElement('div');
-gal.className='gallery';
-
-const prev=document.createElement('button');
-prev.type='button';
-prev.textContent='‹';
-
-const stage=document.createElement('div');
-stage.className='gallery-stage';
-
-const img=document.createElement('img');
-img.alt='Captura del gráfico';
-img.title='Haz clic para ampliar';
-
-const count=document.createElement('div');
-count.className='note';
-
-stage.append(img,count);
-
-const next=document.createElement('button');
-next.type='button';
-next.textContent='›';
-
-const thumbs=document.createElement('div');
-thumbs.className='thumbs';
+const gal=document.createElement('div');gal.className='gallery';
+const prev=document.createElement('button');prev.type='button';prev.textContent='‹';
+const stage=document.createElement('div');stage.className='gallery-stage';
+const img=document.createElement('img');img.alt='Captura del gráfico';img.title='Haz clic para ampliar';
+const count=document.createElement('div');count.className='note';
+const removeBtn=document.createElement('button');removeBtn.type='button';removeBtn.className='danger';removeBtn.textContent='🗑️ Eliminar esta imagen';
+stage.append(img,count,removeBtn);
+const next=document.createElement('button');next.type='button';next.textContent='›';
+const thumbs=document.createElement('div');thumbs.className='thumbs';
 
 function paint(){
 img.src=urls[ix].url;
 count.textContent=`Imagen ${ix+1} de ${urls.length} · Haz clic para ampliar`;
 [...thumbs.children].forEach((x,i)=>x.classList.toggle('active',i===ix));
 }
-
 urls.forEach((u,i)=>{
-const im=document.createElement('img');
-im.src=u.url;
-im.alt=`Miniatura ${i+1}`;
-im.onclick=()=>{
-ix=i;
-paint();
-};
-thumbs.append(im);
+const im=document.createElement('img');im.src=u.url;im.alt=`Miniatura ${i+1}`;
+im.onclick=()=>{ix=i;paint();};thumbs.append(im);
 });
+prev.onclick=()=>{ix=(ix-1+urls.length)%urls.length;paint();};
+next.onclick=()=>{ix=(ix+1)%urls.length;paint();};
+img.onclick=()=>{modalImages=urls;ensureModal();showModalImage(ix);};
 
-prev.onclick=()=>{
-ix=(ix-1+urls.length)%urls.length;
-paint();
-};
+removeBtn.onclick=async()=>{
+const selected=urls[ix];
+if(!confirm('¿Seguro que quieres eliminar solamente esta imagen?'))return;
+removeBtn.disabled=true;removeBtn.textContent='Eliminando...';
+try{
+// Actualizamos primero la lista de imágenes de la operación.
+const remaining=trade.image_paths.filter(p=>p!==selected.path);
+const{error}=await sb.from('trades').update({image_paths:remaining}).eq('id',trade.id);
+if(error)throw error;
 
-next.onclick=()=>{
-ix=(ix+1)%urls.length;
-paint();
-};
+trade.image_paths=remaining;
+const localTrade=trades.find(t=>String(t.id)===String(trade.id));
+if(localTrade)localTrade.image_paths=remaining;
 
-img.onclick=()=>{
-modalImages=urls;
-ensureModal();
-showModalImage(ix);
-};
-
-gal.append(prev,stage,next);
-container.append(gal,thumbs);
-paint();
+// Borramos el archivo de Supabase Storage.
+const{error:storageError}=await sb.storage.from(BUCKET).remove([selected.path]);
+if(storageError){
+alert('La imagen se quitó del diario, pero no se pudo borrar del almacenamiento: '+storageError.message);
 }
-
-/* =====================================
-   HISTORIAL DE OPERACIONES
-===================================== */
-
-async function renderHistory(){
-const host=$('historyTable');
-
-if(!trades.length){
-host.innerHTML='<div class="empty">Todavía no tienes operaciones registradas.</div>';
+const toggle=container.previousElementSibling;
+if(!remaining.length){
+container.innerHTML='<p class="note">Esta operación ya no tiene capturas.</p>';
+if(toggle)toggle.remove();
 return;
 }
+if(ix>=remaining.length)ix=remaining.length-1;
+await renderGallery(container,trade);
+if(toggle)toggle.textContent=`Ocultar imágenes (${remaining.length})`;
+}catch(e){
+alert('No se pudo eliminar la imagen: '+e.message);
+removeBtn.disabled=false;removeBtn.textContent='🗑️ Eliminar esta imagen';
+}
+};
 
+gal.append(prev,stage,next);container.append(gal,thumbs);paint();
+}
+
+/* HISTORIAL */
+async function renderHistory(){
+const host=$('historyTable');
+if(!trades.length){host.innerHTML='<div class="empty">Todavía no tienes operaciones registradas.</div>';return;}
 host.innerHTML='';
-
-const wrap=document.createElement('div');
-wrap.className='table-wrap';
-
+const wrap=document.createElement('div');wrap.className='table-wrap';
 const table=document.createElement('table');
 table.innerHTML='<thead><tr><th>Fecha</th><th>Activo</th><th>Sesión</th><th>Resultado</th><th>Riesgo</th><th>Disciplina</th><th>Acciones</th></tr></thead>';
-
 const body=document.createElement('tbody');
 
 for(const t of trades){
 const tr=document.createElement('tr');
-
-tr.innerHTML=`
-<td>${esc(t.date)}</td>
-<td>${esc(t.symbol)}</td>
-<td>${esc(t.session)}</td>
-<td class="${t.pnl>0?'green':t.pnl<0?'red':''}">${fmt(t.pnl)}</td>
-<td>${Number(t.risk||0)}%</td>
-<td>${compliant(t)?'<span class="green">En plan</span>':'<span class="red">Fuera de plan</span>'}</td>
-<td></td>`;
-
+tr.innerHTML=`<td>${esc(t.date)}</td><td>${esc(t.symbol)}</td><td>${esc(t.session)}</td><td class="${t.pnl>0?'green':t.pnl<0?'red':''}">${fmt(t.pnl)}</td><td>${Number(t.risk||0)}%</td><td>${compliant(t)?'<span class="green">En plan</span>':'<span class="red">Fuera de plan</span>'}</td><td></td>`;
 const actions=tr.lastElementChild;
-
-const edit=document.createElement('button');
-edit.textContent='Editar';
-edit.onclick=()=>editTrade(t.id);
-
-const del=document.createElement('button');
-del.textContent='Eliminar';
-del.className='danger';
-del.onclick=()=>deleteTrade(t);
-
-actions.append(edit,document.createTextNode(' '),del);
-body.append(tr);
+const edit=document.createElement('button');edit.textContent='Editar';edit.onclick=()=>editTrade(t.id);
+const del=document.createElement('button');del.textContent='Eliminar';del.className='danger';del.onclick=()=>deleteTrade(t);
+actions.append(edit,document.createTextNode(' '),del);body.append(tr);
 
 const detail=document.createElement('tr');
-const cell=document.createElement('td');
-cell.colSpan=7;
-
-const info=document.createElement('div');
-info.className='note';
-
-info.innerHTML=`
-<b>Contexto:</b> ${esc(t.zone||'—')} ·
-<b>Confirmación:</b> ${esc(t.confirmation||'—')}<br>
-<b>Emociones:</b> ${esc(t.emotion||'—')}<br>
-<b>Lección:</b> ${esc(t.lesson||'—')}`;
-
+const cell=document.createElement('td');cell.colSpan=7;
+const info=document.createElement('div');info.className='note';
+info.innerHTML=`<b>Contexto:</b> ${esc(t.zone||'—')} · <b>Confirmación:</b> ${esc(t.confirmation||'—')}<br><b>Emociones:</b> ${esc(t.emotion||'—')}<br><b>Lección:</b> ${esc(t.lesson||'—')}`;
 cell.append(info);
 
 if(t.image_paths?.length){
-const toggle=document.createElement('button');
-toggle.type='button';
-toggle.className='gallery-toggle';
-toggle.textContent=`Ver imágenes (${t.image_paths.length})`;
-
-const gallery=document.createElement('div');
-gallery.className='trade-gallery';
-
+const toggle=document.createElement('button');toggle.type='button';toggle.className='gallery-toggle';toggle.textContent=`Ver imágenes (${t.image_paths.length})`;
+const gallery=document.createElement('div');gallery.className='trade-gallery';
 let loaded=false;
-
 toggle.onclick=async()=>{
-const opening=!gallery.classList.contains('open');
-gallery.classList.toggle('open',opening);
-
+const opening=!gallery.classList.contains('open');gallery.classList.toggle('open',opening);
 toggle.textContent=opening?'Ocultar imágenes':'Ver imágenes ('+t.image_paths.length+')';
-
 if(opening&&!loaded){
-toggle.disabled=true;
-toggle.textContent='Cargando imágenes...';
-await renderGallery(gallery,t.image_paths);
-loaded=true;
-toggle.disabled=false;
+toggle.disabled=true;toggle.textContent='Cargando imágenes...';
+await renderGallery(gallery,t);
+loaded=true;toggle.disabled=false;
 toggle.textContent='Ocultar imágenes';
 }
 };
-
 cell.append(toggle,gallery);
 }else{
-const noImages=document.createElement('div');
-noImages.className='note';
-noImages.textContent='Sin imágenes adjuntas.';
-cell.append(noImages);
+const noImages=document.createElement('div');noImages.className='note';noImages.textContent='Sin imágenes adjuntas.';cell.append(noImages);
 }
-
-detail.append(cell);
-body.append(detail);
+detail.append(cell);body.append(detail);
 }
-
-table.append(body);
-wrap.append(table);
-host.append(wrap);
+table.append(body);wrap.append(table);host.append(wrap);
 }
 
 function editTrade(id){
-const t=trades.find(x=>String(x.id)===String(id));
-if(!t)return;
-
-const vals={
-date:t.date,symbol:t.symbol,session:t.session,direction:t.direction,
-contextTf:t.contextTf,entryTf:t.entryTf,outcome:t.outcome,pnl:t.pnl,
-risk:t.risk,zone:t.zone,confirmation:t.confirmation,market:t.market,
-emotion:t.emotion,lesson:t.lesson
-};
-
+const t=trades.find(x=>String(x.id)===String(id));if(!t)return;
+const vals={date:t.date,symbol:t.symbol,session:t.session,direction:t.direction,contextTf:t.contextTf,entryTf:t.entryTf,outcome:t.outcome,pnl:t.pnl,risk:t.risk,zone:t.zone,confirmation:t.confirmation,market:t.market,emotion:t.emotion,lesson:t.lesson};
 fields.forEach(f=>$(f).value=vals[f]??'');
-
-$('onTime').checked=t.on_time;
-$('riskOk').checked=t.risk_ok;
-$('confirmationOk').checked=t.confirmation_ok;
-$('followed').checked=t.followed;
-
-$('editId').value=t.id;
-$('formTitle').textContent='Editar operación';
-
-selectedFiles=[];
-$('imagePreview').innerHTML='';
-$('images').value='';
-
+$('onTime').checked=t.on_time;$('riskOk').checked=t.risk_ok;$('confirmationOk').checked=t.confirmation_ok;$('followed').checked=t.followed;
+$('editId').value=t.id;$('formTitle').textContent='Editar operación';
+selectedFiles=[];$('imagePreview').innerHTML='';$('images').value='';
 show('new');
-
-if(t.image_paths?.length){
-message('saveMsg',`Esta operación ya tiene ${t.image_paths.length} imagen(es). Puedes añadir más; las anteriores se conservan.`);
+if(t.image_paths?.length)message('saveMsg',`Esta operación ya tiene ${t.image_paths.length} imagen(es). Puedes añadir más; las anteriores se conservan.`);
 }
-}
-
 async function deleteTrade(t){
 if(!confirm('¿Eliminar esta operación y sus capturas?'))return;
-
 try{
 if(t.image_paths?.length){
-const {error:e}=await sb.storage.from(BUCKET).remove(t.image_paths);
-if(e)throw e;
+const{error:e}=await sb.storage.from(BUCKET).remove(t.image_paths);if(e)throw e;
 }
-
-const {error}=await sb.from('trades').delete().eq('id',t.id);
-if(error)throw error;
-
+const{error}=await sb.from('trades').delete().eq('id',t.id);if(error)throw error;
 await loadTrades();
-
-}catch(e){
-alert('No se pudo eliminar: '+e.message);
-}
+}catch(e){alert('No se pudo eliminar: '+e.message);}
 }
 
-/* Exportar e importar */
-
+/* EXPORTAR E IMPORTAR */
 $('export').onclick=()=>{
-const blob=new Blob([
-JSON.stringify({trades:trades.map(t=>({...t})),reviews},null,2)
-],{type:'application/json'});
-
-const a=document.createElement('a');
-a.href=URL.createObjectURL(blob);
-a.download='respaldo-diario-trading.json';
-a.click();
-URL.revokeObjectURL(a.href);
+const blob=new Blob([JSON.stringify({trades:trades.map(t=>({...t})),reviews},null,2)],{type:'application/json'});
+const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='respaldo-diario-trading.json';a.click();URL.revokeObjectURL(a.href);
 };
-
 $('importFile').onchange=async e=>{
-const file=e.target.files[0];
-if(!file)return;
-
+const file=e.target.files[0];if(!file)return;
 try{
 const data=JSON.parse(await file.text());
-
-if(!Array.isArray(data.trades)){
-throw new Error('El JSON no contiene una lista de operaciones.');
-}
-
+if(!Array.isArray(data.trades))throw new Error('El JSON no contiene una lista de operaciones.');
 if(!confirm(`Se agregarán ${data.trades.length} operaciones a tu cuenta. No se borrará lo que ya tienes. ¿Continuar?`))return;
-
 let imported=0;
-
 for(const old of data.trades){
 const t={
-date:old.date||old.fecha||localDate(),
-symbol:old.symbol||old.activo||'NASDAQ',
-session:old.session||'NY',
-direction:old.direction||old.direccion||'Compra',
-contextTf:old.contextTf||'',
-entryTf:old.entryTf||'',
-outcome:old.outcome||old.result||'be',
-pnl:Number(old.pnl??old.resultado??0),
-risk:Number(old.risk??old.riesgo??0),
-zone:old.zone||old.context||old.contexto||'',
-confirmation:old.confirmation||old.confirmacion||'',
-market:old.market||old.market_view||'',
-onTime:!!(old.onTime??old.on_time),
-riskOk:!!(old.riskOk??old.risk_ok),
-confirmationOk:!!(old.confirmationOk??old.confirmation_ok),
-followed:!!(old.followed??old.cumplio_plan),
-emotion:old.emotion||old.emotions||old.emociones||'',
-lesson:old.lesson||old.leccion||'',
-image_paths:[]
+date:old.date||old.fecha||localDate(),symbol:old.symbol||old.activo||'NASDAQ',session:old.session||'NY',direction:old.direction||old.direccion||'Compra',
+contextTf:old.contextTf||'',entryTf:old.entryTf||'',outcome:old.outcome||old.result||'be',pnl:Number(old.pnl??old.resultado??0),risk:Number(old.risk??old.riesgo??0),
+zone:old.zone||old.context||old.contexto||'',confirmation:old.confirmation||old.confirmacion||'',market:old.market||old.market_view||'',
+onTime:!!(old.onTime??old.on_time),riskOk:!!(old.riskOk??old.risk_ok),confirmationOk:!!(old.confirmationOk??old.confirmation_ok),
+followed:!!(old.followed??old.cumplio_plan),emotion:old.emotion||old.emotions||old.emociones||'',lesson:old.lesson||old.leccion||'',image_paths:[]
 };
-
-const {data:row,error}=await sb.from('trades')
-.insert(toRow(t)).select().single();
-
-if(error)throw error;
-
+const{data:row,error}=await sb.from('trades').insert(toRow(t)).select().single();if(error)throw error;
 const files=[];
-
 if(typeof old.image==='string'&&old.image.startsWith('data:image/')){
-const blob=await(await fetch(old.image)).blob();
-files.push(new File([blob],`captura-${row.id}.jpg`,{type:blob.type||'image/jpeg'}));
+const blob=await(await fetch(old.image)).blob();files.push(new File([blob],`captura-${row.id}.jpg`,{type:blob.type||'image/jpeg'}));
 }
-
 if(Array.isArray(old.images)){
 for(let i=0;i<old.images.length;i++){
 const v=old.images[i];
-
 if(typeof v==='string'&&v.startsWith('data:image/')){
-const b=await(await fetch(v)).blob();
-files.push(new File([b],`captura-${row.id}-${i+1}.jpg`,{type:b.type||'image/jpeg'}));
+const b=await(await fetch(v)).blob();files.push(new File([b],`captura-${row.id}-${i+1}.jpg`,{type:b.type||'image/jpeg'}));
 }
 }
 }
-
 if(files.length){
 const paths=await uploadFiles(files,row.id);
-const {error:e2}=await sb.from('trades').update({image_paths:paths}).eq('id',row.id);
-if(e2)throw e2;
+const{error:e2}=await sb.from('trades').update({image_paths:paths}).eq('id',row.id);if(e2)throw e2;
 }
-
 imported++;
 }
-
-await loadTrades();
-alert(`Listo: se importaron ${imported} operaciones.`);
-
-}catch(err){
-alert('No se pudo completar la importación: '+err.message);
-}finally{
-e.target.value='';
-}
+await loadTrades();alert(`Listo: se importaron ${imported} operaciones.`);
+}catch(err){alert('No se pudo completar la importación: '+err.message);}
+finally{e.target.value='';}
 };
 
-/* Semana actual */
-
+/* SEMANA ACTUAL */
 $('week').value=(()=>{
-const d=new Date();
-const th=new Date(d);
-th.setDate(d.getDate()+4-(d.getDay()||7));
-
-const y=th.getFullYear();
-const first=new Date(y,0,1);
-const w=Math.ceil((((th-first)/86400000)+1)/7);
-
-return `${y}-W${String(w).padStart(2,'0')}`;
+const d=new Date();const th=new Date(d);th.setDate(d.getDate()+4-(d.getDay()||7));
+const y=th.getFullYear();const first=new Date(y,0,1);const w=Math.ceil((((th-first)/86400000)+1)/7);
+return`${y}-W${String(w).padStart(2,'0')}`;
 })();
-
-if(sb){
-refreshSession();
-}else{
-$('authMsg').textContent='Falta configurar la clave publicable de Supabase en el archivo index.html.';
-}
+if(sb){refreshSession();}
+else{$('authMsg').textContent='Falta configurar la clave publicable de Supabase en el archivo index.html.';}
 </script>
 </body>
 </html>
