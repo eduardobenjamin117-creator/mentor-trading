@@ -1,4 +1,4 @@
-
+```html
 <!doctype html>
 <html lang="es">
 <head>
@@ -42,7 +42,7 @@ textarea{min-height:82px;resize:vertical}
 .checks input{width:auto;margin:0}
 .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
 .table-wrap{overflow:auto}
-table{width:100%;border-collapse:collapse;min-width:700px}
+table{width:100%;border-collapse:collapse;min-width:760px}
 th,td{text-align:left;padding:11px 9px;border-bottom:1px solid var(--line);font-size:13px}
 th{color:var(--muted);font-weight:600}
 .empty{text-align:center;color:var(--muted);padding:28px}
@@ -76,6 +76,14 @@ th{color:var(--muted);font-weight:600}
 .chat-message small{display:block;color:var(--muted);font-size:11px;margin-bottom:6px}
 .mentor-question{min-height:100px}
 .mentor-chat-empty{text-align:center;color:var(--muted);padding:25px;border:1px dashed var(--line);border-radius:12px}
+.checklist{display:grid;gap:10px;margin-top:15px}
+.check-item{display:flex;align-items:flex-start;gap:12px;padding:14px;background:#0d1527;border:1px solid var(--line);border-radius:11px;cursor:pointer;color:var(--text);font-size:14px}
+.check-item input{width:19px;height:19px;margin:1px 0 0;accent-color:var(--green);flex-shrink:0}
+.progress-track{height:10px;background:#0d1527;border-radius:20px;overflow:hidden;margin-top:12px}
+.progress-fill{height:100%;width:0;background:var(--green);transition:width .2s}
+.existing-image{position:relative}
+.existing-image img{width:115px;height:80px;object-fit:cover;border-radius:8px;cursor:zoom-in}
+.existing-title{width:100%;font-size:13px;color:var(--muted);margin-top:12px}
 @media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}}
 @media(max-width:520px){
 main{padding:0 12px 30px}
@@ -122,6 +130,7 @@ form{grid-template-columns:1fr}
 <button class="tab active" data-view="dashboard">Resumen</button>
 <button class="tab" data-view="new">+ Registrar trade</button>
 <button class="tab" data-view="history">Historial</button>
+<button class="tab" data-view="checklist">☑ Mi checklist</button>
 <button class="tab" data-view="review">Revisión semanal</button>
 <button class="tab" data-view="mentor">🧠 Mentor IA</button>
 </nav>
@@ -146,6 +155,7 @@ form{grid-template-columns:1fr}
 <form id="tradeForm">
 <input type="hidden" id="editId">
 <label>Fecha<input id="date" type="date" required></label>
+<label>Hora de entrada<input id="entryTime" type="time" required></label>
 <label>Instrumento / par<input id="symbol" value="NASDAQ" placeholder="Ej. NASDAQ"></label>
 <label>Sesión<select id="session"><option>NY</option><option>Londres</option><option>Asia</option><option>Otra</option></select></label>
 <label>Dirección<select id="direction"><option>Compra</option><option>Venta</option></select></label>
@@ -155,7 +165,7 @@ form{grid-template-columns:1fr}
 <label>Resultado en % (positivo o negativo)<input id="pnl" type="number" step="0.01" placeholder="Ej. -1 o 2.5" required></label>
 <label>Riesgo usado (%)<input id="risk" type="number" step="0.01" min="0" placeholder="Ej. 0.5"></label>
 <label class="wide">Zona / contexto / DOL / FVG<textarea id="zone" placeholder="¿Qué zona estabas observando? ¿El DOL estaba claro?"></textarea></label>
-<label class="wide">Confirmación de entrada<textarea id="confirmation" placeholder="¿Hubo iFVG, estructura, desplazamiento...?"></textarea></label>
+<label class="wide">Confirmación de entrada<textarea id="confirmation" placeholder="¿Cómo se confirmó tu modelo iFVG?"></textarea></label>
 <label class="wide">¿Qué viste en el mercado?<textarea id="market" placeholder="Describe tu lectura real. Si estaba nublado, escríbelo."></textarea></label>
 <div class="wide checks">
 <label><input type="checkbox" id="onTime" checked> Dentro de mi horario</label>
@@ -169,6 +179,7 @@ form{grid-template-columns:1fr}
 <input id="images" type="file" accept="image/jpeg,image/png,image/webp" multiple>
 <span class="note">Puedes añadir varias capturas por operación. Máximo 5 MB por imagen.</span>
 <div id="imagePreview" class="image-preview"></div>
+<div id="existingImages" class="image-preview"></div>
 </label>
 </form>
 <div class="actions">
@@ -188,6 +199,27 @@ form{grid-template-columns:1fr}
 <div id="historyTable" class="table-wrap"></div>
 <div class="actions"><label style="display:inline-block">Importar respaldo JSON<input id="importFile" type="file" accept=".json,application/json"></label></div>
 <p class="note">La importación agrega operaciones al historial actual; no reemplaza ni borra tus registros.</p>
+</div>
+</section>
+
+<section id="checklist" class="view">
+<div class="panel">
+<h2>☑ Mi checklist de trading</h2>
+<p class="note">Marca cada punto antes de ejecutar tu operación. La checklist se guarda en este navegador y no se envía al mentor.</p>
+<div class="checklist">
+<label class="check-item"><input type="checkbox" data-check="dol"> <span><b>1. DOL claro</b><br><span class="muted">Tengo definido mi Draw on Liquidity.</span></span></label>
+<label class="check-item"><input type="checkbox" data-check="fvg"> <span><b>2. FVG alineado</b><br><span class="muted">El FVG está alineado con mi DOL.</span></span></label>
+<label class="check-item"><input type="checkbox" data-check="tapeo"> <span><b>3. Tapeo</b><br><span class="muted">Identifiqué el tapeo que estoy esperando.</span></span></label>
+<label class="check-item"><input type="checkbox" data-check="confirmacion"> <span><b>4. Confirmación</b><br><span class="muted">Tengo la confirmación de mi modelo iFVG.</span></span></label>
+<label class="check-item"><input type="checkbox" data-check="horario"> <span><b>5. Horario de operación</b><br><span class="muted">Estoy dentro de mi horario establecido.</span></span></label>
+</div>
+<div style="margin-top:18px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">
+<strong id="checkCount">0 de 5 completados</strong>
+<span id="checkPercent" class="muted">0%</span>
+</div>
+<div class="progress-track"><div id="checkBar" class="progress-fill"></div></div>
+<p id="checkWarning" class="note">Completa los puntos de tu estrategia antes de entrar.</p>
+<div class="actions"><button id="resetChecklist" type="button">Reiniciar checklist</button></div>
 </div>
 </section>
 
@@ -247,7 +279,8 @@ const sb=supabaseReady?window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLIS
 let user=null,trades=[],selectedFiles=[];
 let reviews=JSON.parse(localStorage.getItem('mi_diario_reviews_v2')||'{}');
 let modalImages=[],modalIndex=0,mentorMessages=[],mentorSending=false;
-const fields=['date','symbol','session','direction','contextTf','entryTf','outcome','pnl','risk','zone','confirmation','market','emotion','lesson'];
+const fields=['date','entryTime','symbol','session','direction','contextTf','entryTf','outcome','pnl','risk','zone','confirmation','market','emotion','lesson'];
+const CHECKLIST_KEY='mi_diario_checklist_v1';
 
 function message(id,txt,kind=''){
 const el=$(id);el.textContent=txt;el.className='note '+(kind==='error'?'red':kind==='ok'?'green':'');
@@ -264,13 +297,40 @@ if(view==='mentor')loadMentorMessages();
 }
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>show(b.dataset.view));
 function localDate(){const d=new Date();return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10);}
+function localTime(){const d=new Date();return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}
 $('date').value=localDate();
+$('entryTime').value=localTime();
 
 function mapRow(r){
-return{id:r.id,date:r.fecha,symbol:r.activo||'NASDAQ',session:r.session||'NY',direction:r.direccion||'Compra',contextTf:r.context_tf||'',entryTf:r.entry_tf||'',outcome:r.outcome||(Number(r.resultado)>0?'win':Number(r.resultado)<0?'loss':'be'),pnl:Number(r.resultado||0),risk:Number(r.riesgo||0),zone:r.zone||r.contexto||'',confirmation:r.confirmacion||'',market:r.market_view||'',on_time:r.on_time??false,risk_ok:r.risk_ok??false,confirmation_ok:r.confirmation_ok??false,followed:r.followed??r.cumplio_plan??false,emotion:r.emociones||'',lesson:r.leccion||'',image_paths:r.image_paths||[]};
+return{
+id:r.id,date:r.fecha,entryTime:r.hora_entrada||'',
+symbol:r.activo||'NASDAQ',session:r.session||'NY',
+direction:r.direccion||'Compra',contextTf:r.context_tf||'',
+entryTf:r.entry_tf||'',
+outcome:r.outcome||(Number(r.resultado)>0?'win':Number(r.resultado)<0?'loss':'be'),
+pnl:Number(r.resultado||0),risk:Number(r.riesgo||0),
+zone:r.zone||r.contexto||'',confirmation:r.confirmacion||'',
+market:r.market_view||'',on_time:r.on_time??false,
+risk_ok:r.risk_ok??false,confirmation_ok:r.confirmation_ok??false,
+followed:r.followed??r.cumplio_plan??false,
+emotion:r.emociones||'',lesson:r.leccion||'',
+image_paths:r.image_paths||[]
+};
 }
 function toRow(t){
-return{user_id:user.id,fecha:t.date,activo:t.symbol||'NASDAQ',direccion:t.direction||'Compra',resultado:Number(t.pnl||0),riesgo:Number(t.risk||0),contexto:t.zone||'',confirmacion:t.confirmation||'',emociones:t.emotion||'',leccion:t.lesson||'',cumplio_plan:!!t.followed,session:t.session||'NY',context_tf:t.contextTf||'',entry_tf:t.entryTf||'',outcome:t.outcome||'be',zone:t.zone||'',market_view:t.market||'',on_time:!!t.onTime,risk_ok:!!t.riskOk,confirmation_ok:!!t.confirmationOk,followed:!!t.followed,image_paths:t.image_paths||[]};
+return{
+user_id:user.id,fecha:t.date,hora_entrada:t.entryTime||null,
+activo:t.symbol||'NASDAQ',direccion:t.direction||'Compra',
+resultado:Number(t.pnl||0),riesgo:Number(t.risk||0),
+contexto:t.zone||'',confirmacion:t.confirmation||'',
+emociones:t.emotion||'',leccion:t.lesson||'',
+cumplio_plan:!!t.followed,session:t.session||'NY',
+context_tf:t.contextTf||'',entry_tf:t.entryTf||'',
+outcome:t.outcome||'be',zone:t.zone||'',
+market_view:t.market||'',on_time:!!t.onTime,
+risk_ok:!!t.riskOk,confirmation_ok:!!t.confirmationOk,
+followed:!!t.followed,image_paths:t.image_paths||[]
+};
 }
 
 async function refreshSession(){
@@ -282,6 +342,7 @@ else{user=null;$('auth').classList.remove('hide');$('app').classList.add('hide')
 async function enterApp(){
 $('auth').classList.add('hide');$('app').classList.remove('hide');
 $('who').textContent='Sesión: '+(user.email||'usuario');
+loadChecklist();
 await loadTrades();await loadMentorMessages();
 }
 $('login').onclick=async()=>{
@@ -320,7 +381,7 @@ $('count').textContent=trades.length;
 $('winrate').textContent=trades.length?Math.round(wins/trades.length*100)+'%':'0%';
 $('violations').textContent=viol;
 $('discipline').textContent=trades.length?Math.round(good/trades.length*100)+'%':'—';
-$('recent').innerHTML=trades.length?'<div class="table-wrap"><table><thead><tr><th>Fecha</th><th>Activo</th><th>Resultado</th><th>Disciplina</th></tr></thead><tbody>'+trades.slice(0,5).map(t=>`<tr><td>${esc(t.date)}</td><td>${esc(t.symbol)}</td><td class="${t.pnl>=0?'green':'red'}">${fmt(t.pnl)}</td><td>${compliant(t)?'En plan':'Fuera de plan'}</td></tr>`).join('')+'</tbody></table></div>':'<div class="empty">Registra tu primer trade para ver tus estadísticas.</div>';
+$('recent').innerHTML=trades.length?'<div class="table-wrap"><table><thead><tr><th>Fecha</th><th>Hora</th><th>Activo</th><th>Resultado</th><th>Disciplina</th></tr></thead><tbody>'+trades.slice(0,5).map(t=>`<tr><td>${esc(t.date)}</td><td>${esc(t.entryTime||'—')}</td><td>${esc(t.symbol)}</td><td class="${t.pnl>=0?'green':'red'}">${fmt(t.pnl)}</td><td>${compliant(t)?'En plan':'Fuera de plan'}</td></tr>`).join('')+'</tbody></table></div>':'<div class="empty">Registra tu primer trade para ver tus estadísticas.</div>';
 renderHistory();
 }
 
@@ -332,83 +393,157 @@ if(file.size>5*1024*1024)throw new Error('Cada imagen debe pesar máximo 5 MB.')
 const safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
 const path=`${user.id}/${tradeId}/${crypto.randomUUID()}-${safeName}`;
 const{error}=await sb.storage.from(BUCKET).upload(path,file,{upsert:false,contentType:file.type});
-if(error)throw error;paths.push(path);
+if(error)throw error;
+paths.push(path);
 }
 return paths;
 }
 $('images').onchange=()=>{
-selectedFiles=Array.from($('images').files||[]);$('imagePreview').innerHTML='';
-for(const f of selectedFiles){const img=document.createElement('img');img.src=URL.createObjectURL(f);img.alt=f.name;$('imagePreview').append(img);}
+selectedFiles=Array.from($('images').files||[]);
+$('imagePreview').innerHTML='';
+for(const f of selectedFiles){
+const img=document.createElement('img');img.src=URL.createObjectURL(f);img.alt=f.name;
+$('imagePreview').append(img);
+}
 };
+
 function resetForm(){
-$('tradeForm').reset();$('date').value=localDate();$('symbol').value='NASDAQ';
+$('tradeForm').reset();
+$('date').value=localDate();$('entryTime').value=localTime();$('symbol').value='NASDAQ';
 $('onTime').checked=$('riskOk').checked=$('confirmationOk').checked=$('followed').checked=true;
 $('editId').value='';$('formTitle').textContent='Registrar una operación';
-selectedFiles=[];$('imagePreview').innerHTML='';$('images').value='';message('saveMsg','');
+selectedFiles=[];$('imagePreview').innerHTML='';$('existingImages').innerHTML='';
+$('images').value='';message('saveMsg','');
 }
 $('clearForm').onclick=resetForm;
 
 $('saveTrade').onclick=async()=>{
-const btn=$('saveTrade');if(!$('tradeForm').reportValidity())return;
+const btn=$('saveTrade');
+if(!$('tradeForm').reportValidity())return;
 btn.disabled=true;message('saveMsg','Guardando operación e imágenes...');
 try{
-const id=$('editId').value;const t={};fields.forEach(f=>t[f]=$(f).value);
+const id=$('editId').value;const t={};
+fields.forEach(f=>t[f]=$(f).value);
 t.pnl=Number(t.pnl||0);t.risk=Number(t.risk||0);
-t.onTime=$('onTime').checked;t.riskOk=$('riskOk').checked;t.confirmationOk=$('confirmationOk').checked;t.followed=$('followed').checked;
+t.onTime=$('onTime').checked;t.riskOk=$('riskOk').checked;
+t.confirmationOk=$('confirmationOk').checked;t.followed=$('followed').checked;
 t.image_paths=[];let row;
+
 if(id){
 const old=trades.find(x=>String(x.id)===String(id));
-const{data,error}=await sb.from('trades').update(toRow({...t,image_paths:old?.image_paths||[]})).eq('id',id).select().single();
-if(error)throw error;row=data;
-const paths=await uploadFiles(selectedFiles,id);const all=[...(old?.image_paths||[]),...paths];
-if(paths.length){const{error:e2}=await sb.from('trades').update({image_paths:all}).eq('id',id);if(e2)throw e2;row.image_paths=all;}
+const oldPaths=old?.image_paths||[];
+const{data,error}=await sb.from('trades').update(toRow({...t,image_paths:oldPaths})).eq('id',id).select().single();
+if(error)throw error;
+row=data;
+const paths=await uploadFiles(selectedFiles,id);
+const all=[...oldPaths,...paths];
+if(paths.length){
+const{error:e2}=await sb.from('trades').update({image_paths:all}).eq('id',id);
+if(e2)throw e2;
+row.image_paths=all;
+}
 }else{
 const{data,error}=await sb.from('trades').insert(toRow(t)).select().single();
-if(error)throw error;row=data;
+if(error)throw error;
+row=data;
 const paths=await uploadFiles(selectedFiles,row.id);
-if(paths.length){const{error:e2}=await sb.from('trades').update({image_paths:paths}).eq('id',row.id);if(e2)throw e2;}
+if(paths.length){
+const{error:e2}=await sb.from('trades').update({image_paths:paths}).eq('id',row.id);
+if(e2)throw e2;
 }
-resetForm();await loadTrades();show('history');message('saveMsg','Operación guardada.','ok');
-}catch(e){message('saveMsg','No se pudo guardar: '+e.message,'error');}
+}
+resetForm();await loadTrades();show('history');
+message('saveMsg','Operación guardada.','ok');
+}catch(e){
+message('saveMsg','No se pudo guardar: '+e.message,'error');
+}
 finally{btn.disabled=false;}
 };
 
-function weekDates(w){
-if(!w)return[];const[y,n]=w.split('-W').map(Number);const d=new Date(y,0,1+(n-1)*7);const day=d.getDay()||7;d.setDate(d.getDate()+1-day);const a=localDateFrom(d);d.setDate(d.getDate()+6);return[a,localDateFrom(d)];
+/* CHECKLIST */
+function updateChecklist(){
+const checks=[...document.querySelectorAll('[data-check]')];
+const completed=checks.filter(c=>c.checked).length;
+const percent=Math.round(completed/checks.length*100);
+$('checkCount').textContent=`${completed} de ${checks.length} completados`;
+$('checkPercent').textContent=percent+'%';
+$('checkBar').style.width=percent+'%';
+$('checkWarning').textContent=completed===checks.length
+?'Checklist completa. Ya revisaste tus cinco puntos.'
+:`Te faltan ${checks.length-completed} puntos. No te adelantes a tu modelo.`;
+const state={};
+checks.forEach(c=>state[c.dataset.check]=c.checked);
+localStorage.setItem(CHECKLIST_KEY,JSON.stringify(state));
 }
-function localDateFrom(d){const x=new Date(d.getTime()-d.getTimezoneOffset()*60000);return x.toISOString().slice(0,10);}
+function loadChecklist(){
+let saved={};
+try{saved=JSON.parse(localStorage.getItem(CHECKLIST_KEY)||'{}');}catch(e){}
+document.querySelectorAll('[data-check]').forEach(c=>c.checked=!!saved[c.dataset.check]);
+updateChecklist();
+}
+document.querySelectorAll('[data-check]').forEach(c=>c.addEventListener('change',updateChecklist));
+$('resetChecklist').onclick=()=>{
+if(!confirm('¿Quieres reiniciar los cinco puntos de tu checklist?'))return;
+document.querySelectorAll('[data-check]').forEach(c=>c.checked=false);
+updateChecklist();
+};
+
+/* REVISIÓN SEMANAL */
+function weekDates(w){
+if(!w)return[];
+const[y,n]=w.split('-W').map(Number);
+const d=new Date(y,0,1+(n-1)*7);const day=d.getDay()||7;
+d.setDate(d.getDate()+1-day);const a=localDateFrom(d);
+d.setDate(d.getDate()+6);return[a,localDateFrom(d)];
+}
+function localDateFrom(d){
+const x=new Date(d.getTime()-d.getTimezoneOffset()*60000);
+return x.toISOString().slice(0,10);
+}
 function getTradesForSelectedWeek(){
-const dates=weekDates($('week').value);if(dates.length!==2)return[];
-const[a,b]=dates;return trades.filter(t=>t.date>=a&&t.date<=b);
+const dates=weekDates($('week').value);
+if(dates.length!==2)return[];
+const[a,b]=dates;
+return trades.filter(t=>t.date>=a&&t.date<=b);
 }
 function renderWeek(){
 const w=$('week').value;
 if(!w){$('weeklyStats').innerHTML='<p class="muted">Selecciona una semana para ver tu resumen.</p>';return;}
-const[a,b]=weekDates(w);const ts=getTradesForSelectedWeek();const sum=ts.reduce((s,t)=>s+t.pnl,0);const viol=ts.filter(t=>!compliant(t)).length;
+const[a,b]=weekDates(w);const ts=getTradesForSelectedWeek();
+const sum=ts.reduce((s,t)=>s+t.pnl,0);
+const viol=ts.filter(t=>!compliant(t)).length;
 $('weeklyStats').innerHTML=`<div class="grid"><div class="card metric"><small>Operaciones</small><strong>${ts.length}</strong></div><div class="card metric"><small>Resultado</small><strong class="${sum>=0?'green':'red'}">${fmt(sum)}</strong></div><div class="card metric"><small>Ganadoras</small><strong>${ts.filter(t=>t.outcome==='win').length}</strong></div><div class="card metric"><small>Fuera de plan</small><strong>${viol}</strong></div></div><p class="note">Periodo: ${a} al ${b}. ${ts.length?'Revisa especialmente las operaciones fuera de plan.':'No hay operaciones registradas esta semana.'}</p>`;
-const r=reviews[w]||{};$('weekError').value=r.error||'';$('weekRule').value=r.rule||'';
+const r=reviews[w]||{};
+$('weekError').value=r.error||'';$('weekRule').value=r.rule||'';
 }
 $('week').onchange=renderWeek;
 $('saveReview').onclick=()=>{
 const w=$('week').value;if(!w)return alert('Selecciona una semana.');
 reviews[w]={error:$('weekError').value,rule:$('weekRule').value};
-localStorage.setItem('mi_diario_reviews_v2',JSON.stringify(reviews));alert('Revisión semanal guardada en este navegador.');
+localStorage.setItem('mi_diario_reviews_v2',JSON.stringify(reviews));
+alert('Revisión semanal guardada en este navegador.');
 };
 
-/* MENTOR PSICOLÓGICO: solo recibe mensajes y conversación */
+/* MENTOR PSICOLÓGICO */
 function renderMentorChat(){
 const host=$('mentorChat');host.innerHTML='';
-if(!mentorMessages.length){host.innerHTML='<div class="mentor-chat-empty">Todavía no hay mensajes. Puedes comenzar a conversar con tu mentor.</div>';return;}
+if(!mentorMessages.length){
+host.innerHTML='<div class="mentor-chat-empty">Todavía no hay mensajes. Puedes comenzar a conversar con tu mentor.</div>';
+return;
+}
 mentorMessages.forEach(m=>{
-const bubble=document.createElement('div');bubble.className='chat-message '+(m.role==='user'?'user':'assistant');
-const label=document.createElement('small');label.textContent=m.role==='user'?'Tú':'🧠 Mentor psicológico';
+const bubble=document.createElement('div');
+bubble.className='chat-message '+(m.role==='user'?'user':'assistant');
+const label=document.createElement('small');
+label.textContent=m.role==='user'?'Tú':'🧠 Mentor psicológico';
 const content=document.createElement('div');content.textContent=m.content;
 bubble.append(label,content);host.append(bubble);
 });
 host.scrollTop=host.scrollHeight;
 }
 async function loadMentorMessages(){
-if(!sb||!user)return;message('mentorStatus','Recuperando tu conversación...');
+if(!sb||!user)return;
+message('mentorStatus','Recuperando tu conversación...');
 try{
 const{data,error}=await sb.from('mentor_messages').select('id,role,content,created_at').eq('user_id',user.id).order('created_at',{ascending:true}).limit(200);
 if(error)throw error;
@@ -426,7 +561,8 @@ async function sendToMentor({question}){
 if(mentorSending)return false;
 if(!sb||!user){message('mentorStatus','Primero inicia sesión en tu diario.','error');return false;}
 if(!question.trim()){message('mentorStatus','Escribe un mensaje primero.','error');return false;}
-mentorSending=true;const askButton=$('askMentor');askButton.disabled=true;askButton.textContent='Consultando...';
+mentorSending=true;
+const askButton=$('askMentor');askButton.disabled=true;askButton.textContent='Consultando...';
 try{
 message('mentorStatus','Tu mentor está leyendo tu mensaje...');
 const previousHistory=mentorMessages.slice(-16).map(m=>({role:m.role==='assistant'?'model':'user',content:m.content}));
@@ -434,18 +570,28 @@ await saveMentorMessage('user',question);
 const{data,error}=await sb.functions.invoke(MENTOR_FUNCTION,{body:{question,mode:'chat',history:previousHistory}});
 if(error){
 let detail=error.message||'No se pudo conectar con el mentor.';
-if(error.context){try{const responseBody=await error.context.json();if(responseBody.error)detail=responseBody.error;}catch{}}
+if(error.context){
+try{const responseBody=await error.context.json();if(responseBody.error)detail=responseBody.error;}catch{}
+}
 throw new Error(detail);
 }
 if(data?.error)throw new Error(data.error);
 if(!data?.answer)throw new Error('El mentor no devolvió una respuesta.');
-await saveMentorMessage('assistant',data.answer);message('mentorStatus','Respuesta guardada correctamente.','ok');return true;
-}catch(e){message('mentorStatus','No se pudo completar la conversación: '+e.message,'error');return false;}
-finally{mentorSending=false;askButton.disabled=false;askButton.textContent='Enviar mensaje';}
+await saveMentorMessage('assistant',data.answer);
+message('mentorStatus','Respuesta guardada correctamente.','ok');
+return true;
+}catch(e){
+message('mentorStatus','No se pudo completar la conversación: '+e.message,'error');
+return false;
+}finally{
+mentorSending=false;askButton.disabled=false;askButton.textContent='Enviar mensaje';
+}
 }
 $('askMentor').onclick=async()=>{
-const question=$('mentorQuestion').value.trim();if(!question)return message('mentorStatus','Escribe un mensaje primero.','error');
-const success=await sendToMentor({question});if(success)$('mentorQuestion').value='';
+const question=$('mentorQuestion').value.trim();
+if(!question)return message('mentorStatus','Escribe un mensaje primero.','error');
+const success=await sendToMentor({question});
+if(success)$('mentorQuestion').value='';
 };
 $('clearMentor').onclick=()=>{$('mentorQuestion').value='';$('mentorQuestion').focus();};
 $('reloadMentor').onclick=loadMentorMessages;
@@ -453,7 +599,8 @@ $('reloadMentor').onclick=loadMentorMessages;
 /* IMÁGENES Y GALERÍA */
 async function signedUrl(path){
 const{data,error}=await sb.storage.from(BUCKET).createSignedUrl(path,3600);
-if(error)throw error;return data.signedUrl;
+if(error)throw error;
+return data.signedUrl;
 }
 function ensureModal(){
 if($('imageModal'))return;
@@ -473,6 +620,32 @@ $('modalCaption').textContent=`Imagen ${modalIndex+1} de ${modalImages.length}`;
 $('imageModal').classList.add('open');
 }
 
+/* MOSTRAR LAS IMÁGENES QUE YA EXISTEN AL EDITAR */
+async function renderEditImages(paths){
+const host=$('existingImages');host.innerHTML='';
+if(!paths?.length)return;
+const title=document.createElement('div');
+title.className='existing-title';
+title.textContent=`Capturas guardadas de esta operación (${paths.length}). Se conservarán al guardar los cambios.`;
+host.append(title);
+const urls=[];
+for(const path of paths){
+try{urls.push({path,url:await signedUrl(path)});}
+catch(e){console.warn('No se pudo cargar una captura existente:',e);}
+}
+if(!urls.length){
+const note=document.createElement('p');note.className='note';
+note.textContent='No se pudieron mostrar las capturas guardadas. Tus imágenes originales se conservarán.';
+host.append(note);return;
+}
+urls.forEach((item,i)=>{
+const wrap=document.createElement('div');wrap.className='existing-image';
+const img=document.createElement('img');img.src=item.url;img.alt=`Captura guardada ${i+1}`;
+img.onclick=()=>{modalImages=urls;ensureModal();showModalImage(i);};
+wrap.append(img);host.append(wrap);
+});
+}
+
 /* GALERÍA CON ELIMINACIÓN INDIVIDUAL */
 async function renderGallery(container,trade){
 container.innerHTML='';
@@ -484,8 +657,9 @@ for(const path of trade.image_paths){
 try{urls.push({path,url:await signedUrl(path)});}
 catch(e){console.warn('No se pudo abrir imagen',e);}
 }
-if(!urls.length){container.innerHTML='<p class="note">No se pudieron cargar las imágenes.</p>';return;}
-
+if(!urls.length){
+container.innerHTML='<p class="note">No se pudieron cargar las imágenes.</p>';return;
+}
 let ix=0;
 const gal=document.createElement('div');gal.className='gallery';
 const prev=document.createElement('button');prev.type='button';prev.textContent='‹';
@@ -496,7 +670,6 @@ const removeBtn=document.createElement('button');removeBtn.type='button';removeB
 stage.append(img,count,removeBtn);
 const next=document.createElement('button');next.type='button';next.textContent='›';
 const thumbs=document.createElement('div');thumbs.className='thumbs';
-
 function paint(){
 img.src=urls[ix].url;
 count.textContent=`Imagen ${ix+1} de ${urls.length} · Haz clic para ampliar`;
@@ -509,26 +682,19 @@ im.onclick=()=>{ix=i;paint();};thumbs.append(im);
 prev.onclick=()=>{ix=(ix-1+urls.length)%urls.length;paint();};
 next.onclick=()=>{ix=(ix+1)%urls.length;paint();};
 img.onclick=()=>{modalImages=urls;ensureModal();showModalImage(ix);};
-
 removeBtn.onclick=async()=>{
 const selected=urls[ix];
 if(!confirm('¿Seguro que quieres eliminar solamente esta imagen?'))return;
 removeBtn.disabled=true;removeBtn.textContent='Eliminando...';
 try{
-// Actualizamos primero la lista de imágenes de la operación.
 const remaining=trade.image_paths.filter(p=>p!==selected.path);
 const{error}=await sb.from('trades').update({image_paths:remaining}).eq('id',trade.id);
 if(error)throw error;
-
 trade.image_paths=remaining;
 const localTrade=trades.find(t=>String(t.id)===String(trade.id));
 if(localTrade)localTrade.image_paths=remaining;
-
-// Borramos el archivo de Supabase Storage.
 const{error:storageError}=await sb.storage.from(BUCKET).remove([selected.path]);
-if(storageError){
-alert('La imagen se quitó del diario, pero no se pudo borrar del almacenamiento: '+storageError.message);
-}
+if(storageError)alert('La imagen se quitó del diario, pero no se pudo borrar del almacenamiento: '+storageError.message);
 const toggle=container.previousElementSibling;
 if(!remaining.length){
 container.innerHTML='<p class="note">Esta operación ya no tiene capturas.</p>';
@@ -543,40 +709,40 @@ alert('No se pudo eliminar la imagen: '+e.message);
 removeBtn.disabled=false;removeBtn.textContent='🗑️ Eliminar esta imagen';
 }
 };
-
 gal.append(prev,stage,next);container.append(gal,thumbs);paint();
 }
 
 /* HISTORIAL */
 async function renderHistory(){
 const host=$('historyTable');
-if(!trades.length){host.innerHTML='<div class="empty">Todavía no tienes operaciones registradas.</div>';return;}
+if(!trades.length){
+host.innerHTML='<div class="empty">Todavía no tienes operaciones registradas.</div>';return;
+}
 host.innerHTML='';
 const wrap=document.createElement('div');wrap.className='table-wrap';
 const table=document.createElement('table');
-table.innerHTML='<thead><tr><th>Fecha</th><th>Activo</th><th>Sesión</th><th>Resultado</th><th>Riesgo</th><th>Disciplina</th><th>Acciones</th></tr></thead>';
+table.innerHTML='<thead><tr><th>Fecha</th><th>Hora</th><th>Activo</th><th>Sesión</th><th>Resultado</th><th>Riesgo</th><th>Disciplina</th><th>Acciones</th></tr></thead>';
 const body=document.createElement('tbody');
-
 for(const t of trades){
 const tr=document.createElement('tr');
-tr.innerHTML=`<td>${esc(t.date)}</td><td>${esc(t.symbol)}</td><td>${esc(t.session)}</td><td class="${t.pnl>0?'green':t.pnl<0?'red':''}">${fmt(t.pnl)}</td><td>${Number(t.risk||0)}%</td><td>${compliant(t)?'<span class="green">En plan</span>':'<span class="red">Fuera de plan</span>'}</td><td></td>`;
+tr.innerHTML=`<td>${esc(t.date)}</td><td>${esc(t.entryTime||'—')}</td><td>${esc(t.symbol)}</td><td>${esc(t.session)}</td><td class="${t.pnl>0?'green':t.pnl<0?'red':''}">${fmt(t.pnl)}</td><td>${Number(t.risk||0)}%</td><td>${compliant(t)?'<span class="green">En plan</span>':'<span class="red">Fuera de plan</span>'}</td><td></td>`;
 const actions=tr.lastElementChild;
 const edit=document.createElement('button');edit.textContent='Editar';edit.onclick=()=>editTrade(t.id);
 const del=document.createElement('button');del.textContent='Eliminar';del.className='danger';del.onclick=()=>deleteTrade(t);
 actions.append(edit,document.createTextNode(' '),del);body.append(tr);
 
 const detail=document.createElement('tr');
-const cell=document.createElement('td');cell.colSpan=7;
+const cell=document.createElement('td');cell.colSpan=8;
 const info=document.createElement('div');info.className='note';
 info.innerHTML=`<b>Contexto:</b> ${esc(t.zone||'—')} · <b>Confirmación:</b> ${esc(t.confirmation||'—')}<br><b>Emociones:</b> ${esc(t.emotion||'—')}<br><b>Lección:</b> ${esc(t.lesson||'—')}`;
 cell.append(info);
-
 if(t.image_paths?.length){
 const toggle=document.createElement('button');toggle.type='button';toggle.className='gallery-toggle';toggle.textContent=`Ver imágenes (${t.image_paths.length})`;
 const gallery=document.createElement('div');gallery.className='trade-gallery';
 let loaded=false;
 toggle.onclick=async()=>{
-const opening=!gallery.classList.contains('open');gallery.classList.toggle('open',opening);
+const opening=!gallery.classList.contains('open');
+gallery.classList.toggle('open',opening);
 toggle.textContent=opening?'Ocultar imágenes':'Ver imágenes ('+t.image_paths.length+')';
 if(opening&&!loaded){
 toggle.disabled=true;toggle.textContent='Cargando imágenes...';
@@ -587,30 +753,45 @@ toggle.textContent='Ocultar imágenes';
 };
 cell.append(toggle,gallery);
 }else{
-const noImages=document.createElement('div');noImages.className='note';noImages.textContent='Sin imágenes adjuntas.';cell.append(noImages);
+const noImages=document.createElement('div');noImages.className='note';
+noImages.textContent='Sin imágenes adjuntas.';cell.append(noImages);
 }
 detail.append(cell);body.append(detail);
 }
 table.append(body);wrap.append(table);host.append(wrap);
 }
 
-function editTrade(id){
+async function editTrade(id){
 const t=trades.find(x=>String(x.id)===String(id));if(!t)return;
-const vals={date:t.date,symbol:t.symbol,session:t.session,direction:t.direction,contextTf:t.contextTf,entryTf:t.entryTf,outcome:t.outcome,pnl:t.pnl,risk:t.risk,zone:t.zone,confirmation:t.confirmation,market:t.market,emotion:t.emotion,lesson:t.lesson};
+const vals={
+date:t.date,entryTime:t.entryTime||'',symbol:t.symbol,session:t.session,
+direction:t.direction,contextTf:t.contextTf,entryTf:t.entryTf,
+outcome:t.outcome,pnl:t.pnl,risk:t.risk,zone:t.zone,
+confirmation:t.confirmation,market:t.market,emotion:t.emotion,lesson:t.lesson
+};
 fields.forEach(f=>$(f).value=vals[f]??'');
-$('onTime').checked=t.on_time;$('riskOk').checked=t.risk_ok;$('confirmationOk').checked=t.confirmation_ok;$('followed').checked=t.followed;
+$('onTime').checked=t.on_time;$('riskOk').checked=t.risk_ok;
+$('confirmationOk').checked=t.confirmation_ok;$('followed').checked=t.followed;
 $('editId').value=t.id;$('formTitle').textContent='Editar operación';
 selectedFiles=[];$('imagePreview').innerHTML='';$('images').value='';
+$('existingImages').innerHTML='';
 show('new');
-if(t.image_paths?.length)message('saveMsg',`Esta operación ya tiene ${t.image_paths.length} imagen(es). Puedes añadir más; las anteriores se conservan.`);
+if(t.image_paths?.length){
+message('saveMsg',`Esta operación tiene ${t.image_paths.length} imagen(es) guardadas. Puedes añadir más; las anteriores se conservarán.`);
+await renderEditImages(t.image_paths);
+}else{
+message('saveMsg','Esta operación no tiene capturas guardadas.');
+}
 }
 async function deleteTrade(t){
 if(!confirm('¿Eliminar esta operación y sus capturas?'))return;
 try{
 if(t.image_paths?.length){
-const{error:e}=await sb.storage.from(BUCKET).remove(t.image_paths);if(e)throw e;
+const{error:e}=await sb.storage.from(BUCKET).remove(t.image_paths);
+if(e)throw e;
 }
-const{error}=await sb.from('trades').delete().eq('id',t.id);if(error)throw error;
+const{error}=await sb.from('trades').delete().eq('id',t.id);
+if(error)throw error;
 await loadTrades();
 }catch(e){alert('No se pudo eliminar: '+e.message);}
 }
@@ -618,7 +799,8 @@ await loadTrades();
 /* EXPORTAR E IMPORTAR */
 $('export').onclick=()=>{
 const blob=new Blob([JSON.stringify({trades:trades.map(t=>({...t})),reviews},null,2)],{type:'application/json'});
-const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='respaldo-diario-trading.json';a.click();URL.revokeObjectURL(a.href);
+const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+a.download='respaldo-diario-trading.json';a.click();URL.revokeObjectURL(a.href);
 };
 $('importFile').onchange=async e=>{
 const file=e.target.files[0];if(!file)return;
@@ -629,28 +811,43 @@ if(!confirm(`Se agregarán ${data.trades.length} operaciones a tu cuenta. No se 
 let imported=0;
 for(const old of data.trades){
 const t={
-date:old.date||old.fecha||localDate(),symbol:old.symbol||old.activo||'NASDAQ',session:old.session||'NY',direction:old.direction||old.direccion||'Compra',
-contextTf:old.contextTf||'',entryTf:old.entryTf||'',outcome:old.outcome||old.result||'be',pnl:Number(old.pnl??old.resultado??0),risk:Number(old.risk??old.riesgo??0),
-zone:old.zone||old.context||old.contexto||'',confirmation:old.confirmation||old.confirmacion||'',market:old.market||old.market_view||'',
-onTime:!!(old.onTime??old.on_time),riskOk:!!(old.riskOk??old.risk_ok),confirmationOk:!!(old.confirmationOk??old.confirmation_ok),
-followed:!!(old.followed??old.cumplio_plan),emotion:old.emotion||old.emotions||old.emociones||'',lesson:old.lesson||old.leccion||'',image_paths:[]
+date:old.date||old.fecha||localDate(),
+entryTime:old.entryTime||old.hora_entrada||'',
+symbol:old.symbol||old.activo||'NASDAQ',
+session:old.session||'NY',direction:old.direction||old.direccion||'Compra',
+contextTf:old.contextTf||'',entryTf:old.entryTf||'',
+outcome:old.outcome||old.result||'be',
+pnl:Number(old.pnl??old.resultado??0),risk:Number(old.risk??old.riesgo??0),
+zone:old.zone||old.context||old.contexto||'',
+confirmation:old.confirmation||old.confirmacion||'',
+market:old.market||old.market_view||'',
+onTime:!!(old.onTime??old.on_time),
+riskOk:!!(old.riskOk??old.risk_ok),
+confirmationOk:!!(old.confirmationOk??old.confirmation_ok),
+followed:!!(old.followed??old.cumplio_plan),
+emotion:old.emotion||old.emotions||old.emociones||'',
+lesson:old.lesson||old.leccion||'',image_paths:[]
 };
-const{data:row,error}=await sb.from('trades').insert(toRow(t)).select().single();if(error)throw error;
+const{data:row,error}=await sb.from('trades').insert(toRow(t)).select().single();
+if(error)throw error;
 const files=[];
 if(typeof old.image==='string'&&old.image.startsWith('data:image/')){
-const blob=await(await fetch(old.image)).blob();files.push(new File([blob],`captura-${row.id}.jpg`,{type:blob.type||'image/jpeg'}));
+const blob=await(await fetch(old.image)).blob();
+files.push(new File([blob],`captura-${row.id}.jpg`,{type:blob.type||'image/jpeg'}));
 }
 if(Array.isArray(old.images)){
 for(let i=0;i<old.images.length;i++){
 const v=old.images[i];
 if(typeof v==='string'&&v.startsWith('data:image/')){
-const b=await(await fetch(v)).blob();files.push(new File([b],`captura-${row.id}-${i+1}.jpg`,{type:b.type||'image/jpeg'}));
+const b=await(await fetch(v)).blob();
+files.push(new File([b],`captura-${row.id}-${i+1}.jpg`,{type:b.type||'image/jpeg'}));
 }
 }
 }
 if(files.length){
 const paths=await uploadFiles(files,row.id);
-const{error:e2}=await sb.from('trades').update({image_paths:paths}).eq('id',row.id);if(e2)throw e2;
+const{error:e2}=await sb.from('trades').update({image_paths:paths}).eq('id',row.id);
+if(e2)throw e2;
 }
 imported++;
 }
@@ -661,8 +858,10 @@ finally{e.target.value='';}
 
 /* SEMANA ACTUAL */
 $('week').value=(()=>{
-const d=new Date();const th=new Date(d);th.setDate(d.getDate()+4-(d.getDay()||7));
-const y=th.getFullYear();const first=new Date(y,0,1);const w=Math.ceil((((th-first)/86400000)+1)/7);
+const d=new Date();const th=new Date(d);
+th.setDate(d.getDate()+4-(d.getDay()||7));
+const y=th.getFullYear();const first=new Date(y,0,1);
+const w=Math.ceil((((th-first)/86400000)+1)/7);
 return`${y}-W${String(w).padStart(2,'0')}`;
 })();
 if(sb){refreshSession();}
@@ -670,3 +869,4 @@ else{$('authMsg').textContent='Falta configurar la clave publicable de Supabase 
 </script>
 </body>
 </html>
+```
