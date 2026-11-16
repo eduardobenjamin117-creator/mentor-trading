@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="es">
 <head>
@@ -84,6 +85,10 @@ th{color:var(--muted);font-weight:600}
 .existing-image{position:relative}
 .existing-image img{width:115px;height:80px;object-fit:cover;border-radius:8px;cursor:zoom-in}
 .existing-title{width:100%;font-size:13px;color:var(--muted);margin-top:12px}
+.check-history-item{background:#0d1527;border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:10px}
+.check-history-head{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.check-history-points{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:10px;font-size:13px}
+.check-history-point{padding:7px 9px;background:#121a2d;border-radius:7px}
 @media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}}
 @media(max-width:520px){
 main{padding:0 12px 30px}
@@ -95,6 +100,7 @@ form{grid-template-columns:1fr}
 .wide{grid-column:auto}
 .image-modal img{max-width:85vw;max-height:70vh}
 .chat-message{max-width:100%}
+.check-history-points{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -205,7 +211,8 @@ form{grid-template-columns:1fr}
 <section id="checklist" class="view">
 <div class="panel">
 <h2>☑ Mi checklist de trading</h2>
-<p class="note">Marca cada punto antes de ejecutar tu operación. La checklist se guarda en este navegador y no se envía al mentor.</p>
+<p class="note">Marca cada punto antes de ejecutar tu operación. Cuando termines, pulsa “Guardar en historial” para conservar una copia de esta checklist.</p>
+
 <div class="checklist">
 <label class="check-item"><input type="checkbox" data-check="dol"> <span><b>1. DOL claro</b><br><span class="muted">Tengo definido mi Draw on Liquidity.</span></span></label>
 <label class="check-item"><input type="checkbox" data-check="fvg"> <span><b>2. FVG alineado</b><br><span class="muted">El FVG está alineado con mi DOL.</span></span></label>
@@ -220,15 +227,31 @@ form{grid-template-columns:1fr}
 <input type="time" id="checkTime" aria-label="Hora de operación">
 </div>
 </div>
-
 </div>
+
 <div style="margin-top:18px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">
 <strong id="checkCount">0 de 5 completados</strong>
 <span id="checkPercent" class="muted">0%</span>
 </div>
 <div class="progress-track"><div id="checkBar" class="progress-fill"></div></div>
 <p id="checkWarning" class="note">Completa los puntos de tu estrategia antes de entrar.</p>
-<div class="actions"><button id="resetChecklist" type="button">Reiniciar checklist</button></div>
+
+<div class="actions">
+<button class="primary" id="saveChecklist" type="button">Guardar en historial</button>
+<button id="resetChecklist" type="button">Reiniciar checklist</button>
+</div>
+<p id="checkSaveMsg" class="note" aria-live="polite"></p>
+
+<div class="panel" style="margin-top:20px">
+<div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap">
+<h2 style="margin:0">📋 Historial de checklist</h2>
+<strong id="checkHistoryCount" class="muted">0 registros</strong>
+</div>
+<p class="note">Aquí aparecerán las checklist que hayas guardado, de la más reciente a la más antigua.</p>
+<div id="checkHistoryList">
+<div class="empty">Todavía no has guardado ninguna checklist.</div>
+</div>
+</div>
 </div>
 </section>
 
@@ -291,6 +314,7 @@ let modalImages=[],modalIndex=0,mentorMessages=[],mentorSending=false;
 const fields=['date','entryTime','symbol','session','direction','contextTf','entryTf','outcome','pnl','risk','zone','confirmation','market','emotion','lesson'];
 const CHECKLIST_KEY='mi_diario_checklist_v1';
 const CHECKLIST_TIME_KEY='mi_diario_checklist_hora_v1';
+const CHECKLIST_HISTORY_KEY='mi_diario_checklist_historial_v1';
 
 function message(id,txt,kind=''){
 const el=$(id);el.textContent=txt;el.className='note '+(kind==='error'?'red':kind==='ok'?'green':'');
@@ -302,6 +326,10 @@ function show(view){
 document.querySelectorAll('.view').forEach(x=>x.classList.toggle('active',x.id===view));
 document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.view===view));
 if(view==='history')renderHistory();
+if(view==='checklist'){
+loadChecklist();
+renderChecklistHistory();
+}
 if(view==='review')renderWeek();
 if(view==='mentor')loadMentorMessages();
 }
@@ -353,6 +381,7 @@ async function enterApp(){
 $('auth').classList.add('hide');$('app').classList.remove('hide');
 $('who').textContent='Sesión: '+(user.email||'usuario');
 loadChecklist();
+renderChecklistHistory();
 await loadTrades();await loadMentorMessages();
 }
 $('login').onclick=async()=>{
@@ -470,7 +499,92 @@ message('saveMsg','No se pudo guardar: '+e.message,'error');
 finally{btn.disabled=false;}
 };
 
-/* CHECKLIST */
+/* CHECKLIST E HISTORIAL */
+function getChecklistHistory(){
+try{
+const saved=JSON.parse(localStorage.getItem(CHECKLIST_HISTORY_KEY)||'[]');
+return Array.isArray(saved)?saved:[];
+}catch(e){return[];}
+}
+
+function renderChecklistHistory(){
+const host=$('checkHistoryList');
+if(!host)return;
+
+const history=getChecklistHistory();
+$('checkHistoryCount').textContent=history.length+' registro'+(history.length===1?'':'s');
+
+if(!history.length){
+host.innerHTML='<div class="empty">Todavía no has guardado ninguna checklist.</div>';
+return;
+}
+
+host.innerHTML='';
+
+history.forEach((record,index)=>{
+const completed=Object.values(record.checks||{}).filter(Boolean).length;
+const percent=Math.round(completed/5*100);
+
+const card=document.createElement('div');
+card.className='check-history-item';
+
+const head=document.createElement('div');
+head.className='check-history-head';
+
+const date=document.createElement('strong');
+date.textContent=record.date||'Fecha desconocida';
+
+const percentLabel=document.createElement('span');
+percentLabel.className=percent===100?'green':'muted';
+percentLabel.textContent=percent+'% completado';
+
+head.append(date,percentLabel);
+
+const details=document.createElement('div');
+details.className='note';
+details.textContent='Guardada a las '+(record.savedAt||'—')+' · Hora de operación: '+(record.operationTime||'No seleccionada');
+
+const points=document.createElement('div');
+points.className='check-history-points';
+
+const labels=[
+['dol','1. DOL claro'],
+['fvg','2. FVG alineado'],
+['tapeo','3. Tapeo'],
+['confirmacion','4. Confirmación'],
+['horario','5. Horario de operación']
+];
+
+labels.forEach(([key,label])=>{
+const item=document.createElement('div');
+item.className='check-history-point';
+const done=!!(record.checks&&record.checks[key]);
+item.textContent=(done?'✓ ':'✗ ')+label;
+item.classList.add(done?'green':'muted');
+points.append(item);
+});
+
+const actions=document.createElement('div');
+actions.className='actions';
+
+const deleteButton=document.createElement('button');
+deleteButton.type='button';
+deleteButton.className='danger';
+deleteButton.textContent='Eliminar registro';
+deleteButton.onclick=()=>{
+if(!confirm('¿Quieres eliminar este registro del historial de checklist?'))return;
+const updated=getChecklistHistory();
+updated.splice(index,1);
+localStorage.setItem(CHECKLIST_HISTORY_KEY,JSON.stringify(updated));
+renderChecklistHistory();
+};
+
+actions.append(deleteButton);
+card.append(head,details,points,actions);
+host.append(card);
+});
+}
+
 function updateChecklist(){
 const checks=[...document.querySelectorAll('[data-check]')];
 const completed=checks.filter(c=>c.checked).length;
@@ -493,7 +607,6 @@ localStorage.setItem(CHECKLIST_TIME_KEY,$('checkTime').value);
 
 function loadChecklist(){
 let saved={};
-
 try{
 saved=JSON.parse(localStorage.getItem(CHECKLIST_KEY)||'{}');
 }catch(e){}
@@ -503,7 +616,6 @@ c.checked=!!saved[c.dataset.check];
 });
 
 $('checkTime').value=localStorage.getItem(CHECKLIST_TIME_KEY)||'';
-
 updateChecklist();
 }
 
@@ -513,13 +625,44 @@ c.addEventListener('change',updateChecklist);
 
 $('checkTime').addEventListener('change',updateChecklist);
 
+$('saveChecklist').onclick=()=>{
+const checks={};
+document.querySelectorAll('[data-check]').forEach(c=>{
+checks[c.dataset.check]=c.checked;
+});
+
+const completed=Object.values(checks).filter(Boolean).length;
+const now=new Date();
+
+const record={
+id:Date.now(),
+date:localDate(),
+savedAt:localTime(),
+operationTime:$('checkTime').value,
+checks:checks,
+completed:completed,
+percent:Math.round(completed/5*100)
+};
+
+const history=getChecklistHistory();
+history.unshift(record);
+
+try{
+localStorage.setItem(CHECKLIST_HISTORY_KEY,JSON.stringify(history));
+renderChecklistHistory();
+message('checkSaveMsg','Checklist guardada en tu historial.','ok');
+}catch(e){
+message('checkSaveMsg','No se pudo guardar. Es posible que el almacenamiento del navegador esté lleno.','error');
+}
+};
+
 $('resetChecklist').onclick=()=>{
-if(!confirm('¿Quieres reiniciar los cinco puntos de tu checklist?'))return;
+if(!confirm('¿Quieres reiniciar los cinco puntos de tu checklist? El historial guardado no se borrará.'))return;
 
 document.querySelectorAll('[data-check]').forEach(c=>c.checked=false);
 $('checkTime').value='';
-
 updateChecklist();
+message('checkSaveMsg','Checklist reiniciada. Tu historial sigue guardado.','ok');
 };
 
 /* REVISIÓN SEMANAL */
@@ -746,7 +889,7 @@ removeBtn.disabled=false;removeBtn.textContent='🗑️ Eliminar esta imagen';
 gal.append(prev,stage,next);container.append(gal,thumbs);paint();
 }
 
-/* HISTORIAL */
+/* HISTORIAL DE OPERACIONES */
 async function renderHistory(){
 const host=$('historyTable');
 if(!trades.length){
@@ -832,7 +975,11 @@ await loadTrades();
 
 /* EXPORTAR E IMPORTAR */
 $('export').onclick=()=>{
-const blob=new Blob([JSON.stringify({trades:trades.map(t=>({...t})),reviews},null,2)],{type:'application/json'});
+const blob=new Blob([JSON.stringify({
+trades:trades.map(t=>({...t})),
+reviews,
+checklistHistory:getChecklistHistory()
+},null,2)],{type:'application/json'});
 const a=document.createElement('a');a.href=URL.createObjectURL(blob);
 a.download='respaldo-diario-trading.json';a.click();URL.revokeObjectURL(a.href);
 };
@@ -884,6 +1031,15 @@ const{error:e2}=await sb.from('trades').update({image_paths:paths}).eq('id',row.
 if(e2)throw e2;
 }
 imported++;
+}
+if(Array.isArray(data.checklistHistory)){
+const current=getChecklistHistory();
+localStorage.setItem(CHECKLIST_HISTORY_KEY,JSON.stringify([...data.checklistHistory,...current]));
+renderChecklistHistory();
+}
+if(data.reviews&&typeof data.reviews==='object'){
+reviews={...reviews,...data.reviews};
+localStorage.setItem('mi_diario_reviews_v2',JSON.stringify(reviews));
 }
 await loadTrades();alert(`Listo: se importaron ${imported} operaciones.`);
 }catch(err){alert('No se pudo completar la importación: '+err.message);}
