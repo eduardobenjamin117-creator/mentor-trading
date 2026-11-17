@@ -1,0 +1,13 @@
+{
+  "background_color": "#080b12",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "NO MERCY",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "MERCY",
+  "start_url": "/",
+  "theme_color": "#111827",
+  "id": "no-mercy-trading",
+  "description": "Trading journal. Discipline. Precision. No excuses"
+}
