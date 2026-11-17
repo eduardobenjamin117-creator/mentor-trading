@@ -4,7 +4,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Mi diario de trading</title>
+<title>NO MERCY</title>
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#0b1020">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MERCY">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{--bg:#0b1020;--panel:#121a2d;--panel2:#18233a;--line:#26344f;--text:#edf2ff;--muted:#94a3bd;--green:#42d392;--red:#ff7185;--blue:#7aa7ff;--yellow:#f5c76b}
@@ -107,8 +113,8 @@ form{grid-template-columns:1fr}
 <body>
 
 <header>
-<h1>📈 Mi diario de trading</h1>
-<p>Registra tus operaciones. Mide tu disciplina, no solamente el dinero.</p>
+<h1>😈 NO MERCY</h1>
+<p>Trading · Discipline · Precision · No excuses.</p>
 </header>
 
 <main>
@@ -295,7 +301,7 @@ form{grid-template-columns:1fr}
 </main>
 
 <footer style="max-width:1200px;margin:auto;padding:0 20px 30px;color:var(--muted);font-size:12px">
-Diario privado · Operaciones e imágenes sincronizadas con Supabase.
+NO MERCY · Diario privado · Operaciones e imágenes sincronizadas con Supabase.
 </footer>
 
 <script>
@@ -1056,6 +1062,20 @@ return`${y}-W${String(w).padStart(2,'0')}`;
 })();
 if(sb){refreshSession();}
 else{$('authMsg').textContent='Falta configurar la clave publicable de Supabase en el archivo index.html.';}
+</script>
+
+<script>
+/* REGISTRO PWA: permite que NO MERCY consulte nuevas versiones */
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('./sw.js')
+      .then(registration=>{
+        registration.update();
+        setInterval(()=>registration.update(),60*60*1000);
+      })
+      .catch(error=>console.error('No se pudo activar el actualizador:',error));
+  });
+}
 </script>
 </body>
 </html>
