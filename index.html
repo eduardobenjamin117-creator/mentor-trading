@@ -1,5 +1,4 @@
-</body>
-</html>
+
 <!doctype html>
 <html lang="es">
 <head>
@@ -101,6 +100,11 @@ th{color:var(--muted);font-weight:600}
 .reminder-quote{font-size:clamp(16px,2.2vw,20px);font-weight:650;line-height:1.5;color:#edf2ff;margin:0;opacity:1;transform:translateY(0);transition:opacity .45s ease,transform .45s ease}
 .reminder-quote.changing{opacity:0;transform:translateY(8px)}
 .reminder-mark{color:#7aa7ff;font-size:24px;line-height:1;margin-bottom:8px}
+/* CENTRADO DEL RECUADRO DE RECORDATORIOS */
+.reminder-box{align-items:center;text-align:center}
+.reminder-label,.reminder-mark,.reminder-quote{width:100%;text-align:center}
+.reminder-quote{max-width:500px;margin:0 auto}
+
 @media(prefers-reduced-motion:reduce){.reminder-quote{transition:none}}
 @media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}}
 @media(max-width:520px){
@@ -1117,3 +1121,5 @@ if('serviceWorker' in navigator){
   });
 }
 </script>
+</body>
+</html>
