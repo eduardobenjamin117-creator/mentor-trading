@@ -2,14 +2,14 @@
 {
   "id": "/mentor-trading/",
   "name": "NO MERCY",
-  "short_name": "MERCY",
+  "short_name": "NO MERCY",
   "description": "Trading journal. Discipline. Precision. No excuses.",
   "start_url": "/mentor-trading/",
   "scope": "/mentor-trading/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#0b1020",
-  "theme_color": "#0b1020",
+  "background_color": "#000000",
+  "theme_color": "#000000",
   "icons": [
     {
       "src": "icon.svg",
