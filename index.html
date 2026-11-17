@@ -1,4 +1,5 @@
-
+</body>
+</html>
 <!doctype html>
 <html lang="es">
 <head>
@@ -95,6 +96,12 @@ th{color:var(--muted);font-weight:600}
 .check-history-head{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:8px}
 .check-history-points{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:10px;font-size:13px}
 .check-history-point{padding:7px 9px;background:#121a2d;border-radius:7px}
+.reminder-box{min-height:130px;display:flex;flex-direction:column;justify-content:center;background:linear-gradient(145deg,#0b1221,#121d31);border:1px solid #35435d;border-radius:14px;padding:18px;position:relative;overflow:hidden}
+.reminder-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8293b2;margin-bottom:12px}
+.reminder-quote{font-size:clamp(16px,2.2vw,20px);font-weight:650;line-height:1.5;color:#edf2ff;margin:0;opacity:1;transform:translateY(0);transition:opacity .45s ease,transform .45s ease}
+.reminder-quote.changing{opacity:0;transform:translateY(8px)}
+.reminder-mark{color:#7aa7ff;font-size:24px;line-height:1;margin-bottom:8px}
+@media(prefers-reduced-motion:reduce){.reminder-quote{transition:none}}
 @media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}}
 @media(max-width:520px){
 main{padding:0 12px 30px}
@@ -156,7 +163,14 @@ form{grid-template-columns:1fr}
 </div>
 <div class="two">
 <div class="panel"><h2>Disciplina</h2><div id="discipline" style="font-size:30px;font-weight:700">—</div><p class="note">Porcentaje de operaciones en las que respetaste tus reglas registradas.</p></div>
-<div class="panel"><h2>Recordatorio</h2><p>Un trade ganador fuera de tu plan sigue siendo un error de ejecución. Una pérdida respetando tu plan puede ser una buena operación.</p></div>
+<div class="panel"><h2>Recordatorios</h2>
+<div class="reminder-box" aria-live="polite" aria-atomic="true">
+<div class="reminder-label">NO MERCY · Mentalidad de ejecución</div>
+<div class="reminder-mark">“</div>
+<p id="rotatingReminder" class="reminder-quote">No estás aquí para recuperar pérdidas, estás aquí para ejecutar tu plan.</p>
+</div>
+<p class="note">Una frase nueva aparecerá automáticamente cada 8 segundos.</p>
+</div>
 </div>
 <div class="panel"><h2>Últimas operaciones</h2><div id="recent"></div></div>
 </section>
@@ -321,6 +335,32 @@ const fields=['date','entryTime','symbol','session','direction','contextTf','ent
 const CHECKLIST_KEY='mi_diario_checklist_v1';
 const CHECKLIST_TIME_KEY='mi_diario_checklist_hora_v1';
 const CHECKLIST_HISTORY_KEY='mi_diario_checklist_historial_v1';
+
+/* FRASES AUTOMÁTICAS DE NO MERCY */
+const reminderPhrases=[
+'No estás aquí para recuperar pérdidas, estás aquí para ejecutar tu plan.',
+'Una operación perdida no justifica diez operaciones impulsivas.',
+'Tu trabajo es ejecutar, no perseguir el precio.',
+'La paciencia también genera resultados.',
+'No necesitas operar todos los días para ser rentable.',
+'Protege tu capital como si fuera tu futuro.',
+'Una buena operación respeta tus reglas, no necesariamente gana.',
+'El mercado siempre estará mañana.',
+'Disciplina antes que dinero.',
+'NO MERCY: cero excusas, cero impulsividad.'
+];
+let reminderIndex=0;
+function rotateReminder(){
+ const el=$('rotatingReminder');
+ if(!el)return;
+ el.classList.add('changing');
+ setTimeout(()=>{
+  reminderIndex=(reminderIndex+1)%reminderPhrases.length;
+  el.textContent=reminderPhrases[reminderIndex];
+  el.classList.remove('changing');
+ },450);
+}
+setInterval(rotateReminder,8000);
 
 function message(id,txt,kind=''){
 const el=$(id);el.textContent=txt;el.className='note '+(kind==='error'?'red':kind==='ok'?'green':'');
@@ -1077,5 +1117,3 @@ if('serviceWorker' in navigator){
   });
 }
 </script>
-</body>
-</html>
