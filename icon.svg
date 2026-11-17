@@ -1,1 +1,23 @@
 
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#000000"/>
+
+  <text x="256" y="155"
+        text-anchor="middle"
+        font-family="Arial, sans-serif"
+        font-size="58"
+        font-weight="900"
+        letter-spacing="9"
+        fill="#ffffff">NO MERCY</text>
+
+  <path d="M256 285
+           C210 215 115 215 115 285
+           C115 355 210 355 256 285
+           C302 215 397 215 397 285
+           C397 355 302 355 256 285"
+        fill="none"
+        stroke="#ffffff"
+        stroke-width="17"
+        stroke-linecap="round"/>
+</svg>
+
