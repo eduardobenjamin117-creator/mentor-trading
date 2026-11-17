@@ -1,13 +1,21 @@
+
 {
-  "background_color": "#080b12",
-  "dir": "ltr",
-  "display": "standalone",
+  "id": "/mentor-trading/",
   "name": "NO MERCY",
-  "orientation": "any",
-  "scope": "/",
   "short_name": "MERCY",
-  "start_url": "/",
-  "theme_color": "#111827",
-  "id": "no-mercy-trading",
-  "description": "Trading journal. Discipline. Precision. No excuses"
+  "description": "Trading journal. Discipline. Precision. No excuses.",
+  "start_url": "/mentor-trading/",
+  "scope": "/mentor-trading/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b1020",
+  "theme_color": "#0b1020",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
 }
