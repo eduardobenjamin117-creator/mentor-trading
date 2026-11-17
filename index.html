@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>NO MERCY</title>
 <link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#0b1020">
+<meta name="theme-color" content="#090a0c">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -100,11 +100,6 @@ th{color:var(--muted);font-weight:600}
 .reminder-quote{font-size:clamp(16px,2.2vw,20px);font-weight:650;line-height:1.5;color:#edf2ff;margin:0;opacity:1;transform:translateY(0);transition:opacity .45s ease,transform .45s ease}
 .reminder-quote.changing{opacity:0;transform:translateY(8px)}
 .reminder-mark{color:#7aa7ff;font-size:24px;line-height:1;margin-bottom:8px}
-/* CENTRADO DEL RECUADRO DE RECORDATORIOS */
-.reminder-box{align-items:center;text-align:center}
-.reminder-label,.reminder-mark,.reminder-quote{width:100%;text-align:center}
-.reminder-quote{max-width:500px;margin:0 auto}
-
 @media(prefers-reduced-motion:reduce){.reminder-quote{transition:none}}
 @media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}}
 @media(max-width:520px){
@@ -119,6 +114,65 @@ form{grid-template-columns:1fr}
 .chat-message{max-width:100%}
 .check-history-points{grid-template-columns:1fr}
 }
+
+/* REDISEÑO NO MERCY · modo oscuro sobrio */
+:root{
+  color-scheme:dark;
+  --bg:#090a0c;
+  --panel:#111316;
+  --panel2:#181b20;
+  --line:#292d33;
+  --text:#f1f2f4;
+  --muted:#9298a2;
+  --green:#58c995;
+  --red:#e87979;
+  --blue:#7397d8;
+  --yellow:#c9ad70;
+}
+html{background:var(--bg)}
+body{background:#090a0c;color:var(--text)}
+header{padding-top:30px;padding-bottom:18px}
+h1{letter-spacing:1.2px;font-weight:800}
+header p{color:#858b95;letter-spacing:.25px}
+main{padding-bottom:48px}
+button,.tab{
+  background:#171a1e;color:#dfe2e6;border:1px solid #30343a;
+  border-radius:9px;transition:background .18s ease,border-color .18s ease,color .18s ease;
+}
+button:hover,.tab:hover{background:#20242a;border-color:#4a515c}
+button.primary{background:#252b34;border-color:#53627a;color:#f5f7fa}
+button.primary:hover{background:#303947;border-color:#7186a6}
+.tab.active{background:#252b34;color:#fff;border-color:#53627a}
+button.danger{color:var(--red)}
+.card,.panel{background:#111316;border:1px solid #292d33;border-radius:13px;box-shadow:0 8px 26px rgba(0,0,0,.16)}
+.metric strong{font-weight:700;letter-spacing:-.5px}
+.metric small,.muted,.note,label{color:var(--muted)}
+.panel h2{color:#eceef1;font-weight:650;letter-spacing:.1px}
+input,select,textarea{background:#0c0e10;border:1px solid #2b3036;color:#edf0f3;border-radius:8px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#667d9e;box-shadow:0 0 0 2px rgba(102,125,158,.13)}
+input::placeholder,textarea::placeholder{color:#666d77}
+th,td{border-bottom-color:#292d33}
+th{color:#a2a8b1}
+.pill{background:#242930;color:#cbd0d7;border:1px solid #343a43}
+.trade-gallery,.check-item,.check-history-item{background:#0d0f12;border-color:#2a2f35}
+.check-history-point{background:#191c20}
+.check-item input[type="checkbox"]{accent-color:#8a9db8}
+.progress-track{background:#25292e}
+.progress-fill{background:#8a9db8}
+.thumbs img.active{border-color:#8398b7}
+.mentor-intro{background:#14171b;border:1px solid #30353c}
+.chat-message.user{background:#202630;border:1px solid #384354;color:#f0f2f5}
+.chat-message.assistant{background:#101215;border:1px solid #2b3036}
+.mentor-chat-empty{border-color:#343a42}
+.reminder-box{background:#111316;border:1px solid #30353c;border-radius:12px}
+.reminder-label{color:#8993a1}
+.reminder-quote{color:#f0f1f3}
+.reminder-mark{color:#8298b9}
+.image-modal{background:rgba(0,0,0,.96)}
+.green{color:var(--green)}
+.red{color:var(--red)}
+@media(hover:hover){.card:hover{border-color:#363c44}}
+
 </style>
 </head>
 <body>
