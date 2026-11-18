@@ -1,4 +1,4 @@
-
+</html>
 <!doctype html>
 <html lang="es">
 <head>
@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>NO MERCY</title>
 <link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#07090d">
+<meta name="theme-color" content="#0b1020">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -95,12 +95,6 @@ th{color:var(--muted);font-weight:600}
 .check-history-head{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:8px}
 .check-history-points{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:10px;font-size:13px}
 .check-history-point{padding:7px 9px;background:#121a2d;border-radius:7px}
-.reminder-box{min-height:130px;display:flex;flex-direction:column;justify-content:center;background:linear-gradient(145deg,#0b1221,#121d31);border:1px solid #35435d;border-radius:14px;padding:18px;position:relative;overflow:hidden}
-.reminder-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8293b2;margin-bottom:12px}
-.reminder-quote{font-size:clamp(16px,2.2vw,20px);font-weight:650;line-height:1.5;color:#edf2ff;margin:0;opacity:1;transform:translateY(0);transition:opacity .45s ease,transform .45s ease}
-.reminder-quote.changing{opacity:0;transform:translateY(8px)}
-.reminder-mark{color:#7aa7ff;font-size:24px;line-height:1;margin-bottom:8px}
-@media(prefers-reduced-motion:reduce){.reminder-quote{transition:none}}
 @media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}}
 @media(max-width:520px){
 main{padding:0 12px 30px}
@@ -115,28 +109,24 @@ form{grid-template-columns:1fr}
 .check-history-points{grid-template-columns:1fr}
 }
 
-/* NO MERCY · profundidad 3D sobria */
-:root{--bg:#07090d;--panel:#10141b;--panel2:#171e29;--line:#293444;--text:#f1f4f8;--muted:#929eae;--blue:#78aaff;--green:#42d392;--red:#ff7185;--yellow:#f5c76b}
-body{background:radial-gradient(ellipse at 50% -18%,#1b2b43 0%,#0b1018 42%,#050609 100%);background-attachment:fixed}
-header h1{text-shadow:0 2px 0 #111,0 8px 22px rgba(0,0,0,.8);letter-spacing:1.5px}
-header p{letter-spacing:.35px}
-.card,.panel{position:relative;background:linear-gradient(145deg,rgba(27,35,47,.98),rgba(10,14,20,.99));border:1px solid #2c394b;border-radius:16px;box-shadow:inset 0 1px 0 rgba(255,255,255,.075),inset 0 -1px 0 rgba(0,0,0,.7),0 9px 0 #080b10,0 15px 28px rgba(0,0,0,.48);transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}
-.card:hover,.panel:hover{transform:translateY(-3px);border-color:#49617e;box-shadow:inset 0 1px 0 rgba(255,255,255,.09),0 11px 0 #080b10,0 20px 34px rgba(0,0,0,.58)}
-.metric strong{text-shadow:0 2px 0 #05070a,0 5px 12px rgba(0,0,0,.65)}
-button,.tab{position:relative;background:linear-gradient(180deg,#202a38 0%,#111720 100%);border:1px solid #354458;border-radius:10px;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 4px 0 #080b10,0 7px 12px rgba(0,0,0,.4);transition:transform .14s ease,box-shadow .14s ease,border-color .14s ease}
-button:hover,.tab:hover{transform:translateY(-2px);border-color:#6684aa;box-shadow:inset 0 1px 0 rgba(255,255,255,.15),0 6px 0 #080b10,0 10px 17px rgba(0,0,0,.5)}
-button:active,.tab:active{transform:translateY(2px);box-shadow:inset 0 2px 5px rgba(0,0,0,.55),0 1px 0 #080b10}
-button.primary,.tab.active{background:linear-gradient(180deg,#91bdff 0%,#477fc9 100%);border-color:#9bc5ff;color:#07101c;text-shadow:0 1px 0 rgba(255,255,255,.35);box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 4px 0 #1c3655,0 8px 16px rgba(37,94,160,.25)}
-input,select,textarea{background:linear-gradient(180deg,#080c12,#111823);border:1px solid #303d4e;box-shadow:inset 0 3px 8px rgba(0,0,0,.55),0 1px 0 rgba(255,255,255,.04);transition:border-color .18s ease,box-shadow .18s ease}
-input:focus,select:focus,textarea:focus{outline:none;border-color:#78aaff;box-shadow:inset 0 2px 7px rgba(0,0,0,.5),0 0 0 3px rgba(120,170,255,.13)}
-.pill{background:linear-gradient(180deg,#263448,#111a27);border:1px solid #3a4b62;box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
-.mentor-intro,.trade-gallery,.check-item,.check-history-item,.check-history-point,.chat-message{background:linear-gradient(145deg,#171f2b,#0b1017);border-color:#2c394a;box-shadow:inset 0 1px 0 rgba(255,255,255,.045),0 5px 12px rgba(0,0,0,.25)}
-.chat-message.user{background:linear-gradient(145deg,#233c5e,#111e30);border-color:#46678e}
-.reminder-box{background:linear-gradient(145deg,#1b2738 0%,#0b1018 65%,#080b10 100%);border-color:#3c4d64;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),inset 0 -12px 22px rgba(0,0,0,.3),0 8px 0 #080b10,0 15px 25px rgba(0,0,0,.42)}
-.reminder-mark{color:#8dbaff;text-shadow:0 0 14px rgba(120,170,255,.35)}
-.progress-track{box-shadow:inset 0 2px 5px rgba(0,0,0,.65)}
-.progress-fill{box-shadow:0 0 12px rgba(66,211,146,.35)}
-@media(prefers-reduced-motion:reduce){.card,.panel,button,.tab{transition:none}}
+/* NO MERCY · ACABADO OSCURO CON PROFUNDIDAD */
+body{background:radial-gradient(ellipse at 50% -20%,#1b2942 0%,#0b1020 48%,#070b14 100%)}
+.card,.panel{background:linear-gradient(145deg,rgba(24,34,54,.98),rgba(12,19,33,.98));border:1px solid #293750;box-shadow:inset 0 1px 0 rgba(255,255,255,.045),0 12px 28px rgba(0,0,0,.28),0 3px 0 rgba(0,0,0,.22)}
+button,.tab{background:linear-gradient(145deg,#1d2a40,#111a2b);border-color:#30415d;box-shadow:0 4px 0 #080e18,0 7px 15px rgba(0,0,0,.22);transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease}
+button:hover,.tab:hover{transform:translateY(-1px);border-color:#54709a;box-shadow:0 5px 0 #080e18,0 10px 18px rgba(0,0,0,.28)}
+button:active,.tab:active{transform:translateY(2px);box-shadow:0 1px 0 #080e18,0 3px 8px rgba(0,0,0,.2)}
+button.primary,.tab.active{background:linear-gradient(145deg,#a9c5f4,#668cc8);border-color:#9bb9eb;color:#081326;box-shadow:0 4px 0 #30476b,0 8px 16px rgba(0,0,0,.25)}
+input,select,textarea{background:linear-gradient(145deg,#080e19,#101a2b);border-color:#293750;box-shadow:inset 0 2px 6px rgba(0,0,0,.28)}
+.reminder-panel{position:relative;overflow:hidden;padding:18px;background:linear-gradient(145deg,#172238,#0b1220);border-color:#344663}
+.reminder-topline{display:flex;align-items:center;gap:9px;color:#a9b9d2;font-size:10px;font-weight:800;letter-spacing:2px;margin-bottom:13px}
+.reminder-dot{width:7px;height:7px;border-radius:50%;background:#8fb5f2;box-shadow:0 0 12px rgba(143,181,242,.75)}
+.reminder-box{position:relative;min-height:155px;display:flex;flex-direction:column;justify-content:center;padding:27px 25px 19px 30px;border:1px solid #344966;border-radius:15px;background:linear-gradient(145deg,#1b2940 0%,#101a2c 55%,#0b1321 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.07),inset 0 -12px 24px rgba(0,0,0,.2),0 9px 0 #080e18,0 17px 26px rgba(0,0,0,.3)}
+.reminder-mark{position:absolute;top:4px;left:17px;color:#8eacd9;font:700 56px/1 Georgia,serif;opacity:.75}
+#rotatingReminder{position:relative;margin:20px 0 22px;color:#f0f4fc;font-size:clamp(17px,2vw,21px);font-weight:650;line-height:1.5;letter-spacing:.1px;text-shadow:0 2px 8px rgba(0,0,0,.35);transition:opacity .35s ease,transform .35s ease}
+#rotatingReminder.changing{opacity:0;transform:translateY(7px)}
+.reminder-footer{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding-top:11px;border-top:1px solid rgba(151,177,215,.16);color:#8498b7;font-size:9px;font-weight:800;letter-spacing:1.4px}
+.reminder-note{margin:17px 2px 0;color:#8191aa;font-size:11px}
+@media(max-width:520px){.reminder-box{padding:24px 17px 17px;min-height:165px}.reminder-footer{font-size:8px;letter-spacing:1px}}
 
 </style>
 </head>
@@ -186,13 +176,14 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#78aaff;box-sh
 </div>
 <div class="two">
 <div class="panel"><h2>Disciplina</h2><div id="discipline" style="font-size:30px;font-weight:700">—</div><p class="note">Porcentaje de operaciones en las que respetaste tus reglas registradas.</p></div>
-<div class="panel"><h2>Recordatorios</h2>
-<div class="reminder-box" aria-live="polite" aria-atomic="true">
-<div class="reminder-label">NO MERCY · Mentalidad de ejecución</div>
-<div class="reminder-mark">“</div>
-<p id="rotatingReminder" class="reminder-quote">No estás aquí para recuperar pérdidas, estás aquí para ejecutar tu plan.</p>
-</div>
-<p class="note">Una frase nueva aparecerá automáticamente cada 8 segundos.</p>
+<div class="panel reminder-panel">
+  <div class="reminder-topline"><span class="reminder-dot"></span><span>NO MERCY · MENTALIDAD DE EJECUCIÓN</span></div>
+  <div class="reminder-box">
+    <div class="reminder-mark">“</div>
+    <p id="rotatingReminder" aria-live="polite">Tu trabajo es ejecutar, no perseguir el precio.</p>
+    <div class="reminder-footer"><span>DISCIPLINA ANTES QUE DINERO</span><span class="reminder-count">FRASE AUTOMÁTICA</span></div>
+  </div>
+  <p class="reminder-note">Una frase nueva aparecerá automáticamente cada 8 segundos.</p>
 </div>
 </div>
 <div class="panel"><h2>Últimas operaciones</h2><div id="recent"></div></div>
@@ -359,32 +350,6 @@ const CHECKLIST_KEY='mi_diario_checklist_v1';
 const CHECKLIST_TIME_KEY='mi_diario_checklist_hora_v1';
 const CHECKLIST_HISTORY_KEY='mi_diario_checklist_historial_v1';
 
-/* FRASES AUTOMÁTICAS DE NO MERCY */
-const reminderPhrases=[
-'No estás aquí para recuperar pérdidas, estás aquí para ejecutar tu plan.',
-'Una operación perdida no justifica diez operaciones impulsivas.',
-'Tu trabajo es ejecutar, no perseguir el precio.',
-'La paciencia también genera resultados.',
-'No necesitas operar todos los días para ser rentable.',
-'Protege tu capital como si fuera tu futuro.',
-'Una buena operación respeta tus reglas, no necesariamente gana.',
-'El mercado siempre estará mañana.',
-'Disciplina antes que dinero.',
-'NO MERCY: cero excusas, cero impulsividad.'
-];
-let reminderIndex=0;
-function rotateReminder(){
- const el=$('rotatingReminder');
- if(!el)return;
- el.classList.add('changing');
- setTimeout(()=>{
-  reminderIndex=(reminderIndex+1)%reminderPhrases.length;
-  el.textContent=reminderPhrases[reminderIndex];
-  el.classList.remove('changing');
- },450);
-}
-setInterval(rotateReminder,8000);
-
 function message(id,txt,kind=''){
 const el=$(id);el.textContent=txt;el.className='note '+(kind==='error'?'red':kind==='ok'?'green':'');
 }
@@ -438,6 +403,37 @@ market_view:t.market||'',on_time:!!t.onTime,
 risk_ok:!!t.riskOk,confirmation_ok:!!t.confirmationOk,
 followed:!!t.followed,image_paths:t.image_paths||[]
 };
+}
+
+// Compatibilidad con proyectos Supabase donde todavía no existe hora_entrada.
+// Si la columna falta en la caché del esquema, reintenta sin ese campo para
+// que la operación sí pueda guardarse. La hora se conservará en el formulario,
+// pero no en la nube hasta crear la columna en Supabase.
+function missingEntryTimeColumn(error){
+const msg=String(error?.message||'').toLowerCase();
+return msg.includes('hora_entrada') &&
+(msg.includes('schema cache') || msg.includes('could not find') ||
+ msg.includes('column') || msg.includes('does not exist'));
+}
+async function insertTradeRecord(t){
+const payload=toRow(t);
+let result=await sb.from('trades').insert(payload).select().single();
+if(result.error&&missingEntryTimeColumn(result.error)){
+delete payload.hora_entrada;
+result=await sb.from('trades').insert(payload).select().single();
+result.entryTimeNotSaved=!result.error;
+}
+return result;
+}
+async function updateTradeRecord(t,id){
+const payload=toRow(t);
+let result=await sb.from('trades').update(payload).eq('id',id).select().single();
+if(result.error&&missingEntryTimeColumn(result.error)){
+delete payload.hora_entrada;
+result=await sb.from('trades').update(payload).eq('id',id).select().single();
+result.entryTimeNotSaved=!result.error;
+}
+return result;
 }
 
 async function refreshSession(){
@@ -529,6 +525,7 @@ $('saveTrade').onclick=async()=>{
 const btn=$('saveTrade');
 if(!$('tradeForm').reportValidity())return;
 btn.disabled=true;message('saveMsg','Guardando operación e imágenes...');
+let entryTimeWarning=false;
 try{
 const id=$('editId').value;const t={};
 fields.forEach(f=>t[f]=$(f).value);
@@ -540,9 +537,10 @@ t.image_paths=[];let row;
 if(id){
 const old=trades.find(x=>String(x.id)===String(id));
 const oldPaths=old?.image_paths||[];
-const{data,error}=await sb.from('trades').update(toRow({...t,image_paths:oldPaths})).eq('id',id).select().single();
-if(error)throw error;
-row=data;
+const result=await updateTradeRecord({...t,image_paths:oldPaths},id);
+if(result.error)throw result.error;
+row=result.data;
+if(result.entryTimeNotSaved)entryTimeWarning=true;
 const paths=await uploadFiles(selectedFiles,id);
 const all=[...oldPaths,...paths];
 if(paths.length){
@@ -551,9 +549,10 @@ if(e2)throw e2;
 row.image_paths=all;
 }
 }else{
-const{data,error}=await sb.from('trades').insert(toRow(t)).select().single();
-if(error)throw error;
-row=data;
+const result=await insertTradeRecord(t);
+if(result.error)throw result.error;
+row=result.data;
+if(result.entryTimeNotSaved)entryTimeWarning=true;
 const paths=await uploadFiles(selectedFiles,row.id);
 if(paths.length){
 const{error:e2}=await sb.from('trades').update({image_paths:paths}).eq('id',row.id);
@@ -561,7 +560,7 @@ if(e2)throw e2;
 }
 }
 resetForm();await loadTrades();show('history');
-message('saveMsg','Operación guardada.','ok');
+message('saveMsg',entryTimeWarning?'Operación guardada, pero la hora no se sincronizó porque falta la columna hora_entrada en Supabase.':'Operación guardada.','ok');
 }catch(e){
 message('saveMsg','No se pudo guardar: '+e.message,'error');
 }
@@ -1078,8 +1077,9 @@ followed:!!(old.followed??old.cumplio_plan),
 emotion:old.emotion||old.emotions||old.emociones||'',
 lesson:old.lesson||old.leccion||'',image_paths:[]
 };
-const{data:row,error}=await sb.from('trades').insert(toRow(t)).select().single();
-if(error)throw error;
+const importedResult=await insertTradeRecord(t);
+if(importedResult.error)throw importedResult.error;
+const row=importedResult.data;
 const files=[];
 if(typeof old.image==='string'&&old.image.startsWith('data:image/')){
 const blob=await(await fetch(old.image)).blob();
@@ -1125,6 +1125,41 @@ return`${y}-W${String(w).padStart(2,'0')}`;
 })();
 if(sb){refreshSession();}
 else{$('authMsg').textContent='Falta configurar la clave publicable de Supabase en el archivo index.html.';}
+
+/* RECORDATORIOS AUTOMÁTICOS NO MERCY */
+const reminderPhrases=[
+  'Tu trabajo es ejecutar, no perseguir el precio.',
+  'Una pérdida no es una invitación a recuperar. Es una señal para respetar tu límite.',
+  'No necesitas otra operación. Necesitas respetar la siguiente decisión.',
+  'El mercado no te debe nada. Tú sí te debes disciplina.',
+  'Cerrar la plataforma también es parte de tu estrategia.',
+  'Una operación fuera de plan nunca se convierte en buena por haber ganado.',
+  'No operes por aburrimiento, enojo ni necesidad de recuperar.',
+  'Tu capital es tu herramienta. Protégelo.',
+  'La paciencia también es una posición.',
+  'Una pérdida bien ejecutada vale más que una ganancia impulsiva.',
+  'Si ya cumpliste tu plan, tu trabajo terminó por hoy.',
+  'No persigas velas. Espera tu zona y tu confirmación.',
+  'La consistencia se construye en las decisiones que nadie ve.',
+  'No tienes que demostrarle nada al mercado.',
+  'Primero el proceso. Después el resultado.',
+  'NO MERCY: cero venganza, cero impulsividad, cero excusas.'
+];
+let reminderIndex=0;
+function rotateReminder(){
+  const el=document.getElementById('rotatingReminder');
+  if(!el||reminderPhrases.length<2)return;
+  el.classList.add('changing');
+  setTimeout(()=>{
+    reminderIndex=(reminderIndex+1)%reminderPhrases.length;
+    el.textContent=reminderPhrases[reminderIndex];
+    el.classList.remove('changing');
+  },350);
+}
+if(document.getElementById('rotatingReminder')){
+  setInterval(rotateReminder,8000);
+}
+
 </script>
 
 <script>
@@ -1141,4 +1176,3 @@ if('serviceWorker' in navigator){
 }
 </script>
 </body>
-</html>
