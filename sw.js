@@ -1,43 +1,47 @@
-
 const CACHE_NAME = 'no-mercy-v1';
+const APP_FILES = [
+  './',
+  './index.html',
+  './manifest.json',
+  './icon-192.png',
+  './icon-512.png'
+];
 
 self.addEventListener('install', event => {
-  self.skipWaiting();
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(APP_FILES))
+      .then(() => self.skipWaiting())
+  );
 });
 
 self.addEventListener('activate', event => {
-  event.waitUntil((async () => {
-    const keys = await caches.keys();
-    await Promise.all(
-      keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
-    );
-    await self.clients.claim();
-  })());
+  event.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key)))
+    ).then(() => self.clients.claim())
+  );
 });
 
 self.addEventListener('fetch', event => {
   const request = event.request;
-
-  if (request.method !== 'GET') return;
-
   const url = new URL(request.url);
+
+  // No interceptar Supabase ni otros servicios externos.
   if (url.origin !== self.location.origin) return;
 
-  event.respondWith((async () => {
-    try {
-      const response = await fetch(request, { cache: 'no-store' });
+  if (request.mode === 'navigate') {
+    event.respondWith(
+      fetch(request).then(response => {
+        const copy = response.clone();
+        caches.open(CACHE_NAME).then(cache => cache.put('./index.html', copy));
+        return response;
+      }).catch(() => caches.match('./index.html'))
+    );
+    return;
+  }
 
-      if (response && response.ok && request.destination !== 'document') {
-        const cache = await caches.open(CACHE_NAME);
-        cache.put(request, response.clone());
-      }
-
-      return response;
-    } catch (error) {
-      const cached = await caches.match(request);
-      if (cached) return cached;
-      throw error;
-    }
-  })());
+  event.respondWith(
+    caches.match(request).then(cached => cached || fetch(request))
+  );
 });
-

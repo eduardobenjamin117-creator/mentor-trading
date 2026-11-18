@@ -1,0 +1,12 @@
+NO MERCY - ARCHIVOS PARA PWA BUILDER
+
+Sube TODOS estos archivos a la raíz del repositorio GitHub Pages:
+- index.html
+- manifest.json
+- sw.js
+- icon-192.png
+- icon-512.png
+
+No cambies los nombres. La aplicación ya referencia manifest.json y sw.js.
+Después espera a que GitHub Pages publique los cambios y abre la URL del sitio.
+En PWABuilder pega la URL pública y vuelve a analizar la PWA.

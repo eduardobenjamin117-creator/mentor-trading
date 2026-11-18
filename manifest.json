@@ -1,21 +1,32 @@
-
 {
-  "id": "/mentor-trading/",
-  "name": "NO MERCY",
+  "id": "./",
+  "name": "NO MERCY - Diario de Trading",
   "short_name": "NO MERCY",
-  "description": "Trading journal. Discipline. Precision. No excuses.",
-  "start_url": "/mentor-trading/",
-  "scope": "/mentor-trading/",
+  "description": "Diario privado de trading y disciplina.",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
-  "orientation": "portrait",
-  "background_color": "#000000",
-  "theme_color": "#000000",
+  "orientation": "any",
+  "background_color": "#05070b",
+  "theme_color": "#05070b",
   "icons": [
     {
-      "src": "icon.svg",
-      "sizes": "512x512",
-      "type": "image/svg+xml",
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
