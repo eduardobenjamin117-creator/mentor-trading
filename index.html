@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>NO MERCY</title>
 <link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#090a0c">
+<meta name="theme-color" content="#07090d">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -115,63 +115,28 @@ form{grid-template-columns:1fr}
 .check-history-points{grid-template-columns:1fr}
 }
 
-/* REDISEÑO NO MERCY · modo oscuro sobrio */
-:root{
-  color-scheme:dark;
-  --bg:#090a0c;
-  --panel:#111316;
-  --panel2:#181b20;
-  --line:#292d33;
-  --text:#f1f2f4;
-  --muted:#9298a2;
-  --green:#58c995;
-  --red:#e87979;
-  --blue:#7397d8;
-  --yellow:#c9ad70;
-}
-html{background:var(--bg)}
-body{background:#090a0c;color:var(--text)}
-header{padding-top:30px;padding-bottom:18px}
-h1{letter-spacing:1.2px;font-weight:800}
-header p{color:#858b95;letter-spacing:.25px}
-main{padding-bottom:48px}
-button,.tab{
-  background:#171a1e;color:#dfe2e6;border:1px solid #30343a;
-  border-radius:9px;transition:background .18s ease,border-color .18s ease,color .18s ease;
-}
-button:hover,.tab:hover{background:#20242a;border-color:#4a515c}
-button.primary{background:#252b34;border-color:#53627a;color:#f5f7fa}
-button.primary:hover{background:#303947;border-color:#7186a6}
-.tab.active{background:#252b34;color:#fff;border-color:#53627a}
-button.danger{color:var(--red)}
-.card,.panel{background:#111316;border:1px solid #292d33;border-radius:13px;box-shadow:0 8px 26px rgba(0,0,0,.16)}
-.metric strong{font-weight:700;letter-spacing:-.5px}
-.metric small,.muted,.note,label{color:var(--muted)}
-.panel h2{color:#eceef1;font-weight:650;letter-spacing:.1px}
-input,select,textarea{background:#0c0e10;border:1px solid #2b3036;color:#edf0f3;border-radius:8px}
-input:focus,select:focus,textarea:focus{outline:none;border-color:#667d9e;box-shadow:0 0 0 2px rgba(102,125,158,.13)}
-input::placeholder,textarea::placeholder{color:#666d77}
-th,td{border-bottom-color:#292d33}
-th{color:#a2a8b1}
-.pill{background:#242930;color:#cbd0d7;border:1px solid #343a43}
-.trade-gallery,.check-item,.check-history-item{background:#0d0f12;border-color:#2a2f35}
-.check-history-point{background:#191c20}
-.check-item input[type="checkbox"]{accent-color:#8a9db8}
-.progress-track{background:#25292e}
-.progress-fill{background:#8a9db8}
-.thumbs img.active{border-color:#8398b7}
-.mentor-intro{background:#14171b;border:1px solid #30353c}
-.chat-message.user{background:#202630;border:1px solid #384354;color:#f0f2f5}
-.chat-message.assistant{background:#101215;border:1px solid #2b3036}
-.mentor-chat-empty{border-color:#343a42}
-.reminder-box{background:#111316;border:1px solid #30353c;border-radius:12px}
-.reminder-label{color:#8993a1}
-.reminder-quote{color:#f0f1f3}
-.reminder-mark{color:#8298b9}
-.image-modal{background:rgba(0,0,0,.96)}
-.green{color:var(--green)}
-.red{color:var(--red)}
-@media(hover:hover){.card:hover{border-color:#363c44}}
+/* NO MERCY · profundidad 3D sobria */
+:root{--bg:#07090d;--panel:#10141b;--panel2:#171e29;--line:#293444;--text:#f1f4f8;--muted:#929eae;--blue:#78aaff;--green:#42d392;--red:#ff7185;--yellow:#f5c76b}
+body{background:radial-gradient(ellipse at 50% -18%,#1b2b43 0%,#0b1018 42%,#050609 100%);background-attachment:fixed}
+header h1{text-shadow:0 2px 0 #111,0 8px 22px rgba(0,0,0,.8);letter-spacing:1.5px}
+header p{letter-spacing:.35px}
+.card,.panel{position:relative;background:linear-gradient(145deg,rgba(27,35,47,.98),rgba(10,14,20,.99));border:1px solid #2c394b;border-radius:16px;box-shadow:inset 0 1px 0 rgba(255,255,255,.075),inset 0 -1px 0 rgba(0,0,0,.7),0 9px 0 #080b10,0 15px 28px rgba(0,0,0,.48);transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}
+.card:hover,.panel:hover{transform:translateY(-3px);border-color:#49617e;box-shadow:inset 0 1px 0 rgba(255,255,255,.09),0 11px 0 #080b10,0 20px 34px rgba(0,0,0,.58)}
+.metric strong{text-shadow:0 2px 0 #05070a,0 5px 12px rgba(0,0,0,.65)}
+button,.tab{position:relative;background:linear-gradient(180deg,#202a38 0%,#111720 100%);border:1px solid #354458;border-radius:10px;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 4px 0 #080b10,0 7px 12px rgba(0,0,0,.4);transition:transform .14s ease,box-shadow .14s ease,border-color .14s ease}
+button:hover,.tab:hover{transform:translateY(-2px);border-color:#6684aa;box-shadow:inset 0 1px 0 rgba(255,255,255,.15),0 6px 0 #080b10,0 10px 17px rgba(0,0,0,.5)}
+button:active,.tab:active{transform:translateY(2px);box-shadow:inset 0 2px 5px rgba(0,0,0,.55),0 1px 0 #080b10}
+button.primary,.tab.active{background:linear-gradient(180deg,#91bdff 0%,#477fc9 100%);border-color:#9bc5ff;color:#07101c;text-shadow:0 1px 0 rgba(255,255,255,.35);box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 4px 0 #1c3655,0 8px 16px rgba(37,94,160,.25)}
+input,select,textarea{background:linear-gradient(180deg,#080c12,#111823);border:1px solid #303d4e;box-shadow:inset 0 3px 8px rgba(0,0,0,.55),0 1px 0 rgba(255,255,255,.04);transition:border-color .18s ease,box-shadow .18s ease}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#78aaff;box-shadow:inset 0 2px 7px rgba(0,0,0,.5),0 0 0 3px rgba(120,170,255,.13)}
+.pill{background:linear-gradient(180deg,#263448,#111a27);border:1px solid #3a4b62;box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+.mentor-intro,.trade-gallery,.check-item,.check-history-item,.check-history-point,.chat-message{background:linear-gradient(145deg,#171f2b,#0b1017);border-color:#2c394a;box-shadow:inset 0 1px 0 rgba(255,255,255,.045),0 5px 12px rgba(0,0,0,.25)}
+.chat-message.user{background:linear-gradient(145deg,#233c5e,#111e30);border-color:#46678e}
+.reminder-box{background:linear-gradient(145deg,#1b2738 0%,#0b1018 65%,#080b10 100%);border-color:#3c4d64;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),inset 0 -12px 22px rgba(0,0,0,.3),0 8px 0 #080b10,0 15px 25px rgba(0,0,0,.42)}
+.reminder-mark{color:#8dbaff;text-shadow:0 0 14px rgba(120,170,255,.35)}
+.progress-track{box-shadow:inset 0 2px 5px rgba(0,0,0,.65)}
+.progress-fill{box-shadow:0 0 12px rgba(66,211,146,.35)}
+@media(prefers-reduced-motion:reduce){.card,.panel,button,.tab{transition:none}}
 
 </style>
 </head>
